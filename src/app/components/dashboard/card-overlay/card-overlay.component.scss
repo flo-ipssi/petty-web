@@ -1,0 +1,38 @@
+
+.bg-radient{
+    background-image: -webkit-radial-gradient(center, circle 248px, #16d9e3 0%, #30c7ec 47%, #46aef7 100%) !important;
+    background-image: -o-radial-gradient(center, circle 248px, #16d9e3 0%, #30c7ec 47%, #46aef7 100%) !important;
+    background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%) !important;   
+}
+fa-icon{
+    font-size: 25px;
+    color: aqua;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2px 10px;
+    -webkit-box-shadow: 4px 5px 7px 0px rgba(0, 0, 0, 0.61) ;
+    box-shadow: 4px 5px 7px 0px rgba(0, 0, 0, 0.61)
+}
+
+h3{
+    margin-top: 10px;
+}
+
+.bg-violet{
+    background-image: -webkit-linear-gradient(110deg, #2b5876 0%, #4e4376 100%) !important;
+    background-image: -o-linear-gradient(110deg, #2b5876 0%, #4e4376 100%) !important;
+    background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%) !important;
+}
+
+.bg-green{
+    background-image: -webkit-gradient(linear, left bottom, left top, from(#0ba360), to(#3cba92)) !important;
+    background-image: -webkit-linear-gradient(bottom, #0ba360 0%, #3cba92 100%) !important;
+    background-image: -o-linear-gradient(bottom, #0ba360 0%, #3cba92 100%) !important;
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%) !important;
+}
+
+.bg-red{
+    background-image: -webkit-gradient(linear, left bottom, left top, from(#ff0844), to(#ffb199)) !important;
+    background-image: -webkit-linear-gradient(bottom, #ff0844 0%, #ffb199 100%) !important;
+    background-image: -o-linear-gradient(bottom, #ff0844 0%, #ffb199 100%) !important;
+    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%) !important;
+}

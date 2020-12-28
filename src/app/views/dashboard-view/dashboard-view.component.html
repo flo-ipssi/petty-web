@@ -1,0 +1,45 @@
+<div class="wrapper">
+    <app-dashboard-header></app-dashboard-header>
+
+    <!-- Content  -->
+    <div id="content" class="container-fluid">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Toggle Sidebar</span>
+                </button>
+            </div>
+        </nav>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                line Chart
+            </div>
+            <div class="col-sm-6 xol-xs-12">
+                <div class="row">
+                    <div class="col-sm-6 p-2">
+                        <app-card-overlay class="shadowBox"></app-card-overlay>
+                    </div>
+                    <div class="col-sm-6 p-2">
+                        <app-card-overlay class="shadowBox" bg="violet"></app-card-overlay>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 p-2">
+                        <app-card-overlay class="shadowBox" bg="green"></app-card-overlay>
+                    </div>
+                    <div class="col-sm-6 p-2">
+                        <app-card-overlay class="shadowBox" bg="red"></app-card-overlay>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row p-4">
+            <div class="col-sm-12 mt-4">
+                <app-table-activity></app-table-activity>
+            </div>
+        </div>
+    </div>
+</div>
