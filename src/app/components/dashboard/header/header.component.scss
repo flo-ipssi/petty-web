@@ -1,7 +1,7 @@
 
 #sidebar {
     // background: #6dccc3;
-    background: url('../../../assets/cat-2606759_1920.jpg') no-repeat -150px 0px;
+    background: url('/../../../assets/cat-2606759_1920.jpg') no-repeat -150px 0px;
     background-size: cover;
 
     color: #fff;
@@ -55,8 +55,57 @@
         // background: #6dc6cc;
     }
     ul.components {
-        padding: 20px 0;
+        padding: 20px 15px;
+        h5{
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin: 0.75rem 0;
+            font-weight: bold;
+            white-space: nowrap;
+            position: relative;
+        }
+        .list-group{
+            a{
+                background: none;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.88rem;
+                -webkit-transition: height 300ms, color 300ms, background-color 300ms, -webkit-transform .2s;
+                transition: height 300ms, color 300ms, background-color 300ms, -webkit-transform .2s;
+                -o-transition: transform .2s, height 300ms, color 300ms, background-color 300ms;
+                transition: transform .2s, height 300ms, color 300ms, background-color 300ms;
+                transition: transform .2s, height 300ms, color 300ms, background-color 300ms, -webkit-transform .2s;
+                display: block;
+                line-height: 2.5rem;
+                height: 2.5rem;
+                padding: 0 1.5rem 0 45px;
+                position: relative;
+                border-radius: 0.25rem;
+                white-space: nowrap;
+                fa-icon{
+                    opacity: .6;
+                    text-align: center;
+                    width: 34px;
+                    height: 34px;
+                    line-height: 34px;
+                    position: absolute;
+                    left: 5px;
+                    top: 50%;
+                    margin-top: -17px;
+                    font-size: 1.5rem;
+                    -webkit-transition: color 300ms;
+                    -o-transition: color 300ms;
+                    transition: color 300ms;
+                }
+                &:hover{
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 5px;
+                }
+            }
+        }
     }
+
     ul {
         li a {
             padding: 10px;
@@ -72,6 +121,5 @@
             padding: 10px;
         }
     }
-    
     
 }

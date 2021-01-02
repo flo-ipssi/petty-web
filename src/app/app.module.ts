@@ -13,17 +13,22 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { environment } from "../environments/environment";
 
-// Components
+// Components - Dashboard
 import { DashboardViewComponent } from './views/dashboard-view/dashboard-view.component';
 import { CardOverlayComponent } from './components/dashboard/card-overlay/card-overlay.component';
 import { TableActivityComponent } from './components/dashboard/table-activity/table-activity.component';
 import { HeaderComponent } from './components/dashboard/header/header.component';
 
+// Redirect 404
+import { FourZeroFourComponent } from './components/config/four-zero-four/four-zero-four.component';
+import { LineChartComponent } from './components/dashboard/line-chart/line-chart.component';
 
 
 const appRoutes: Routes =[
-  {path: 'dashboard', component: DashboardViewComponent},
-  {path: '', component: DashboardViewComponent}
+  { path: 'dashboard', component: DashboardViewComponent},
+  { path: '', component: DashboardViewComponent},
+  { path: 'not-found', component: FourZeroFourComponent },
+  { path: '**', redirectTo: 'not-found' }
 ]
 
 @NgModule({
@@ -33,6 +38,8 @@ const appRoutes: Routes =[
     CardOverlayComponent,
     TableActivityComponent,
     HeaderComponent,
+    FourZeroFourComponent,
+    LineChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +47,7 @@ const appRoutes: Routes =[
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule, 
     FontAwesomeModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [],
   bootstrap: [AppComponent]
