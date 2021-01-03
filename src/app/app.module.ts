@@ -22,10 +22,13 @@ import { HeaderComponent } from './components/dashboard/header/header.component'
 // Redirect 404
 import { FourZeroFourComponent } from './components/config/four-zero-four/four-zero-four.component';
 import { LineChartComponent } from './components/dashboard/line-chart/line-chart.component';
+import { PetProfileComponent } from './components/dashboard/pet/pet-profile/pet-profile.component';
+import { PetListComponent } from './components/dashboard/pet/pet-list/pet-list.component';
 
 
 const appRoutes: Routes =[
   { path: 'dashboard', component: DashboardViewComponent},
+  { path: 'pets', component: PetListComponent},
   { path: '', component: DashboardViewComponent},
   { path: 'not-found', component: FourZeroFourComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -40,6 +43,8 @@ const appRoutes: Routes =[
     HeaderComponent,
     FourZeroFourComponent,
     LineChartComponent,
+    PetProfileComponent,
+    PetListComponent,
   ],
   imports: [
     BrowserModule,
