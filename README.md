@@ -1,4 +1,4 @@
-# PettyWeb
+# PettyWeb (ongoing)
 
 Web platform allowing the presentation of the application and allowing a management adapted to the individuals putting on line the animals at their disposal.
 
