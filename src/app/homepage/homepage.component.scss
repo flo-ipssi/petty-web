@@ -1,0 +1,61 @@
+.textOnPicture{
+   font-size:16px;
+   position: absolute;
+   left: 0;
+   right: 0;
+   text-align: center;
+   z-index: 1;
+}
+
+.owl{
+    img{
+        display : block;
+        width : 100%;
+        height : 500px;
+        opacity : 0.5 ;
+        background : rgba(48,235,184, 0.5) ;
+
+    }
+    .owl-item{
+        background : rgba(48,235,184, 0.5) ;
+    }
+}
+
+.opacity-2{
+    opacity : 20%;
+}
+
+.opacity-4{
+    opacity : 40%;
+}
+
+.opacity-6{
+    opacity : 60%;
+}
+
+.background-petty{
+    background-color : rgba(48,235,184, 1);
+}
+
+.pl-6, .px-6{
+    padding-left: 7rem !important; 
+}
+
+#presentationPetty {
+    position : relative;
+    color : white;
+    height : 400px;
+    .textOnPicture{
+        font-size : 20px !important;
+    }
+}
+
+.cardPartner{
+    position : relative;
+    span{
+        position : absolute; 
+        top : 50%;
+        left : 0;
+        right : 0;
+    }
+}
