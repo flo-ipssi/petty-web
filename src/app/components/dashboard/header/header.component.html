@@ -1,18 +1,21 @@
-
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>My Petty Dashboard</h3>
-            <strong>MP</strong>
+<!-- Sidebar  -->
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3>My Petty Dashboard</h3>
+        <strong>MP</strong>
+    </div>
+    <ul class="list-unstyled components">
+        <h5>Menu</h5>
+        <div class="list-group">
+            <a routerLink="dashboard" class="list-group-item list-group-item-action">
+                <fa-icon [icon]="account"></fa-icon> <strong>Dashboard</strong>
+            </a>
+            <a routerLink="pets-cards" class="list-group-item list-group-item-action">
+                <fa-icon [icon]="pets"></fa-icon> <strong>Animaux</strong>
+            </a>
+            <a routerLink="pets" class="list-group-item list-group-item-action">
+                <fa-icon [icon]="asks"></fa-icon> <strong>Demandes</strong>
+            </a>
         </div>
-
-        <ul class="list-unstyled components">
-            <h5>Menu</h5>
-            <div class="list-group">
-                <a routerLink="dashboard" class="list-group-item list-group-item-action"><fa-icon [icon]="account"></fa-icon> Mon Compte</a>
-                <a routerLink="pets" class="list-group-item list-group-item-action"><fa-icon [icon]="asks"></fa-icon> Animaux</a>
-                <a routerLink="dashboard" class="list-group-item list-group-item-action"><fa-icon [icon]="pets"></fa-icon> Demandes</a>
-              </div>
-        </ul>
-
-    </nav>
+    </ul>
+</nav>

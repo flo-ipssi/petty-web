@@ -23,12 +23,18 @@ import { HeaderComponent } from './components/dashboard/header/header.component'
 import { FourZeroFourComponent } from './components/config/four-zero-four/four-zero-four.component';
 import { LineChartComponent } from './components/dashboard/line-chart/line-chart.component';
 import { PetProfileComponent } from './components/dashboard/pet/pet-profile/pet-profile.component';
-import { PetListComponent } from './components/dashboard/pet/pet-list/pet-list.component';
+import { PetAsksComponent } from './components/dashboard/pet/pet-asks/pet-asks.component';
+import { PetsCardsComponent } from './components/dashboard/pet/pets-cards/pets-cards.component';
+import { PetCardItemComponent } from './components/dashboard/pet/pets-cards/pet-card-item/pet-card-item.component';
+import { PetNewComponent } from './components/dashboard/pet/pet-new/pet-new.component';
 
 
 const appRoutes: Routes =[
   { path: 'dashboard', component: DashboardViewComponent},
-  { path: 'pets', component: PetListComponent},
+  { path: 'pets', component: PetAsksComponent},
+  { path: 'pets-cards', component: PetsCardsComponent},
+  { path: 'pet/details/:id', component: PetProfileComponent},
+  { path: 'pets/new', component: PetNewComponent},
   { path: '', component: DashboardViewComponent},
   { path: 'not-found', component: FourZeroFourComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -44,7 +50,10 @@ const appRoutes: Routes =[
     FourZeroFourComponent,
     LineChartComponent,
     PetProfileComponent,
-    PetListComponent,
+    PetAsksComponent,
+    PetsCardsComponent,
+    PetCardItemComponent,
+    PetNewComponent,
   ],
   imports: [
     BrowserModule,

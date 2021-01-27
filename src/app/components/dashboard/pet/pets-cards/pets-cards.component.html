@@ -1,0 +1,5 @@
+<div class="container">
+    <div *ngFor="let pet of pets" class="row">
+        <app-pet-card-item [key]='pet.key' [pet]='pet' ></app-pet-card-item>
+    </div>
+</div>
