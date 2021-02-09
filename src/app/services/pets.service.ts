@@ -9,11 +9,11 @@ import { Pet } from '../models/pet';
 @Injectable({
   providedIn: 'root',
 })
+
 export class PetsService {
   private dbPath = 'pets';
 
   petsRef: AngularFirestoreCollection<Pet> = null;
-
 
   constructor(private firestore: AngularFirestore) {
     this.petsRef = firestore.collection(this.dbPath);
@@ -52,16 +52,17 @@ export class PetsService {
   //   });
   // }
 
-  deleteAll() {
-    this.petsRef.get().subscribe(
-      (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          doc.ref.delete();
-        });
-      },
-      (error) => {
-        console.log('Error: ', error);
-      }
-    );
-  }
+  // Delete all the pets
+  // deleteAll() {
+  //   this.petsRef.get().subscribe(
+  //     (querySnapshot) => {
+  //       querySnapshot.forEach((doc) => {
+  //         doc.ref.delete();
+  //       });
+  //     },
+  //     (error) => {
+  //       console.log('Error: ', error);
+  //     }
+  //   );
+  // }
 }

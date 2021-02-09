@@ -5,47 +5,92 @@
     </div>
   </div>
   <div class="formBox">
-    <form (ngSubmit)="onSubmit()">
-      
-  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)"
-  (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
-  <div ngxSlickItem class="slide">
-    <div class="col-lg-10 offset-1 col-xs-12 text-center">
-      <div class="box">
-        <i class="fa fa-behance fa-3x" aria-hidden="true"></i>
-        <div class="box-text">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="inputBox ">
-                <div class="inputText">First Name</div>
-                <input type="text" name="" class="input">
-              </div>
-            </div>
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+      <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig"
+        (init)="slickInit($event)" (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)"
+        (beforeChange)="beforeChange($event)">
+        <div ngxSlickItem class="slide">
+          <div class="col-lg-10 offset-1 col-xs-12 text-center">
+            <div class="box px-5">
+              <fa-icon [icon]="faPaw" class="fa-3x"></fa-icon>
+              <div class="box-text">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="inputBox ">
+                      <div class="inputText">Name</div>
+                      <input type="text" name="name" class="input" ngModel>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="inputBox ">
+                      <div class="inputText">Sex</div>
+                      <input type="text" name="sex" class="input" ngModel>
+                    </div>
+                  </div>
 
-            <div class="col-sm-6">
-              <div class="inputBox">
-                <div class="inputText">Last Name</div>
-                <input type="text" id="name" required  name="name" class="input">
+                  <div class="col-sm-4">
+                    <div class="inputBox">
+                      <div class="inputText">Type</div>
+                      <input type="text" name="type" class="input" ngModel>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="inputBox">
+                      <div class="inputText">Age</div>
+                      <input type="text" name="age" class="input" ngModel>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="inputBox">
+                      <div class="inputText">Description</div>
+                      <input type="text" id="name" required name="name" class="input">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="box-btn">
+                <button type="button" (click)="slickModal.slickGoTo(1)" class="btn btn-success">Suivant</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="box-btn">
-          <button type="button" class="btn btn-success">Suivant</button>
+        <div ngxSlickItem class="slide">
+          <div class="col-lg-10 offset-1 col-xs-12 text-center">
+            <div class="box px-5">
+              <fa-icon [icon]="faImages" class="fa-3x"></fa-icon>
+              <div class="box-text">
+                <div class="row">
+                  Drag & Drop files in progress
+                </div>
+              </div>
+              <div class="box-btn">
+                <button type="button" (click)="slickModal.slickGoTo(0)" class="btn btn-secondary">Précedent</button>
+                <button type="button" (click)="slickModal.slickGoTo(2)" class="btn btn-success">Suivant</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div ngxSlickItem class="slide">
-    test 2
-  </div>
-  <div ngxSlickItem class="slide">
-    test 3
-  </div>
-  <div ngxSlickItem class="slide">
-    test 4
-  </div>
-</ngx-slick-carousel>
+        <div ngxSlickItem class="slide">
+          <div class="col-lg-10 col-sm-12 offset-lg-1 col-xs-12 text-center">
+            <div class="box px-5">
+              <fa-icon [icon]="faCheckCircle" class="fa-3x"></fa-icon>
+              <div class="box-text">
+                <div class="row">
+                  Summary WIP
+                </div>
+              </div>
+              <div class="box-btn">
+                <button type="button" (click)="slickModal.slickGoTo(1)" class="btn btn-secondary">Précédent</button>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ngx-slick-carousel>
     </form>
   </div>
 </div>

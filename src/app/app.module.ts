@@ -29,6 +29,7 @@ import { PetAsksComponent } from './components/dashboard/pet/pet-asks/pet-asks.c
 import { PetsCardsComponent } from './components/dashboard/pet/pets-cards/pets-cards.component';
 import { PetCardItemComponent } from './components/dashboard/pet/pets-cards/pet-card-item/pet-card-item.component';
 import { PetNewComponent } from './components/dashboard/pet/pet-new/pet-new.component';
+import { FormsModule } from '@angular/forms';
 
 
 const appRoutes: Routes =[
@@ -65,7 +66,8 @@ const appRoutes: Routes =[
     FontAwesomeModule,
     RouterModule.forRoot(appRoutes),
     AngularFireStorageModule,
-    SlickCarouselModule
+    SlickCarouselModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
