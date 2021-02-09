@@ -4,94 +4,48 @@
       <h1>New Pet</h1>
     </div>
   </div>
+  <div class="formBox">
+    <form (ngSubmit)="onSubmit()">
+      
   <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)"
-    (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
-    <div ngxSlickItem class="slide">
-      <div class="col-lg-10 offset-1 col-xs-12 text-center">
-        <div class="box">
-          <i class="fa fa-behance fa-3x" aria-hidden="true"></i>
-          <div class="box-text">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="inputBox ">
-                  <div class="inputText">First Name</div>
-                  <input type="text" name="" class="input">
-                </div>
+  (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
+  <div ngxSlickItem class="slide">
+    <div class="col-lg-10 offset-1 col-xs-12 text-center">
+      <div class="box">
+        <i class="fa fa-behance fa-3x" aria-hidden="true"></i>
+        <div class="box-text">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="inputBox ">
+                <div class="inputText">First Name</div>
+                <input type="text" name="" class="input">
               </div>
+            </div>
 
-              <div class="col-sm-6">
-                <div class="inputBox">
-                  <div class="inputText">Last Name</div>
-                  <input type="text" id="name" required  name="name" class="input">
-                </div>
+            <div class="col-sm-6">
+              <div class="inputBox">
+                <div class="inputText">Last Name</div>
+                <input type="text" id="name" required  name="name" class="input">
               </div>
             </div>
           </div>
-          <div class="box-btn">
-            <button type="button" class="btn btn-success">Suivant</button>
-          </div>
+        </div>
+        <div class="box-btn">
+          <button type="button" class="btn btn-success">Suivant</button>
         </div>
       </div>
     </div>
-    <div ngxSlickItem class="slide">
-      test 2
-    </div>
-    <div ngxSlickItem class="slide">
-      test 3
-    </div>
-    <div ngxSlickItem class="slide">
-      test 4
-    </div>
-  </ngx-slick-carousel>
-  <div class="formBox">
-    <form (ngSubmit)="onSubmit()">
-
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="inputBox ">
-            <div class="inputText">First Name</div>
-            <input type="text" name="" class="input">
-          </div>
-        </div>
-
-        <div class="col-sm-6">
-          <div class="inputBox">
-            <div class="inputText">Last Name</div>
-            <input type="text" id="name" required [(ngModel)]="pet.name" name="name" class="input">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="inputBox">
-            <div class="inputText">Email</div>
-            <input type="text" name="" class="input">
-          </div>
-        </div>
-
-        <div class="col-sm-6">
-          <div class="inputBox">
-            <div class="inputText">Mobile</div>
-            <input type="text" name="" class="input">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="inputBox">
-            <div class="inputText">Email</div>
-            <textarea class="input"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-12">
-          <input type="submit" name="" class="button" value="Send Message">
-        </div>
-      </div>
+  </div>
+  <div ngxSlickItem class="slide">
+    test 2
+  </div>
+  <div ngxSlickItem class="slide">
+    test 3
+  </div>
+  <div ngxSlickItem class="slide">
+    test 4
+  </div>
+</ngx-slick-carousel>
     </form>
   </div>
 </div>
