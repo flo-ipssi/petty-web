@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import jquery from 'jquery';
 
 @Component({
   selector: 'app-dashboard-view',

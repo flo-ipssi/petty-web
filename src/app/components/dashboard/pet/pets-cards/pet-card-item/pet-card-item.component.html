@@ -1,20 +1,18 @@
-<div class="col-md-4 col-sm-6 ">
-    <div class='pet-module'>
-        <div class='thumbnail'>
-            <a href="#"><img
-                    src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/photo-1429043794791-eb8f26f44081.jpeg'></a>
-        </div>
-        <div class='post-content'>
-            <div class='category'>{{ pet.type }}</div>
-            <h1 class='title'>{{ pet.name }} </h1>
-            <span class="description">
-                {{ pet.description }}
+<div class='pet-module'>
+    <div class='thumbnail'>
+        <a href="#"><img
+                src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/photo-1429043794791-eb8f26f44081.jpeg'></a>
+    </div>
+    <div class='post-content'>
+        <div class='category'>{{ pet.type }}</div>
+        <h1 class='title'>{{ pet.name }} </h1>
+        <span class="description">
+            {{ pet.description }}
+        </span>
+        <div class='post-meta'>
+            <span class='comments'>
+                <a class="btn btn-primary" [routerLink]="['/pet/details', pet.id]">Détail</a>
             </span>
-            <div class='post-meta'>
-                <span class='comments'>
-                    <a class="btn btn-primary" [routerLink]="['/pet/details', pet.key]">Détail</a>
-                </span>
-            </div>
         </div>
     </div>
 </div>

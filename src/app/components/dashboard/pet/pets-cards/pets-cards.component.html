@@ -1,5 +1,9 @@
 <div class="container">
-    <div *ngFor="let pet of pets" class="row">
-        <app-pet-card-item [key]='pet.key' [pet]='pet' ></app-pet-card-item>
+    <button routerLink="/pet-new" class="btn btn btn-primary"><i class="fa fa-plus pr-2"
+            aria-hidden="true"></i>Nouvel animal</button>
+    <div class="row">
+        <div *ngFor="let pet of pets" class="col-md-3 col-sm-3 ">
+            <app-pet-card-item [key]='pet.key' [pet]='pet'></app-pet-card-item>
+        </div>
     </div>
 </div>

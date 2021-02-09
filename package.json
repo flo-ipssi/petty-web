@@ -25,10 +25,12 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
-    "firebase": "^8.2.4",
+    "firebase": "^8.2.5",
     "jquery": "^3.5.1",
     "ng-apexcharts": "^1.5.6",
+    "ngx-slick-carousel": "^0.5.1",
     "rxjs": "~6.6.0",
+    "slick-carousel": "^1.8.1",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

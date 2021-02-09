@@ -24,7 +24,7 @@ export class PetsCardsComponent implements OnInit {
       .pipe(
         map((changes) =>
           changes.map((p) => ({
-            key: p.payload.doc.id,
+            id: p.payload.doc.id,
             ...p.payload.doc.data(),
           }))
         )

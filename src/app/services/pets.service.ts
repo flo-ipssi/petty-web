@@ -44,6 +44,13 @@ export class PetsService {
     return this.petsRef.doc(key);
   }
 
+  // Get the url profile image of a pet
+  // getProfileImageUrl(userId: string) {
+  //   const userStorageRef = firebase.storage().ref().child('images/users/' + userId + "_users.jpg");
+  //   userStorageRef.getDownloadURL().then(url => {
+  //     this.userProfileImg = url
+  //   });
+  // }
 
   deleteAll() {
     this.petsRef.get().subscribe(

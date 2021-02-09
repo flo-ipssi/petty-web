@@ -12,24 +12,24 @@ export class PetAsksComponent implements OnInit {
   constructor(private petsService: PetsService) {}
 
   ngOnInit(): void {
-    this.getPetsList();
+    // this.getPetsList();
   }
 
   // Return all the pets
-  getPetsList() {
-    this.petsService
-      .getPetsList()
-      .snapshotChanges()
-      .pipe(
-        map((changes) =>
-          changes.map((p) => ({
-            key: p.payload.doc.id,
-            ...p.payload.doc.data(),
-          }))
-        )
-      )
-      .subscribe((pets) => {
-        this.pets = pets;
-      });
-  }
+  // getPetsList() {
+  //   this.petsService
+  //     .getPetsList()
+  //     .snapshotChanges()
+  //     .pipe(
+  //       map((changes) =>
+  //         changes.map((p) => ({
+  //           key: p.payload.doc.id,
+  //           ...p.payload.doc.data(),
+  //         }))
+  //       )
+  //     )
+  //     .subscribe((pets) => {
+  //       this.pets = pets;
+  //     });
+  // }
 }

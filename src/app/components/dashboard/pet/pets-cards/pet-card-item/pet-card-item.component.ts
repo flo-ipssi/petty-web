@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PetCardItemComponent implements OnInit {
 
-  @Input pet: any;
+  @Input() pet: any;
   constructor() { }
 
   ngOnInit(): void {

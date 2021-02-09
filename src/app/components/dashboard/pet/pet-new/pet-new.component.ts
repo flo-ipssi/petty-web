@@ -12,12 +12,14 @@ export class PetNewComponent implements OnInit {
 
   pet: Pet = new Pet;
   submitted = false;
+  // SLICK
+  slideConfig = {"slidesToShow":1, "slidesToScroll": 1};
 
   constructor(private petService: PetsService) {}
 
   ngOnInit(): void {
   }
-
+  // FORM
   // Initialize the propreties
   newPet():void{
     this.submitted = false;
@@ -33,6 +35,23 @@ export class PetNewComponent implements OnInit {
     this.submitted = true;
     this.save();
 
+  }
+
+  // SLICK
+  slickInit(e) {
+    console.log('slick initialized');
+  }
+  
+  breakpoint(e) {
+    console.log('breakpoint');
+  }
+  
+  afterChange(e) {
+    console.log('afterChange');
+  }
+  
+  beforeChange(e) {
+    console.log('beforeChange');
   }
 
 }
