@@ -21,7 +21,11 @@ export class PetsService {
 
   // Add a new pet
   addPet(pet: Pet): void {
-    this.petsRef.add({ ...pet });
+    this.petsRef.add({ ...pet }).then((result) => {
+      return result.id
+    }).catch((err) => {
+      return err
+    });;
   }
 
   // Update the data of a pet

@@ -9,46 +9,49 @@
       <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig"
         (init)="slickInit($event)" (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)"
         (beforeChange)="beforeChange($event)">
-        <div ngxSlickItem class="slide">
-          <div class="col-lg-10 offset-1 col-xs-12 text-center">
+        <div ngxSlickItem class="slide row">
+          <div class="col-lg-10 offset-lg-1 col-xs-12 text-center">
             <div class="box px-5">
               <fa-icon [icon]="faPaw" class="fa-3x"></fa-icon>
               <div class="box-text">
                 <div class="row">
                   <div class="col-sm-12">
-                    <div class="inputBox ">
-                      <div class="inputText">Name</div>
-                      <input type="text" name="name" class="input" ngModel>
+                    <div class="form__group field">
+                      <input type="input" class="form__field" placeholder="Nom" name="name" [(ngModel)]="pet.name" />
+                      <label for="name" class="form__label">Nom</label>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="inputBox ">
-                      <div class="inputText">Sex</div>
-                      <input type="text" name="sex" class="input" ngModel>
+                <div class="row p-3">
+                  <div class="col-sm-3 p-1">
+                    <div class="btn-group btn-group-toggle inputs-sex" data-toggle="buttons">
+                      <label class="btn btn-light" id="label-radio-male">
+                        <input type="radio" name="sex" id="radio-male" value="male"
+                          [(ngModel)]="pet.sex">
+                        <fa-icon [icon]="faMars" class="fa-1x"></fa-icon>
+                      </label>
+                      <label class="btn btn-light">
+                        <input type="radio" name="sex" id="radio-female" value="female"
+                          [(ngModel)]="pet.sex">
+                        <fa-icon [icon]="faVenus" class="fa-1x"></fa-icon>
+                      </label>
                     </div>
                   </div>
-
-                  <div class="col-sm-4">
-                    <div class="inputBox">
-                      <div class="inputText">Type</div>
-                      <input type="text" name="type" class="input" ngModel>
-                    </div>
+                  <div class="col-sm-4 p-1">
+                    <select class="form-select form-select-lg form-control" name="type" [(ngModel)]="pet.type">
+                      <option *ngFor="let type of types_animals" [value]="type.value">
+                        {{type.name}}
+                      </option>
+                    </select>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="inputBox">
-                      <div class="inputText">Age</div>
-                      <input type="text" name="age" class="input" ngModel>
-                    </div>
+                  <div class="col-sm-5 p-1">
+                    <input class="form-control" type="number" required min="1" placeholder="Age" max="100" name="age" [(ngModel)]="pet.age">
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <div class="inputBox">
-                      <div class="inputText">Description</div>
-                      <input type="text" id="name" required name="name" class="input">
-                    </div>
+                    <textarea class="form-control" name="description" aria-label="With textarea"
+                      placeholder="Informations sur l'animal" [(ngModel)]="pet.description"></textarea>
                   </div>
                 </div>
               </div>
@@ -58,13 +61,20 @@
             </div>
           </div>
         </div>
-        <div ngxSlickItem class="slide">
-          <div class="col-lg-10 offset-1 col-xs-12 text-center">
+        <div ngxSlickItem class="slide row">
+          <div class="col-lg-10 offset-lg-1 text-center container">
             <div class="box px-5">
               <fa-icon [icon]="faImages" class="fa-3x"></fa-icon>
               <div class="box-text">
+                <!-- <input type="file" (change)="upload($event)" accept=".png,.jpg" /> -->
                 <div class="row">
-                  Drag & Drop files in progress
+
+                  <div class="upload-wrap col-sm-3" *ngFor='let in of counter(8) ;let i = index'>
+                    <label for="{{i}}">
+                      <div class="uploadpreview {{i}}"></div>
+                    </label>
+                    <input type="file" id="{{i}}" accept="image/*" name="imgs" (change)="loadFile($event)" ngModel />
+                  </div>
                 </div>
               </div>
               <div class="box-btn">
@@ -74,13 +84,46 @@
             </div>
           </div>
         </div>
-        <div ngxSlickItem class="slide">
+        <div ngxSlickItem class="slide row">
           <div class="col-lg-10 col-sm-12 offset-lg-1 col-xs-12 text-center">
-            <div class="box px-5">
-              <fa-icon [icon]="faCheckCircle" class="fa-3x"></fa-icon>
+            <div class="box">
               <div class="box-text">
-                <div class="row">
-                  Summary WIP
+                <div class="row justify-content-around">
+                  <div class="col-md-10">
+                    <div class="card border-0">
+                      <div class="card-header pb-0">
+                        <fa-icon [icon]="faCheckCircle" class="fa-3x"></fa-icon>
+                        <p class="card-text text-muted mt-4 space">RECAPITULATIFS</p>
+                        <hr class="my-0">
+                      </div>
+                      <div class="card-body">
+                        <div class="row justify-content-between">
+                          <div class="col-auto mt-0">
+                            <dl class="row">
+                              <dt class="col-sm-3">Name</dt>
+                              <dd class="col-sm-9">{{ pet.name }}</dd>
+                            
+                              <dt class="col-sm-3">Sexe</dt>
+                              <dd class="col-sm-9">
+                                <p>{{ pet.sex }}</p>
+                              </dd>
+                            
+                              <dt class="col-sm-3">Type</dt>
+                              <dd class="col-sm-9">{{ pet.type }}</dd>
+                            
+                              <dt class="col-sm-3 text-truncate">Age</dt>
+                              <dd class="col-sm-9">{{ pet.age }}</dd>
+                            
+                              <dt class="col-sm-3">Description</dt>
+                              <dd class="col-sm-9">
+                                {{ pet.description }}
+                              </dd>
+                            </dl>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="box-btn">
@@ -96,5 +139,5 @@
 </div>
 <div [hidden]="!submitted">
   <h4>You submitted successfully!</h4>
-  <button class="btn btn-success" (click)="newPet()">Add</button>
+  <button class="btn btn-success reset-inputs" (click)="newPet()">Add</button>
 </div>
