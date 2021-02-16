@@ -3,29 +3,33 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-} from '@angular/fire/firestore';
+} from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Pet } from '../models/pet';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class PetsService {
   private dbPath = 'pets';
+  private imgPath = 'upload/photos/';
 
   petsRef: AngularFirestoreCollection<Pet> = null;
 
-  constructor(private firestore: AngularFirestore) {
+  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {
     this.petsRef = firestore.collection(this.dbPath);
   }
 
   // Add a new pet
   addPet(pet: Pet): void {
-    this.petsRef.add({ ...pet }).then((result) => {
-      return result.id
-    }).catch((err) => {
-      return err
-    });;
+    this.petsRef
+      .add({ ...pet })
+      .then((result) => {
+        return result.id;
+      })
+      .catch((err) => {
+        return err;
+      });
   }
 
   // Update the data of a pet
@@ -44,8 +48,13 @@ export class PetsService {
   }
 
   // Return a pet
-  getPet(key: string): AngularFirestoreDocument<Pet>{
+  getPet(key: string): AngularFirestoreDocument<Pet> {
     return this.petsRef.doc(key);
+  }
+
+  getImgURL(name: string) {
+    // Create a reference with an initial file path and name
+    return this.storage.ref(this.imgPath+name).getDownloadURL();
   }
 
   // Get the url profile image of a pet

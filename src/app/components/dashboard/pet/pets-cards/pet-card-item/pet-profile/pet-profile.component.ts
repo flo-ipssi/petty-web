@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PetsService } from '../../../../../../services/pets.service';
 import { Pet } from '../../../../../../models/pet';
 import { ActivatedRoute } from '@angular/router';
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 
 @Component({
   selector: 'app-pet-profile',

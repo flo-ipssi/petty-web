@@ -8,9 +8,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PetsService } from '../../../../services/pets.service';
 import { Pet } from '../../../../models/pet';
-import { NgForm } from '@angular/forms';
-import { AngularFireStorage } from '@angular/fire/storage';
+import {
+  AngularFireStorage,
+  AngularFireStorageReference,
+  AngularFireUploadTask,
+} from 'angularfire2/storage';
 import $ from 'jquery';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-pet-new',
   templateUrl: './pet-new.component.html',
@@ -19,6 +25,8 @@ import $ from 'jquery';
 export class PetNewComponent implements OnInit {
   pet: Pet = new Pet();
   submitted = false;
+  namePictures: any;
+  uploads: any[];
 
   // SLICK
   slideConfig = {
@@ -105,10 +113,10 @@ export class PetNewComponent implements OnInit {
         }
       });
 
-      $("#reset-inputs").click(function(){
+      $('#reset-inputs').click(function () {
         $("input[type='file']").val();
         $('.uploadpreview').css('background-image', 'none');
-      })
+      });
     });
   }
   // FORM
@@ -121,21 +129,9 @@ export class PetNewComponent implements OnInit {
     let id = event.target.id;
     this.pet.photos[id] = event.target.files;
   }
-  
+
   removePhoto(event: any) {
     this.pet.photos.splice(event.target.id, 1);
-  }
-  
-  uploadMedias() {
-    let namePictures = Array();
-    for (let index = 0; index < this.pet.photos.length; index++) {
-      var ID = 'img_' + Math.random().toString(36).substr(2, 9);
-      namePictures.push(ID);
-      this.storage.upload('/upload/photos/'+ID, this.pet.photos[index][0]);
-    }
-    this.pet.photos = namePictures;
-    console.log(this.pet.photos);
-    this.petService.addPet(this.pet);
   }
 
   // Reinitialize the propreties
@@ -144,19 +140,42 @@ export class PetNewComponent implements OnInit {
     this.pet = new Pet();
   }
 
-  save() {
-    this.uploadMedias();
+  save(form) {
+    // Donwload and save pictures
+    const promises = this.pet.photos.map((file, index) => {
+      if (file) {
+        let path = 'test/img_' + Math.random().toString(36).substr(2, 9);
+        let ref = this.storage.ref(path);
+        let task = this.storage.upload(path, file[0]);
+
+        // for every upload in firestore we take the URL of the uploaded file
+        return task.then((f) => {
+          return f.ref.getDownloadURL().then((url) => {
+            console.log(url);
+            return url;
+          });
+        });
+      }
+    });
+    Promise.all(promises)
+      .then((uploadedMediaList) => {
+        this.pet.photos = uploadedMediaList.filter(function (element) {
+          return element !== undefined;
+        });
+        // Create a pet
+        console.log(this.pet);
+        let id = this.petService.addPet(this.pet);
+      })
+      .catch((err) => console.log('Error:' + err));
+
+    //Reinitialize
     this.pet = new Pet();
+    this.namePictures = Array();
   }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
     this.submitted = true;
-    // Remove the empty values
-    var tabPhotos = this.pet.photos.filter(function (el) {
-      return el != null;
-    });
-    this.pet.photos = tabPhotos;
-    this.save();
+    this.save(form);
   }
 
   // SLICK
