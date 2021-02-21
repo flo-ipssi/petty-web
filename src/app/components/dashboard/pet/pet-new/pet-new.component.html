@@ -26,14 +26,12 @@
                   <div class="col-sm-3 p-1">
                     <div class="btn-group btn-group-toggle inputs-sex" data-toggle="buttons">
                       <label class="btn btn-light" id="label-radio-male">
-                        <input type="radio" name="sex" id="radio-male" value="male"
-                          [(ngModel)]="pet.sex">
-                        <fa-icon [icon]="faMars" class="fa-1x"></fa-icon>
+                        <input type="radio" name="sex" id="radio-male" value="male" [(ngModel)]="pet.sex">
+                        <span>Male</span>
                       </label>
                       <label class="btn btn-light">
-                        <input type="radio" name="sex" id="radio-female" value="female"
-                          [(ngModel)]="pet.sex">
-                        <fa-icon [icon]="faVenus" class="fa-1x"></fa-icon>
+                        <input type="radio" name="sex" id="radio-female" value="female" [(ngModel)]="pet.sex">
+                        <span>Female</span>
                       </label>
                     </div>
                   </div>
@@ -45,7 +43,8 @@
                     </select>
                   </div>
                   <div class="col-sm-5 p-1">
-                    <input class="form-control" type="number" required min="1" placeholder="Age" max="100" name="age" [(ngModel)]="pet.age">
+                    <input class="form-control" type="number" required min="1" placeholder="Age" max="100" name="age"
+                      [(ngModel)]="pet.age">
                   </div>
                 </div>
                 <div class="row">
@@ -102,18 +101,18 @@
                             <dl class="row">
                               <dt class="col-sm-3">Name</dt>
                               <dd class="col-sm-9">{{ pet.name }}</dd>
-                            
+
                               <dt class="col-sm-3">Sexe</dt>
                               <dd class="col-sm-9">
                                 <p>{{ pet.sex }}</p>
                               </dd>
-                            
+
                               <dt class="col-sm-3">Type</dt>
                               <dd class="col-sm-9">{{ pet.type }}</dd>
-                            
+
                               <dt class="col-sm-3 text-truncate">Age</dt>
                               <dd class="col-sm-9">{{ pet.age }}</dd>
-                            
+
                               <dt class="col-sm-3">Description</dt>
                               <dd class="col-sm-9">
                                 {{ pet.description }}
@@ -137,7 +136,18 @@
     </form>
   </div>
 </div>
-<div [hidden]="!submitted">
-  <h4>You submitted successfully!</h4>
-  <button class="btn btn-success reset-inputs" (click)="newPet()">Add</button>
+<div [hidden]="!submitted" class="container">
+  <div class="row">
+    <div class="col-lg-10 offset-lg-1 col-xs-12 text-center">
+      <div class="box px-5">
+        <fa-icon [icon]="faCheckCircle" class="fa-3x"></fa-icon>
+        <div class="box-text">
+          <h4>You submitted successfully!</h4>
+        </div>
+        <div class="box-btn">
+          <button class="btn btn-success reset-inputs" (click)="newPet()">Un autre ?</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

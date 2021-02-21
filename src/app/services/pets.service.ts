@@ -3,8 +3,8 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-} from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+} from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Pet } from '../models/pet';
 
 @Injectable({

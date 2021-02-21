@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   faPaw,
   faImages,
-  faCheckCircle,
-  faVenus,
-  faMars,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { PetsService } from '../../../../services/pets.service';
 import { Pet } from '../../../../models/pet';
@@ -12,7 +10,7 @@ import {
   AngularFireStorage,
   AngularFireStorageReference,
   AngularFireUploadTask,
-} from 'angularfire2/storage';
+} from '@angular/fire/storage';
 import $ from 'jquery';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -23,10 +21,10 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./pet-new.component.scss'],
 })
 export class PetNewComponent implements OnInit {
-  pet: Pet = new Pet();
+  pet: Pet = new Pet;
   submitted = false;
   namePictures: any;
-  uploads: any[];
+  element: Pet =  {};
 
   // SLICK
   slideConfig = {
@@ -39,8 +37,6 @@ export class PetNewComponent implements OnInit {
     adaptiveHeight: true,
   };
   // ICONS FONT
-  faMars = faMars;
-  faVenus = faVenus;
   faPaw = faPaw;
   faImages = faImages;
   faCheckCircle = faCheckCircle;
@@ -112,10 +108,11 @@ export class PetNewComponent implements OnInit {
           $('#radio-male').parent().addClass('btn-primary');
         }
       });
-
-      $('#reset-inputs').click(function () {
+      $('.reset-inputs').click(function () {
+        console.log('ok');
+        
         $("input[type='file']").val();
-        $('.uploadpreview').css('background-image', 'none');
+        $('.uploadpreview').css('background-color', 'transparent').css('background-image', '');
       });
     });
   }
@@ -138,13 +135,17 @@ export class PetNewComponent implements OnInit {
   newPet(): void {
     this.submitted = false;
     this.pet = new Pet();
+    this.pet.photos = this.counter(8);
   }
 
-  save(form) {
+  onSubmit(form: NgForm) {
+    this.submitted = true;
+    this.element = this.pet; 
+
     // Donwload and save pictures
     const promises = this.pet.photos.map((file, index) => {
       if (file) {
-        let path = 'test/img_' + Math.random().toString(36).substr(2, 9);
+        let path = 'upload/img_' + Math.random().toString(36).substr(2, 9);
         let ref = this.storage.ref(path);
         let task = this.storage.upload(path, file[0]);
 
@@ -159,23 +160,18 @@ export class PetNewComponent implements OnInit {
     });
     Promise.all(promises)
       .then((uploadedMediaList) => {
-        this.pet.photos = uploadedMediaList.filter(function (element) {
+        this.element.photos = uploadedMediaList.filter(function (element) {
           return element !== undefined;
         });
+        
         // Create a pet
-        console.log(this.pet);
-        let id = this.petService.addPet(this.pet);
+        this.petService.addPet(this.element);
       })
       .catch((err) => console.log('Error:' + err));
 
     //Reinitialize
     this.pet = new Pet();
     this.namePictures = Array();
-  }
-
-  onSubmit(form: NgForm) {
-    this.submitted = true;
-    this.save(form);
   }
 
   // SLICK

@@ -11,10 +11,10 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 // Firebase
-import { AngularFireModule } from "angularfire2";
-import { AngularFirestoreModule } from "angularfire2/firestore";
-import { AngularFireStorageModule } from 'angularfire2/storage';
-import { environment } from "../environments/environment";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { environment } from "../../environments/environment";
 
 // Components - Dashboard
 import { DashboardViewComponent } from './views/dashboard-view/dashboard-view.component';
