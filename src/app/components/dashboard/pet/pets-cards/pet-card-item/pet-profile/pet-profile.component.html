@@ -38,9 +38,8 @@
       <div *ngFor="let img of pictures; let index = index;" class="card col-sm-4 col-xs-12 p-0 card-height">
         <img class="card-img" [src]="img" alt="image">
         <div class="card-img-overlay text-right">
-          <button type="button" 
-          [ngClass]="profile == img ? 'btn btn-primary': 'btn btn-outline-primary'"><i class="fa fa-trophy"></i></button>
-          <button type="button" class="btn btn-outline-danger"><i class="fa fa-times"></i></button>
+          <button type="button" [ngClass]="profile == img ? 'btn btn-primary': 'btn btn-outline-primary'"><i class="fa fa-trophy"></i></button>
+          <button *ngIf="profile != img" type="button" class="btn btn-outline-danger" (click)="deleteImg(img)" ><i class="fa fa-times"></i></button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ export class Pet {
   giver: string;
   description: string;
   photos: any;
+  profile: string;
   sex: boolean;
   type: string;
   age: number;

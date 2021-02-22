@@ -123,7 +123,7 @@ export class PetNewComponent implements OnInit {
   }
 
   loadFile(event: any) {
-    let id = event.target.id;
+    let id = event.target.id; 
     this.pet.photos[id] = event.target.files;
   }
 
@@ -144,6 +144,7 @@ export class PetNewComponent implements OnInit {
 
     // Donwload and save pictures
     const promises = this.pet.photos.map((file, index) => {
+      let i = 0;
       if (file) {
         let path = 'upload/img_' + Math.random().toString(36).substr(2, 9);
         let ref = this.storage.ref(path);
@@ -152,7 +153,10 @@ export class PetNewComponent implements OnInit {
         // for every upload in firestore we take the URL of the uploaded file
         return task.then((f) => {
           return f.ref.getDownloadURL().then((url) => {
-            console.log(url);
+            if (i == 0) {
+              this.element.profile = url;
+              i++;
+            }
             return url;
           });
         });

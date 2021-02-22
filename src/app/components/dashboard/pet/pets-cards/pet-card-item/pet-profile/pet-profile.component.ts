@@ -7,7 +7,7 @@ import {
   AngularFireStorageReference,
   AngularFireUploadTask,
 } from '@angular/fire/storage';
-
+import $ from 'jquery';
 @Component({
   selector: 'app-pet-profile',
   templateUrl: './pet-profile.component.html',
@@ -41,13 +41,26 @@ export class PetProfileComponent implements OnInit {
       .valueChanges()
       .subscribe((pet) => {
         this.pet = pet;
-        this.profile = pet?.photos[0];
+        this.profile = pet?.profile;
         this.pictures = pet?.photos;
       });
   }
 
-  upload(e) {
-
+  deleteImg(src: string): void{
+    Promise.resolve(src)
+    .then((res) => {
+      // Update the display and remove the file
+      const key = this.pictures.indexOf(res);
+      if (key > -1) {
+        this.pictures.splice(key, 1);
+        this.petService.deleteImageByUrl(src);
+      }
+      this.pet.photos = this.pictures;
+      return this.pet;
+    })
+    .then((res) => {      
+      return this.petService.updatePet(this.key, res);
+    });    
   }
   // Update the informations
   // update(isActive: Boolean) {

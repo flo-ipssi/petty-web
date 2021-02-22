@@ -52,9 +52,9 @@ export class PetsService {
     return this.petsRef.doc(key);
   }
 
-  getImgURL(name: string) {
+  deleteImageByUrl(url: string) {
     // Create a reference with an initial file path and name
-    return this.storage.ref(this.imgPath+name).getDownloadURL();
+    return this.storage.refFromURL(url).delete();
   }
 
   // Get the url profile image of a pet
