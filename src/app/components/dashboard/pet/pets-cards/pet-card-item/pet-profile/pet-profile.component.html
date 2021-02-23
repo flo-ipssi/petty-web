@@ -22,6 +22,8 @@
     </div>
     <div class="col-md-2">
       <button class="btn btn-outline-danger"><i class="fa fa-times"></i></button>
+      <label for="file" class="btn btn-outline-primary" title="Tooltip on top"><i class="fa fa-plus"></i></label>
+      <input type="file" class="d-none" id="file" (change)="handleFileInput($event.target.files)">
     </div>
   </div>
 
@@ -35,11 +37,13 @@
       </div>
     </div>
     <div class="row">
-      <div *ngFor="let img of pictures; let index = index;" class="card col-sm-4 col-xs-12 p-0 card-height">
+      <div *ngFor="let img of pictures; let index = index;" class="card col-sm-3 col-xs-12 p-0 card-height">
         <img class="card-img" [src]="img" alt="image">
         <div class="card-img-overlay text-right">
-          <button type="button" [ngClass]="profile == img ? 'btn btn-primary': 'btn btn-outline-primary'"><i class="fa fa-trophy"></i></button>
-          <button *ngIf="profile != img" type="button" class="btn btn-outline-danger" (click)="deleteImg(img)" ><i class="fa fa-times"></i></button>
+          <button type="button" [ngClass]="profile == img ? 'btn btn-primary': 'btn btn-outline-primary'"><i
+              class="fa fa-trophy"></i></button>
+          <button *ngIf="profile != img" type="button" class="btn btn-outline-danger" (click)="deleteImg(img)"><i
+              class="fa fa-times"></i></button>
         </div>
       </div>
     </div>

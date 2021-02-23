@@ -133,9 +133,11 @@
       padding: 2px 6px;
       top: 8px;
     }
-    .btn-outline-danger,.btn-outline-primary, .btn-primary{
+    .btn-outline-danger, .btn-primary{
       right: 10px;
-
+    }
+    .btn-outline-primary{
+      right: 40px;
     }
     .btn-primary i {
       color: rgb(233, 198, 0);

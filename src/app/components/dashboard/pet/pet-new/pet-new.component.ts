@@ -2,18 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {
   faPaw,
   faImages,
-  faCheckCircle
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { PetsService } from '../../../../services/pets.service';
 import { Pet } from '../../../../models/pet';
-import {
-  AngularFireStorage,
-  AngularFireStorageReference,
-  AngularFireUploadTask,
-} from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import $ from 'jquery';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-pet-new',
@@ -21,10 +15,10 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./pet-new.component.scss'],
 })
 export class PetNewComponent implements OnInit {
-  pet: Pet = new Pet;
+  pet: Pet = new Pet();
   submitted = false;
   namePictures: any;
-  element: Pet =  {};
+  element: Pet = {};
 
   // SLICK
   slideConfig = {
@@ -110,9 +104,11 @@ export class PetNewComponent implements OnInit {
       });
       $('.reset-inputs').click(function () {
         console.log('ok');
-        
+
         $("input[type='file']").val();
-        $('.uploadpreview').css('background-color', 'transparent').css('background-image', '');
+        $('.uploadpreview')
+          .css('background-color', 'transparent')
+          .css('background-image', '');
       });
     });
   }
@@ -123,7 +119,7 @@ export class PetNewComponent implements OnInit {
   }
 
   loadFile(event: any) {
-    let id = event.target.id; 
+    let id = event.target.id;
     this.pet.photos[id] = event.target.files;
   }
 
@@ -140,7 +136,7 @@ export class PetNewComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.submitted = true;
-    this.element = this.pet; 
+    this.element = this.pet;
 
     // Donwload and save pictures
     const promises = this.pet.photos.map((file, index) => {
@@ -167,7 +163,7 @@ export class PetNewComponent implements OnInit {
         this.element.photos = uploadedMediaList.filter(function (element) {
           return element !== undefined;
         });
-        
+
         // Create a pet
         this.petService.addPet(this.element);
       })
