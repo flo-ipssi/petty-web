@@ -1,0 +1,22 @@
+
+.goal {
+
+    background: url(../../assets/images/font1.jpg) no-repeat;
+    background-size: cover;
+    img {
+
+        max-height: 230px;
+    }
+    .card-marron {
+        background-color: #d3c8c0;
+        padding: 40px;
+        min-height: 440px;
+        max-width: 420px;
+
+        hr {
+            border-color: black;
+            border-width: 2px;
+        }
+    }
+
+}

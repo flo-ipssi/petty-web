@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0.00 0.00 500.00 500.00">
+<circle fill="#39fee2" cx="221.01" cy="129.52" r="34.19"/>
+<circle fill="#39fee2" cx="321.76" cy="133.55" r="34.22"/>
+<path fill="#39fee2" d="
+  M 145.41 146.73
+  C 162.65 154.18 171.27 171.67 165.31 189.67
+  C 160.27 204.91 142.00 216.30 125.91 212.03
+  Q 108.46 207.40 101.78 192.48
+  Q 97.81 183.59 99.10 173.39
+  C 101.76 152.33 125.83 138.26 145.41 146.73
+  Z"
+/>
+<circle fill="#39fee2" cx="258.78" cy="288.74" r="118.34"/>
+</svg>
