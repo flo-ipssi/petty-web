@@ -2,8 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import logo from '../../assets/images/icon-no-label.svg';
 import logo_without_label from "../../assets/images/icon-label.svg";
 import "./Home.scss";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { PanInfo, motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 
 
 interface HomeProps { }
@@ -27,11 +27,33 @@ const Home: FC<HomeProps> = () => {
     { width: "300px", height: "300px", top: "-10vh", left: "86vw", rotation: "rotate6" },
     { width: "150px", height: "150px", top: "-5vh", left: "50vw", rotation: "rotate7" }
   ];
-
   useEffect(() => setImagePositions(positions), []);
+  const navigate = useNavigate();
 
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    // Vous pouvez ajuster la logique ici en fonction de la distance ou de la direction du glissement
+    // Dans cet exemple, nous naviguons vers la prochaine page dès que l'élément est déplacé
+    console.log('Event:', event);
+    console.log('Info:', info);
+    const dragDistance =info.offset.x + info.point.x;
+    console.log('dragDistance:', dragDistance);
+    if (dragDistance < -400) {
+      navigate('/about');
+    }
+  };
   return (
     <motion.div
+      drag="x"
+      dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+      onDragEnd={(event, info) => handleDragEnd(event, info)}
+      style={{ cursor: 'grab',
+      // width: '100vw',
+      // height: '100vh',
+      background: 'linear-gradient(to right, #36D1DC, #5B86E5)',
+      // display: 'flex',
+      // alignItems: 'center',
+      // justifyContent: 'center',
+      fontSize: '24px',}}
       className="space-6 h-screen space-6 grid grid-cols-1 md:grid-cols-1 gap-4 content-center"
     >
       <div className='logo-background mx-auto'>
