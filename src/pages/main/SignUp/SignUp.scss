@@ -1,0 +1,209 @@
+.SignUp {
+  transition: all 0.3s ease;
+
+  h1 {
+    font-family: 'Fonseca bold';
+    font-size: 28px;
+  }
+
+  h2 {
+    font-family: 'Fonseca';
+    font-size: 16px;
+  }
+
+  select {
+    line-height: 24px;
+    border-bottom: 1px solid #515151;
+    font-size: 16px;
+    padding-left: 5px;
+    color: #999;
+
+    option {
+      text-transform: inherit;
+    }
+  }
+
+  .step1 {
+    min-height: 88vh;
+    margin-top: 60px;
+
+    .bg-left-step1 {
+      background-image: url("../../../assets/images/signup-cat.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .toggleButton {
+      $background-color_1: rgb(113, 92, 248, 0.7);
+      $background-color_2: rgb(77, 175, 165);
+      $background-color_3: rgba(255, 255, 255, 1);
+      $border-color_1: rgb(77, 175, 162);
+
+      .switch {
+        position: relative;
+        height: 1.5rem;
+        width: 3rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        border-radius: 9999px;
+        background-color: $background-color_1;
+        transition: all 0.3s ease;
+
+        &:checked {
+          background-color: $background-color_2;
+
+          &:hover {
+            &::before {
+              box-shadow: 0 0 0px 8px rgba(77, 175, 80, 0.15);
+            }
+          }
+
+          &:before {
+            transform: translateX(100%);
+            border-color: $border-color_1;
+          }
+        }
+
+        &::before {
+          position: absolute;
+          content: "";
+          left: calc(1.5rem - 1.6rem);
+          top: calc(1.5rem - 1.6rem);
+          display: block;
+          height: 1.6rem;
+          width: 1.6rem;
+          cursor: pointer;
+          border: 1px solid rgba(100, 116, 139, 0.527);
+          border-radius: 9999px;
+          background-color: $background-color_3;
+          box-shadow: 0 3px 10px rgba(100, 116, 139, 0.327);
+          transition: all 0.3s ease;
+        }
+
+        &:hover {
+          &::before {
+            box-shadow: 0 0 0px 8px rgba(0, 0, 0, 0.15);
+          }
+        }
+      }
+    }
+  }
+
+  .step2 {
+
+    min-height: 88vh;
+    margin-top: 60px;
+
+    .bg-right {
+      background-image: url("../../../assets/images/signup-cat.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+
+  }
+
+
+  .fields {
+    .group {
+      position: relative;
+    }
+
+    .input {
+      font-size: 16px;
+      padding: 10px 10px 10px 5px;
+      display: block;
+      border: none;
+      border-bottom: 1px solid #515151;
+      background: transparent;
+      width: 100%;
+    }
+
+    .input:focus {
+      outline: none;
+    }
+
+    label {
+      color: #999;
+      font-size: 18px;
+      font-weight: normal;
+      position: absolute;
+      pointer-events: none;
+      left: 5px;
+      top: 10px;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    .input:focus~label,
+    .input:valid~label {
+      top: -20px;
+      font-size: 14px;
+      color: #5264ae;
+    }
+
+    .bar {
+      position: relative;
+      display: block;
+    }
+
+    .bar:before,
+    .bar:after {
+      content: "";
+      height: 2px;
+      width: 0;
+      bottom: 1px;
+      position: absolute;
+      background: #5264ae;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    .bar:before {
+      left: 50%;
+    }
+
+    .bar:after {
+      right: 50%;
+    }
+
+    .input:focus~.bar:before,
+    .input:focus~.bar:after {
+      width: 50%;
+    }
+
+    .highlight {
+      position: absolute;
+      height: 60%;
+      width: 100px;
+      top: 25%;
+      left: 0;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .input:focus~.highlight {
+      animation: inputHighlighter 0.3s ease;
+    }
+
+    @keyframes inputHighlighter {
+      from {
+        background: #5264ae;
+      }
+
+      to {
+        width: 0;
+        background: transparent;
+      }
+    }
+  }
+
+  .residence {
+    $color_1: rgba(75, 85, 99, 1);
+    $background-color_1: rgba(255, 255, 255, 1);
+
+    height: 500px;
+  }
+}

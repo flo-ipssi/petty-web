@@ -19,6 +19,15 @@
   src: local('Telegraf'), url(./fonts/PPTelegraf-Regular.otf) format('opentype');
 }
 
+@font-face {
+  font-family: 'Fonseca bold';
+  src: local('Fonseca bold'), url(./fonts/fonseca/Fonseca-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Fonseca';
+  src: local('Fonseca'), url(./fonts/fonseca/Fonseca.ttf) format('truetype');
+}
 
 body{
   font-family: 'Garet'; 
@@ -26,6 +35,10 @@ body{
 
 h1 {
   font-family: 'Telegraf';
+}
+
+.fonseca{  
+  font-family: 'Fonseca';
 }
 
 .brusher {
