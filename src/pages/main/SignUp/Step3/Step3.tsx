@@ -1,5 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import './Step3.scss';
+import { motion } from 'framer-motion';
+import isDefinedAndNotNull from '../../../../helpers/form';
+import * as yup from 'yup';
+
 
 interface Step3Props {
   data: any;
@@ -11,16 +15,29 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const initialized = useRef(false)
 
   const handleNext = () => {
-    // Validation des données si nécessaire
-    onNext({ ...data, email, password });
+    if (password === confirmedPassword) {
+      onNext({ ...data, email, password });
+    } else {
+      setPasswordMatch(false);
+    }
   };
 
-  console.log(data);
+  useEffect(() => {
+
+    if (!initialized.current) {
+      initialized.current = true
+      if (data) {
+        setEmail(isDefinedAndNotNull(data.email) ? data.email : "");
+      }
+    }
+  }, []);
 
   return (
-    <div className="flex w-screen overflow-hidden step2">
+    <div className="flex w-screen overflow-hidden">
       <div className="w-2/3 p-10">
         <h1 className="my-10">Dernière étape</h1>
         <div className="w-full max-w-lg">
@@ -58,13 +75,26 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
                     required
                     type="password"
                     className="input"
-                    onChange={(e) => setConfirmedPassword(e.target.value)}
+                    onChange={(e) => {
+                      setConfirmedPassword(e.target.value);
+                      setPasswordMatch(true); // Réinitialise l'état lorsque l'utilisateur commence à saisir à nouveau
+                    }}
                   />
                   <span className="highlight"></span>
                   <span className="bar"></span>
                   <label>Confirmer mot de passe</label>
                 </div>
               </div>
+              {!passwordMatch && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-red-500 w-full md:w00 px-3 md:mb-6"
+                >
+                  Les mots de passe ne correspondent pas
+                </motion.div>
+              )}
             </div>
           </div>
         </div>

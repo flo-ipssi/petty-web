@@ -11,7 +11,7 @@ import logo from "../../assets/images/logo.svg";
 import "./Header.scss";
 import Modal from "../Modal/Modal";
 import { Keys, saveToAsyncStorage } from "../../utils/asyncStorage";
-import { updateLoggedInState, updateProfile } from "../../app/auth";
+import { updateLoggedInState, updateProfile } from "../../store/auth";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import client from "../../api/client";
@@ -31,15 +31,14 @@ export const Header = () => {
       const { data } = await client.post("/auth/sign-in", {
         email,
         password,
+      }, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
       });
-
-      console.log(data);
-
       await saveToAsyncStorage(Keys.AUTH_TOKEN, data.token);
-
       dispatch(updateProfile(data.profile));
       dispatch(updateLoggedInState(true));
-      navigation('/dashbord');
     } catch (error) {
       console.log("Sign in error: ", error);
     }

@@ -1,1 +1,73 @@
-.Step2 {}
+.custum-file-upload {
+  height: 200px;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #cacaca;
+  // background-color: $background-color_1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px rgba(0, 0, 0, 0.1);
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      height: 40px;
+      fill: rgba(75, 85, 99, 1);
+    }
+  }
+
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-weight: 400;
+      font-size: 13px;
+      // color: $color_1;
+    }
+  }
+
+  input {
+    display: none;
+  }
+
+  .redButton {
+    top: -10px;
+    right: -10px;
+    z-index: 99999;
+    background: #fff;
+    border-radius: 20px;
+  }
+}
+
+.custum-file-upload-profil {
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  display: flex;
+  gap: 20px;
+  cursor: pointer;
+  align-items: end;
+  justify-content: right;
+  border: 4px dashed #cacaca;
+  // background-color: $background-color_1;
+  padding: 1.5rem;
+  box-shadow: 0px 48px 35px -48px rgba(0, 0, 0, 0.1);
+}
+
+.redButtonProfile {
+  bottom: 0;
+}
+.filter-white {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}

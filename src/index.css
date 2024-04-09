@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @font-face {
   font-family: 'Brusher';
   src: local('Brusher'), url(./fonts/Brusher.ttf) format('truetype');
@@ -28,7 +27,6 @@
   font-family: 'Fonseca';
   src: local('Fonseca'), url(./fonts/fonseca/Fonseca.ttf) format('truetype');
 }
-
 body{
   font-family: 'Garet'; 
 }

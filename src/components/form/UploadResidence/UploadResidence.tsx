@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, useRef } from "react";
 import "./UploadResidence.scss";
 import { AiFillCloseCircle } from "react-icons/ai";
 
@@ -8,11 +8,12 @@ interface UploadResidenceProps {
 
 const UploadResidence: FC<UploadResidenceProps> = ({ onFileChange }) => {
   const [image, setImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("ok");
-    if (event.target.files && event.target.files.length > 0) {
+    if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
       const file = event.target.files[0];
+      const selectedFile  = fileInputRef.current.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
         const imageData = reader.result as string;
@@ -20,7 +21,7 @@ const UploadResidence: FC<UploadResidenceProps> = ({ onFileChange }) => {
         // Appel de la fonction de rappel avec les données de l'image
         onFileChange(imageData);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile );
     }
   };
 
@@ -52,7 +53,7 @@ const UploadResidence: FC<UploadResidenceProps> = ({ onFileChange }) => {
             </div>
           </>
         )}
-        <input type="file" id="file" onChange={handleFileChange} />
+        <input type="file" id="file" ref={fileInputRef} onChange={handleFileChange} />
       </label>
   );
 };

@@ -1,12 +1,12 @@
 import React, { FC, useState, useEffect } from "react";
-import "../SignUp.scss"
+import "../SignUp.scss";
+import isDefinedAndNotNull from "../../../../helpers/form";
 
 interface Step1Props {
   data: any;
   onPrevious: () => void;
   onNext: (data: any) => void;
 }
-
 const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
   const [isChecked, setIsChecked] = useState(null); // Initialisation à true
   const [typeStructure, setTypeStructure] = useState("");
@@ -14,20 +14,20 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
   const [name, setName] = useState("");
   const [firstname, setFirstname] = useState("");
   const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState(null);
   const [zip, setZip] = useState("");
   const [numero, setNumero] = useState("");
   const [website, setWebSite] = useState("");
 
   console.log(data);
-  
+
   const toggleCheckbox = () => {
     if (data.company) {
       setIsChecked(!isChecked);
       if (!isChecked) {
-        setTypeStructure("Particulier");
-      } else {
         setTypeStructure("Association");
+      } else {
+        setTypeStructure("Particulier");
       }
     }
   };
@@ -49,6 +49,23 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
 
   useEffect(() => {
     toggleCheckbox();
+
+    if (data) {
+      setIsChecked(isDefinedAndNotNull(data.isChecked) ? data.isChecked : true);
+      setTypeStructure(
+        isDefinedAndNotNull(data.typeStructure) ? data.typeStructure : ""
+      );
+      setNameAssociation(
+        isDefinedAndNotNull(data.nameAssociation) ? data.nameAssociation : ""
+      );      
+      setName(isDefinedAndNotNull(data.name) ? "" : data.name);
+      setFirstname(isDefinedAndNotNull(data.firstname) ? data.firstname : "");
+      setAddress(isDefinedAndNotNull(data.address) ? data.address : "");
+      setCity(isDefinedAndNotNull(data.city) ? data.city : null);
+      setZip(isDefinedAndNotNull(data.zip) ? data.zip : "");
+      setNumero(isDefinedAndNotNull(data.numero) ? data.numero : "");
+      setWebSite(isDefinedAndNotNull(data.website) ? data.website : "");
+    }
   }, []);
   return (
     <div className="flex w-screen overflow-hidden step1">
@@ -87,7 +104,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
               Particulier
             </div>
           </div>
-          {!isChecked ? (
+          {isChecked ? (
             <div className="flex flex-wrap fields -mx-3 mt-5 mb-8">
               <div className="w-full md:w-100 px-3 mb-6 md:mb-0">
                 <div className="group">
@@ -138,27 +155,31 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap -mx-3 mb-8">
-            <div className="w-full md:w-100 px-3 mb-6 md:mb-0">
-              <div className="group">
-                <input
-                  required
-                  type="text"
-                  className="input"
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                <label>Adresse</label>
+          {data.company ? (
+            <div className="flex flex-wrap -mx-3 mb-8">
+              <div className="w-full md:w-100 px-3 mb-6 md:mb-0">
+                <div className="group">
+                  <input
+                    required
+                    type="text"
+                    className="input"
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                  <span className="highlight"></span>
+                  <span className="bar"></span>
+                  <label>Adresse</label>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
           <div className="flex flex-wrap -mx-3 mb-8">
-            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <div className={" px-3 mb-6 md:mb-0 md:w-1/2"}>
               <select
                 onChange={(e) => setCity(e.target.value)}
                 id="underline_select"
-                className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2  appearance-none  dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                className={
+                  "block py-2.5 px-0  text-sm text-gray-500 bg-transparent border-0 border-b-2  appearance-none dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer w-full"
+                }
               >
                 <option selected>Ville</option>
                 <option value="paris">Paris</option>
@@ -166,30 +187,32 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
                 <option value="rennes">Rennes</option>
               </select>
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-              <div className="group">
-                <input
-                  required
-                  onKeyPress={(event) => {
-                    if (!/[0-9]/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  type="text"
-                  className="input"
-                  onChange={(e) => setZip(e.target.value)}
-                />
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                <label>Code Postale</label>
+
+            {data.company ? (
+              <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+                <div className="group">
+                  <input
+                    required
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    type="text"
+                    className="input"
+                    onChange={(e) => setZip(e.target.value)}
+                  />
+                  <span className="highlight"></span>
+                  <span className="bar"></span>
+                  <label>Code Postale</label>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
           <div className="flex flex-wrap -mx-3 mb-8">
             <div
               className={
-                "w-full px-3 mb-6 md:mb-0 " +
-                (!isChecked ? "md:w-1/2" : "md:w-100")
+                "w-full px-3 mb-6 md:mb-0 " + (data.company ? "md:w-1/2" : null)
               }
             >
               <div className="group">
@@ -205,7 +228,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
                 <label>Numéro</label>
               </div>
             </div>
-            {!isChecked ? (
+            {data.company && typeStructure == "Association" ? (
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <div className="group">
                   <input
