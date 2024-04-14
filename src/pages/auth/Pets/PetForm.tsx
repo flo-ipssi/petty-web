@@ -42,6 +42,8 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const [successMessage, setSuccessMessage] = useState('');
+
     const handlePhotoProfilChange = (event: { target: { files: any[] } }) => {
         const file = event.target.files[0];
         setPhotoProfil(file);
@@ -52,13 +54,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
         if (fileList) {
             const newFiles = Array.from(fileList);
             if (files.length + newFiles.length <= 8) {
-                // Récupérer les URI et les noms des nouveaux fichiers
-                const newFilesData = newFiles.map(file => ({
-                  uri: URL.createObjectURL(file),
-                  name: file.name
-                }));
-                // Ajouter les nouveaux fichiers à la liste des fichiers
-                setFiles([...files, ...newFilesData]);
+                setFiles(prevFiles => [...prevFiles, ...newFiles]);
             } else {
                 alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
             }
@@ -67,7 +63,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
             }
         }
         console.log(files);
-        
+
     };
 
     const removeFile = (indexToRemove: number) => {
@@ -75,7 +71,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
         setFiles(newFiles);
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (
             !nom ||
@@ -87,35 +83,60 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
             !taille ||
             !photoProfil
         ) {
+            console.log('error');
+
             setErrorMessage("Veuillez remplir tous les champs obligatoires (*)");
             return;
         }
 
-        const formData = new FormData();
-        formData.append('name', nom);
-        formData.append('espece', espece);
-        formData.append('race', race);
-        formData.append('age', age.toString());
-        formData.append('sexe', sexe);
-        formData.append('poids', poids.toString());
-        formData.append('taille', taille.toString());
-        formData.append('couleur', couleur);
-        formData.append('description', description);
-        formData.append('etatSante', etatSante);
-        formData.append('niveauEnergie', niveauEnergie);
-        formData.append('compatibiliteAutresAnimaux', compatibiliteAutresAnimaux);
-        formData.append('niveauActivite', niveauActivite);
-        formData.append('histoire', histoire);
-        formData.append('exigencesResidence', exigencesResidence);
-        formData.append('situationVaccination', situationVaccination);
-        formData.append('situationSterilisation', situationSterilisation);
-        formData.append('situationVermifugation', situationVermifugation);
-        formData.append('situationPucage', situationPucage);
-        formData.append('situationTraitementAntiParasitaire', situationTraitementAntiParasitaire);
-        formData.append('photoProfil', photoProfil);
-        files.forEach((file, index) => {
-            formData.append(`file${index}`, file);
-        });
+        // const formData = new FormData();
+        // formData.append('name', nom);
+        // formData.append('espece', espece);
+        // formData.append('race', race);
+        // formData.append('age', age.toString());
+        // formData.append('sexe', sexe);
+        // formData.append('poids', poids.toString());
+        // formData.append('taille', taille.toString());
+        // formData.append('couleur', couleur);
+        // formData.append('description', description);
+        // formData.append('etatSante', etatSante);
+        // formData.append('niveauEnergie', niveauEnergie);
+        // formData.append('compatibiliteAutresAnimaux', compatibiliteAutresAnimaux);
+        // formData.append('niveauActivite', niveauActivite);
+        // formData.append('histoire', histoire);
+        // formData.append('exigencesResidence', exigencesResidence);
+        // formData.append('situationVaccination', situationVaccination);
+        // formData.append('situationSterilisation', situationSterilisation);
+        // formData.append('situationVermifugation', situationVermifugation);
+        // formData.append('situationPucage', situationPucage);
+        // formData.append('situationTraitementAntiParasitaire', situationTraitementAntiParasitaire);
+        // formData.append('photoProfil', photoProfil);
+        // files.forEach((file, index) => {
+        //     formData.append(`file${index}`, file);
+        // });
+
+        const dataToSend = {
+            nom: nom,
+            espece,
+            race,
+            age: age.toString(),
+            sexe,
+            poids: poids.toString(),
+            taille: taille.toString(),
+            couleur,
+            description,
+            etatSante,
+            niveauEnergie,
+            compatibiliteAutresAnimaux,
+            niveauActivite,
+            histoire,
+            exigencesResidence,
+            situationVaccination,
+            situationSterilisation,
+            situationVermifugation,
+            situationPucage,
+            situationTraitementAntiParasitaire
+        };
 
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) {
@@ -124,20 +145,41 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
         };
 
         try {
-            
-            const response = await axios.post('http://localhost:8989/pet/create', formData, {
+            const response = await axios.post('http://localhost:8989/pet/create', dataToSend, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    // 'Content-Type': 'multipart/form-data',
+                    "Access-Control-Allow-Origin": "*",
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(response);
 
+            setTimeout(() => {
+                setSuccessMessage('Votre formulaire a été soumis avec succès !');
+            }, 2000);
+
+            // Si la requête est réussie, envoyer la photo
+            const petId = response.data.pet.id;
+            if (petId && photoProfil) {
+                const formData = new FormData();
+                formData.append('photoProfil', photoProfil);
+                files.forEach((file, index) => {
+                    formData.append(`file${index}`, file);
+                });
+
+                console.log(formData);
+                
+                const photoResponse = await axios.post(`http://localhost:8989/pet/addMedias/${petId}`, formData, {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log(photoResponse);
+            }
         } catch (error) {
             console.error('Une erreur s\'est produite :', error);
         }
 
-        console.log(formData);
     };
 
     useEffect(() => {
@@ -165,7 +207,15 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                 initialValues.situationTraitementAntiParasitaire
             );
         }
-    }, []);
+
+        // Effacer le message après 5 secondes
+        const timer = setTimeout(() => {
+            setSuccessMessage('');
+        }, 5000);
+
+        // Nettoyer le timer lorsque le composant est démonté ou que le message de succès change
+        return () => clearTimeout(timer);
+    }, [successMessage]);
 
     return (
         <div className="relative md:ml-64 bg-blueGray-50">
@@ -255,7 +305,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                         <div className="md:w-1/2 px-6 pb-8">
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="nom"
                                 >
                                     Nom de l'animal:
@@ -270,7 +320,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="espece"
                                 >
                                     Espèce:
@@ -289,7 +339,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="race"
                                 >
                                     Race:
@@ -304,7 +354,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="age"
                                 >
                                     Âge:
@@ -319,7 +369,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="sexe"
                                 >
                                     Sexe:
@@ -337,7 +387,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="poids"
                                 >
                                     Poids:
@@ -352,7 +402,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                             </div>
                             <div className="mb-4">
                                 <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                    className="block text-gray-700 text-sm font-bold mb-2 required"
                                     htmlFor="taille"
                                 >
                                     Taille:
@@ -578,6 +628,13 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                         </button>
                     </div>
                 </form>
+                {/* Message de succès */}
+                {successMessage && (
+                    <div className="mt-4 bg-green-200 border-green-400 text-green-700 border-l-4 p-4" role="alert">
+                        <p className="font-bold">Succès !</p>
+                        <p>{successMessage}</p>
+                    </div>
+                )}
             </div>
         </div>
     );
