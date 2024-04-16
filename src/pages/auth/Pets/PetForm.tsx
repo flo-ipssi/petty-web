@@ -4,36 +4,67 @@ import { AiOutlineCloudUpload, AiOutlineCodepenCircle } from "react-icons/ai";
 import { FaTimes, FaTimesCircle } from "react-icons/fa";
 import axios from "axios";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
+import { useNavigate } from "react-router-dom";
+import InputForm from "../../../components/form/InputForm";
+import SelectForm from "../../../components/form/SelectForm";
+import TextAreaForm from "../../../components/form/TextAreaForm";
 
 interface PetFormProps {
     initialValues?: AnimalData | undefined;
-    onSubmit?: void;
 }
 
-const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
-    const [nom, setNom] = useState(initialValues?.nom || "");
-    const [espece, setEspece] = useState(initialValues?.espece || "");
-    const [race, setRace] = useState(initialValues?.race || "");
+const PetFom: FC<PetFormProps> = ({ initialValues }) => {
+    const navigate = useNavigate();
+
+    const [id, setId] = useState(initialValues?.name || "");
+    const [name, setName] = useState(initialValues?.name || "");
+    const [species, setSpecies] = useState(initialValues?.species || "");
+    const [breed, setBreed] = useState(initialValues?.breed || "");
     const [age, setAge] = useState(initialValues?.age || null);
-    const [sexe, setSexe] = useState(initialValues?.sexe || "");
-    const [poids, setPoids] = useState(initialValues?.poids || null);
-    const [taille, setTaille] = useState(initialValues?.taille || null);
-    const [couleur, setCouleur] = useState(initialValues?.couleur || "");
+    const [gender, setGender] = useState(initialValues?.gender || "");
+    const [weight, setWeight] = useState(initialValues?.weight || null);
+    const [size, setSize] = useState(initialValues?.size || null);
+    const [color, setColor] = useState(initialValues?.color || "");
+    const [location, setLocation] = useState(initialValues?.location || "");
     const [description, setDescription] = useState(initialValues?.description || "");
-    const [etatSante, setEtatSante] = useState(initialValues?.etatSante || "");
-    const [niveauEnergie, setNiveauEnergie] = useState(initialValues?.niveauEnergie || "");
-    const [compatibiliteAutresAnimaux, setCompatibiliteAutresAnimaux] = useState(initialValues?.compatibiliteAutresAnimaux || "");
-    const [niveauActivite, setNiveauActivite] = useState(initialValues?.niveauActivite || "");
-    const [histoire, setHistoire] = useState(initialValues?.histoire || "");
-    const [exigencesResidence, setExigencesResidence] = useState(initialValues?.exigencesResidence || "");
-    const [situationVaccination, setSituationVaccination] = useState(initialValues?.situationVaccination || "");
-    const [situationSterilisation, setSituationSterilisation] = useState(initialValues?.situationSterilisation || "");
-    const [situationVermifugation, setSituationVermifugation] = useState(initialValues?.situationVermifugation || "");
-    const [situationPucage, setSituationPucage] = useState(initialValues?.situationPucage || "");
+    const [healthStatus, setHealthStatus] = useState(initialValues?.healthStatus || "");
+    const [energyLevel, setLevelEnergy] = useState(initialValues?.energyLevel || "");
+    const [compatibilityWithOtherAnimals, setCompatibilityOtherAnimals] = useState(initialValues?.compatibilityWithOtherAnimals || "");
+    const [activityLevel, setLevelActivity] = useState(initialValues?.activityLevel || "");
+    const [story, setStory] = useState(initialValues?.story || "");
+    const [residenceRequirements, setRequirementsResidence] = useState(initialValues?.residenceRequirements || "");
+    const [vaccinationStatus, setVaccinationSituation] = useState(initialValues?.vaccinationStatus || "");
+    const [sterilizationStatus, setSterilizationSituation] = useState(initialValues?.sterilizationStatus || "");
+    const [dewormingStatus, setDewormingSituation] = useState(initialValues?.dewormingStatus || "");
+    const [chipStatus, setChipSituation] = useState(initialValues?.chipStatus || "");
     const [
-        situationTraitementAntiParasitaire,
-        setSituationTraitementAntiParasitaire,
-    ] = useState(initialValues?.situationTraitementAntiParasitaire || "");
+        antiparasiteTreatmentStatus,
+        setSituationAntiparasiteTreatment,
+    ] = useState(initialValues?.antiparasiteTreatmentStatus || "");
+
+    // Options array 
+    const speciesOptions = [
+        { value: 'chien', label: 'Chien' },
+        { value: 'chat', label: 'Chat' },
+        { value: 'autre', label: 'Autre' }
+    ];
+
+    const gendersOptions = [
+        { value: 'male', label: 'Mâle' },
+        { value: 'femelle', label: 'Femelle' }
+    ];
+
+    const levelOptions = [
+        { value: 'faible', label: 'Faible' },
+        { value: 'moyen', label: 'Moyen' },
+        { value: 'élevé', label: 'Élevé' }
+    ];
+
+    const locationsOptions = [
+        { value: 'paris', label: 'Chien' },
+        { value: 'lyon', label: 'Chat' },
+        { value: 'marseille', label: 'Autre' }
+    ];
 
     // Medias
     const [photoProfil, setPhotoProfil] = useState(null);
@@ -62,8 +93,6 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                 fileInputRef.current.value = "";
             }
         }
-        console.log(files);
-
     };
 
     const removeFile = (indexToRemove: number) => {
@@ -74,68 +103,42 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (
-            !nom ||
-            !espece ||
-            !race ||
+            !name ||
+            !species ||
+            !breed ||
             !age ||
-            !sexe ||
-            !poids ||
-            !taille ||
+            !gender ||
+            !weight ||
+            !size ||
+            !description ||
+            !healthStatus ||
             !photoProfil
         ) {
-            console.log('error');
-
             setErrorMessage("Veuillez remplir tous les champs obligatoires (*)");
             return;
         }
 
-        // const formData = new FormData();
-        // formData.append('name', nom);
-        // formData.append('espece', espece);
-        // formData.append('race', race);
-        // formData.append('age', age.toString());
-        // formData.append('sexe', sexe);
-        // formData.append('poids', poids.toString());
-        // formData.append('taille', taille.toString());
-        // formData.append('couleur', couleur);
-        // formData.append('description', description);
-        // formData.append('etatSante', etatSante);
-        // formData.append('niveauEnergie', niveauEnergie);
-        // formData.append('compatibiliteAutresAnimaux', compatibiliteAutresAnimaux);
-        // formData.append('niveauActivite', niveauActivite);
-        // formData.append('histoire', histoire);
-        // formData.append('exigencesResidence', exigencesResidence);
-        // formData.append('situationVaccination', situationVaccination);
-        // formData.append('situationSterilisation', situationSterilisation);
-        // formData.append('situationVermifugation', situationVermifugation);
-        // formData.append('situationPucage', situationPucage);
-        // formData.append('situationTraitementAntiParasitaire', situationTraitementAntiParasitaire);
-        // formData.append('photoProfil', photoProfil);
-        // files.forEach((file, index) => {
-        //     formData.append(`file${index}`, file);
-        // });
-
         const dataToSend = {
-            nom: nom,
-            espece,
-            race,
+            name: name,
+            species,
+            breed,
             age: age.toString(),
-            sexe,
-            poids: poids.toString(),
-            taille: taille.toString(),
-            couleur,
+            gender,
+            weight: weight.toString(),
+            size: size.toString(),
+            color,
             description,
-            etatSante,
-            niveauEnergie,
-            compatibiliteAutresAnimaux,
-            niveauActivite,
-            histoire,
-            exigencesResidence,
-            situationVaccination,
-            situationSterilisation,
-            situationVermifugation,
-            situationPucage,
-            situationTraitementAntiParasitaire
+            healthStatus,
+            energyLevel,
+            compatibilityWithOtherAnimals,
+            activityLevel,
+            story,
+            residenceRequirements,
+            vaccinationStatus,
+            sterilizationStatus,
+            dewormingStatus,
+            chipStatus,
+            antiparasiteTreatmentStatus
         };
 
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
@@ -153,9 +156,6 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                 },
             });
 
-            setTimeout(() => {
-                setSuccessMessage('Votre formulaire a été soumis avec succès !');
-            }, 2000);
 
             // Si la requête est réussie, envoyer la photo
             const petId = response.data.pet.id;
@@ -166,13 +166,13 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                     formData.append(`file${index}`, file);
                 });
 
-                console.log(formData);
-                
                 const photoResponse = await axios.post(`http://localhost:8989/pet/addMedias/${petId}`, formData, {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         Authorization: `Bearer ${token}`,
                     },
+                }).then(() => {
+                    navigate('/pets', { state: "success" });
                 });
                 console.log(photoResponse);
             }
@@ -183,39 +183,33 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
     };
 
     useEffect(() => {
-        if (initialValues) {
-            setNom(initialValues.nom);
-            setEspece(initialValues.espece);
-            setRace(initialValues.race);
+        if (initialValues && initialValues?.id) {
+            setId(initialValues.id);
+            setName(initialValues.name);
+            setSpecies(initialValues.species);
+            setBreed(initialValues.breed);
             setAge(initialValues.age);
-            setSexe(initialValues.sexe);
-            setPoids(initialValues.poids);
-            setTaille(initialValues.taille);
-            setCouleur(initialValues.couleur);
+            setGender(initialValues.gender);
+            setWeight(initialValues.weight);
+            setSize(initialValues.size);
+            setColor(initialValues.color);
             setDescription(initialValues.description);
-            setEtatSante(initialValues.etatSante);
-            setNiveauEnergie(initialValues.niveauEnergie);
-            setCompatibiliteAutresAnimaux(initialValues.compatibiliteAutresAnimaux);
-            setNiveauActivite(initialValues.niveauActivite);
-            setHistoire(initialValues.histoire);
-            setExigencesResidence(initialValues.exigencesResidence);
-            setSituationVaccination(initialValues.situationVaccination);
-            setSituationSterilisation(initialValues.situationSterilisation);
-            setSituationVermifugation(initialValues.situationVermifugation);
-            setSituationPucage(initialValues.situationPucage);
-            setSituationTraitementAntiParasitaire(
-                initialValues.situationTraitementAntiParasitaire
+            setHealthStatus(initialValues.healthStatus);
+            setLevelEnergy(initialValues.energyLevel);
+            setCompatibilityOtherAnimals(initialValues.compatibilityWithOtherAnimals);
+            setLevelActivity(initialValues.activityLevel);
+            setStory(initialValues.story);
+            setRequirementsResidence(initialValues.residenceRequirements);
+            setVaccinationSituation(initialValues.vaccinationStatus);
+            setSterilizationSituation(initialValues.sterilizationStatus);
+            setDewormingSituation(initialValues.dewormingStatus);
+            setChipSituation(initialValues.chipStatus);
+            setSituationAntiparasiteTreatment(
+                initialValues.antiparasiteTreatmentStatus
             );
         }
 
-        // Effacer le message après 5 secondes
-        const timer = setTimeout(() => {
-            setSuccessMessage('');
-        }, 5000);
-
-        // Nettoyer le timer lorsque le composant est démonté ou que le message de succès change
-        return () => clearTimeout(timer);
-    }, [successMessage]);
+    }, []);
 
     return (
         <div className="relative md:ml-64 bg-blueGray-50">
@@ -223,6 +217,14 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                 <h1 className="text-2xl font-bold mb-6 px-6 pt-6">
                     Formulaire d'adoption d'animal
                 </h1>
+                {/* Message d'error */}
+                {errorMessage ? (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span className="block sm:inline">{errorMessage}</span>
+                        <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={() => setErrorMessage('')}>
+                            <FaTimes color="red" className="fill-current h-6 w-6 text-red-500" />
+                        </span>
+                    </div>) : null}
                 <form onSubmit={handleSubmit}>
                     <div className="md:flex">
                         <div className="mb-4 w-1/2">
@@ -290,12 +292,12 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                                 {files.map((file, index) => (
                                     <li key={index} className="flex items-center">
                                         <span className="mr-2">{file.name}</span>
-                                        <button
+                                        <span
                                             className="text-red-500 hover:text-red-700"
                                             onClick={() => removeFile(index)}
                                         >
                                             &#10006;
-                                        </button>
+                                        </span>
                                     </li>
                                 ))}
                             </ul>
@@ -304,322 +306,206 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                     <div className="md:flex">
                         <div className="md:w-1/2 px-6 pb-8">
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="nom"
-                                >
-                                    Nom de l'animal:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="nom"
+                                <InputForm
+                                    label="Nom de l'animal:"
+                                    id="name"
                                     type="text"
-                                    value={nom}
-                                    onChange={(e) => setNom(e.target.value)}
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="espece"
-                                >
-                                    Espèce:
-                                </label>
-                                <select
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="espece"
-                                    value={espece}
-                                    onChange={(e) => setEspece(e.target.value)}
-                                >
-                                    <option value="">Sélectionner une espèce</option>
-                                    <option value="chien">Chien</option>
-                                    <option value="chat">Chat</option>
-                                    <option value="autre">Autre</option>
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="race"
-                                >
-                                    Race:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="race"
-                                    type="text"
-                                    value={race}
-                                    onChange={(e) => setRace(e.target.value)}
+                                <SelectForm
+                                    label="Espèce:"
+                                    id="species"
+                                    value={species}
+                                    onChange={(e) => setSpecies(e.target.value)}
+                                    options={speciesOptions}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="age"
-                                >
-                                    Âge:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                <InputForm
+                                    label="Race:"
+                                    id="breed"
+                                    type="text"
+                                    value={breed}
+                                    onChange={(e) => setBreed(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <InputForm
+                                    label="Âge:"
                                     id="age"
                                     type="number"
+                                    min={1}
                                     value={age}
                                     onChange={(e) => setAge(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="sexe"
-                                >
-                                    Sexe:
-                                </label>
-                                <select
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="sexe"
-                                    value={sexe}
-                                    onChange={(e) => setSexe(e.target.value)}
-                                >
-                                    <option value="">Sélectionner le sexe</option>
-                                    <option value="male">Mâle</option>
-                                    <option value="femelle">Femelle</option>
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="poids"
-                                >
-                                    Poids:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="poids"
-                                    type="number"
-                                    value={poids}
-                                    onChange={(e) => setPoids(e.target.value)}
+
+                                <SelectForm
+                                    label="Genre:"
+                                    id="gender"
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value)}
+                                    options={gendersOptions}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2 required"
-                                    htmlFor="taille"
-                                >
-                                    Taille:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="taille"
+
+                                <SelectForm
+                                    label="Localisation:"
+                                    id="location"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    options={locationsOptions}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <InputForm
+                                    label="Poids:"
+                                    id="weight"
                                     type="number"
-                                    value={taille}
-                                    onChange={(e) => setTaille(e.target.value)}
+                                    value={weight}
+                                    onChange={(e) => setWeight(e.target.value)}
+                                    min={0}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <InputForm
+                                    label="Taille:"
+                                    id="size"
+                                    type="number"
+                                    value={size}
+                                    onChange={(e) => setSize(e.target.value)}
+                                    min={0} // Ajout de la valeur min pour le champ de taille
                                 />
                             </div>
 
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="couleur"
-                                >
-                                    Couleur:
-                                </label>
-                                <input
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="couleur"
+                                <InputForm
+                                    label="Couleur:"
+                                    id="color"
                                     type="text"
-                                    value={couleur}
-                                    onChange={(e) => setCouleur(e.target.value)}
+                                    value={color}
+                                    onChange={(e) => setColor(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="description"
-                                >
-                                    Description:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+
+                                <TextAreaForm
+                                    label="Description:"
                                     id="description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="etatSante"
-                                >
-                                    État de santé:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="etatSante"
-                                    value={etatSante}
-                                    onChange={(e) => setEtatSante(e.target.value)}
+                                <TextAreaForm
+                                    label="État de santé:"
+                                    id="healthStatus"
+                                    value={healthStatus}
+                                    onChange={(e) => setHealthStatus(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="compatibiliteAutresAnimaux"
-                                >
-                                    Compatibilité avec d'autres animaux:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="compatibiliteAutresAnimaux"
-                                    value={compatibiliteAutresAnimaux}
-                                    onChange={(e) =>
-                                        setCompatibiliteAutresAnimaux(e.target.value)
-                                    }
+                                <TextAreaForm
+                                    label="Compatibilité avec d'autres animaux:"
+                                    id="compatibilityWithOtherAnimals"
+                                    value={compatibilityWithOtherAnimals}
+                                    onChange={(e) => setCompatibilityOtherAnimals(e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="md:w-1/2 px-6 pb-8">
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="niveauActivite"
-                                >
-                                    Niveau d'activité:
-                                </label>
-                                <select
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="niveauActivite"
-                                    value={niveauActivite}
-                                    onChange={(e) => setNiveauActivite(e.target.value)}
-                                >
-                                    <option value="">Sélectionner un niveau d'activité</option>
-                                    <option value="faible">Faible</option>
-                                    <option value="moyen">Moyen</option>
-                                    <option value="élevé">Élevé</option>
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="histoire"
-                                >
-                                    Histoire de l'animal:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="histoire"
-                                    value={histoire}
-                                    onChange={(e) => setHistoire(e.target.value)}
+
+                                <SelectForm
+                                    label="Niveau d'activité:"
+                                    id="activityLevel"
+                                    value={activityLevel}
+                                    onChange={(e) => setLevelActivity(e.target.value)}
+                                    options={levelOptions}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="exigencesResidence"
-                                >
-                                    Exigences de résidence:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="exigencesResidence"
-                                    value={exigencesResidence}
-                                    onChange={(e) => setExigencesResidence(e.target.value)}
+
+                                <TextAreaForm
+                                    label="Histoire de l'animal:"
+                                    id="story"
+                                    value={story}
+                                    onChange={(e) => setStory(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="situationVaccination"
-                                >
-                                    Situation de vaccination:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="situationVaccination"
-                                    value={situationVaccination}
-                                    onChange={(e) => setSituationVaccination(e.target.value)}
+
+                                <TextAreaForm
+                                    label="Exigences de résidence:"
+                                    id="residenceRequirements"
+                                    value={residenceRequirements}
+                                    onChange={(e) => setRequirementsResidence(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="situationSterilisation"
-                                >
-                                    Situation de stérilisation/castration:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="situationSterilisation"
-                                    value={situationSterilisation}
-                                    onChange={(e) => setSituationSterilisation(e.target.value)}
+
+                                <TextAreaForm
+                                    label="Situation de vaccination:"
+                                    id="vaccinationStatus"
+                                    value={vaccinationStatus}
+                                    onChange={(e) => setVaccinationSituation(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="situationVermifugation"
-                                >
-                                    Situation de vermifugation:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="situationVermifugation"
-                                    value={situationVermifugation}
-                                    onChange={(e) => setSituationVermifugation(e.target.value)}
+                                <TextAreaForm
+                                    label="Situation de stérilisation/castration:"
+                                    id="sterilizationStatus"
+                                    value={sterilizationStatus}
+                                    onChange={(e) => setSterilizationSituation(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="situationPucage"
-                                >
-                                    Situation de puçage:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="situationPucage"
-                                    value={situationPucage}
-                                    onChange={(e) => setSituationPucage(e.target.value)}
+
+                                <TextAreaForm
+                                    label="Situation de vermifugation:"
+                                    id="dewormingStatus"
+                                    value={dewormingStatus}
+                                    onChange={(e) => setDewormingSituation(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="situationTraitementAntiParasitaire"
-                                >
-                                    Situation de traitement anti-parasitaire:
-                                </label>
-                                <textarea
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="situationTraitementAntiParasitaire"
-                                    value={situationTraitementAntiParasitaire}
-                                    onChange={(e) =>
-                                        setSituationTraitementAntiParasitaire(e.target.value)
-                                    }
+
+                                <TextAreaForm
+                                    label="Situation de puçage:"
+                                    id="chipStatus"
+                                    value={chipStatus}
+                                    onChange={(e) => setChipSituation(e.target.value)}
                                 />
                             </div>
                             <div className="mb-4">
-                                <label
-                                    className="block text-gray-700 text-sm font-bold mb-2"
-                                    htmlFor="niveauEnergie"
-                                >
-                                    Niveau d'énergie:
-                                </label>
-                                <select
-                                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="niveauEnergie"
-                                    value={niveauEnergie}
-                                    onChange={(e) => setNiveauEnergie(e.target.value)}
-                                >
-                                    <option value="">Sélectionner un niveau d'énergie</option>
-                                    <option value="faible">Faible</option>
-                                    <option value="moyen">Moyen</option>
-                                    <option value="élevé">Élevé</option>
-                                </select>
+
+                                <TextAreaForm
+                                    label="Situation de traitement anti-parasitaire:"
+                                    id="antiparasiteTreatmentStatus"
+                                    value={antiparasiteTreatmentStatus}
+                                    onChange={(e) => setSituationAntiparasiteTreatment(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4">
+
+                                <SelectForm
+                                    label="Niveau d'énergie:"
+                                    id="energyLevel"
+                                    value={energyLevel}
+                                    onChange={(e) => setLevelEnergy(e.target.value)}
+                                    options={levelOptions}
+                                />
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-center mb-24">
                         <button
-                            type="submit"
+                            onClick={() => handleSubmit}
                             className="bg-transparent hover:bg-blue-500 text-blue-700 
                                 font-semibold hover:text-white py-2 px-4 
                                 border border-blue-500 hover:border-transparent rounded"
@@ -628,13 +514,6 @@ const PetFom: FC<PetFormProps> = ({ initialValues, onSubmit }) => {
                         </button>
                     </div>
                 </form>
-                {/* Message de succès */}
-                {successMessage && (
-                    <div className="mt-4 bg-green-200 border-green-400 text-green-700 border-l-4 p-4" role="alert">
-                        <p className="font-bold">Succès !</p>
-                        <p>{successMessage}</p>
-                    </div>
-                )}
             </div>
         </div>
     );

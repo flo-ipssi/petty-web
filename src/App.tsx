@@ -12,7 +12,6 @@ import {
 } from "./store/auth";
 import { useEffect } from "react";
 import { Keys, getFromAsyncStorage } from "./utils/asyncStorage";
-import AuthContainer from "./components/AuthContainer";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -54,11 +53,9 @@ function App() {
     <AppContainer>
       <Router>
         {loggedIn ? (
-          <AuthContainer>
-            <PrimeReactProvider>
-              <AuthNavigator />
-            </PrimeReactProvider>
-          </AuthContainer>
+          <PrimeReactProvider>
+            <AuthNavigator />
+          </PrimeReactProvider>
         ) : (
           <TabNavigator />
         )}

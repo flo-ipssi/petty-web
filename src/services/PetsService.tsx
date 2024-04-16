@@ -1,27 +1,24 @@
+import axios from 'axios';
+import { Keys, getFromAsyncStorage } from '../utils/asyncStorage';
+
 export const PetsService = {
-    getPetsData() {
-        return [
-            {
-                id: '1000',
-                giver: 'f230fh0g3',
-                type: 'Bamboo Watch',
-                race: 'Bamboo Watch',
-                name: 'Bamboo Watch',
-                avatar: "https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg",
-                age: 4,
-                status: "AVAILABLE",
-                weight: 4,
-                height: 20,
-                sexe: 'Accessories',
-                couleur: 'Accessories',
-                description: 'Product Description',
-                health: '',
-                residenceRequirement: ''
-            },
-        ]
+    async getPetsData() {
+        try {
+            const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+            const response = await axios.get(`http://localhost:8989/pet/list`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                } 
+            });
+            return response.data.list;
+        } catch (error) {
+            console.error('Une erreur s\'est produite lors de la récupération des données des animaux :', error);
+            return [];
+        }
     },
 
     getPetsOfCompany() {
-        return Promise.resolve(this.getPetsData().slice(0, 5));
+        // return Promise.resolve(this.getPetsData().slice(0, 5));
+        return Promise.resolve(this.getPetsData());
     },
 }
