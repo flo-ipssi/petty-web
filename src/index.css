@@ -51,3 +51,11 @@ h1 {
   content:" *";
   color: red;
 }
+
+.p-datatable-wrapper{
+  z-index: 0;
+}
+
+.ReactModal__Overlay{
+  z-index: 9999;
+}

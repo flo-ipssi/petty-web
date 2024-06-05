@@ -33,7 +33,7 @@ function App() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*", // Permet les requêtes depuis toutes les origines
+            "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
           },
         });

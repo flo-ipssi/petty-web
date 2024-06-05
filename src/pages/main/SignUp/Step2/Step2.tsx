@@ -18,12 +18,14 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
   // Function to handle file selection
   const handleFileChange = (index, event) => {
     const newImages = [...images];
-    newImages[index] = URL.createObjectURL(event.target.files[0]);
+    newImages[index] = event.target.files[0];
     setImages(newImages);
   };
   const handleProfileFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      console.log(file);
+      
       // const newImage = URL.createObjectURL(file);
       setProfileImage(file);
     }
@@ -43,14 +45,17 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true
-      if (data.company) {
-        handleNext();
-      }
+      // if (data.company) {
+      //   handleNext();
+      // }
       setImages(isDefinedAndNotNull(data.images) ? data.images : Array(8).fill(null));
       setProfileImage(
         isDefinedAndNotNull(data.profileImage) ? data.profileImage : null
       );
     }
+    
+    console.log("Step2: ");
+    console.log(data);
   }, []);
 
   return (

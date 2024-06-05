@@ -3,18 +3,19 @@ import React, { useState, useEffect } from 'react';
 interface AlertProps {
     type: 'success' | 'error';
     message: string;
+    visible: boolean;
+
 }
 
-const AlertForm: React.FC<AlertProps> = ({ type, message }) => {
-    const [visible, setVisible] = useState<boolean>(true);
+const AlertForm: React.FC<AlertProps> = ({ type, message,visible  }) => {
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setVisible(false);
-        }, 3000);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setVisible(false);
+    //     }, 3000);
 
-        return () => clearTimeout(timer);
-    }, []);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
     return (
         <>

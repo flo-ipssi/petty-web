@@ -4,67 +4,42 @@ import { AiOutlineCloudUpload, AiOutlineCodepenCircle } from "react-icons/ai";
 import { FaTimes, FaTimesCircle } from "react-icons/fa";
 import axios from "axios";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import InputForm from "../../../components/form/InputForm";
 import SelectForm from "../../../components/form/SelectForm";
 import TextAreaForm from "../../../components/form/TextAreaForm";
+import { PetsService } from "../../../services/PetsService";
+import { gendersOptions, levelOptions, locationsOptions, speciesOptions } from "../../../api/fieldsValues";
 
 interface PetFormProps {
-    initialValues?: AnimalData | undefined;
 }
 
-const PetFom: FC<PetFormProps> = ({ initialValues }) => {
+const PetFom: FC<PetFormProps> = ({ }) => {
     const navigate = useNavigate();
+    const params = useLocation();
+    const [id, setId] = useState("");
+    const [name, setName] = useState("");
+    const [species, setSpecies] = useState("");
+    const [breed, setBreed] = useState("");
+    const [age, setAge] = useState(null);
+    const [gender, setGender] = useState("");
+    const [weight, setWeight] = useState(null);
+    const [size, setSize] = useState(null);
+    const [color, setColor] = useState("");
+    const [location, setLocation] = useState("");
+    const [description, setDescription] = useState("");
+    const [healthStatus, setHealthStatus] = useState("");
+    const [energyLevel, setLevelEnergy] = useState("");
+    const [compatibilityWithOtherAnimals, setCompatibilityOtherAnimals] = useState("");
+    const [activityLevel, setLevelActivity] = useState("");
+    const [story, setStory] = useState("");
+    const [residenceRequirements, setRequirementsResidence] = useState("");
+    const [vaccinationStatus, setVaccinationSituation] = useState("");
+    const [sterilizationStatus, setSterilizationSituation] = useState("");
+    const [dewormingStatus, setDewormingSituation] = useState("");
+    const [chipStatus, setChipSituation] = useState("");
+    const [antiparasiteTreatmentStatus, setSituationAntiparasiteTreatment] = useState("");
 
-    const [id, setId] = useState(initialValues?.name || "");
-    const [name, setName] = useState(initialValues?.name || "");
-    const [species, setSpecies] = useState(initialValues?.species || "");
-    const [breed, setBreed] = useState(initialValues?.breed || "");
-    const [age, setAge] = useState(initialValues?.age || null);
-    const [gender, setGender] = useState(initialValues?.gender || "");
-    const [weight, setWeight] = useState(initialValues?.weight || null);
-    const [size, setSize] = useState(initialValues?.size || null);
-    const [color, setColor] = useState(initialValues?.color || "");
-    const [location, setLocation] = useState(initialValues?.location || "");
-    const [description, setDescription] = useState(initialValues?.description || "");
-    const [healthStatus, setHealthStatus] = useState(initialValues?.healthStatus || "");
-    const [energyLevel, setLevelEnergy] = useState(initialValues?.energyLevel || "");
-    const [compatibilityWithOtherAnimals, setCompatibilityOtherAnimals] = useState(initialValues?.compatibilityWithOtherAnimals || "");
-    const [activityLevel, setLevelActivity] = useState(initialValues?.activityLevel || "");
-    const [story, setStory] = useState(initialValues?.story || "");
-    const [residenceRequirements, setRequirementsResidence] = useState(initialValues?.residenceRequirements || "");
-    const [vaccinationStatus, setVaccinationSituation] = useState(initialValues?.vaccinationStatus || "");
-    const [sterilizationStatus, setSterilizationSituation] = useState(initialValues?.sterilizationStatus || "");
-    const [dewormingStatus, setDewormingSituation] = useState(initialValues?.dewormingStatus || "");
-    const [chipStatus, setChipSituation] = useState(initialValues?.chipStatus || "");
-    const [
-        antiparasiteTreatmentStatus,
-        setSituationAntiparasiteTreatment,
-    ] = useState(initialValues?.antiparasiteTreatmentStatus || "");
-
-    // Options array 
-    const speciesOptions = [
-        { value: 'chien', label: 'Chien' },
-        { value: 'chat', label: 'Chat' },
-        { value: 'autre', label: 'Autre' }
-    ];
-
-    const gendersOptions = [
-        { value: 'male', label: 'Mâle' },
-        { value: 'femelle', label: 'Femelle' }
-    ];
-
-    const levelOptions = [
-        { value: 'faible', label: 'Faible' },
-        { value: 'moyen', label: 'Moyen' },
-        { value: 'élevé', label: 'Élevé' }
-    ];
-
-    const locationsOptions = [
-        { value: 'paris', label: 'Chien' },
-        { value: 'lyon', label: 'Chat' },
-        { value: 'marseille', label: 'Autre' }
-    ];
 
     // Medias
     const [photoProfil, setPhotoProfil] = useState(null);
@@ -108,6 +83,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
             !breed ||
             !age ||
             !gender ||
+            !location ||
             !weight ||
             !size ||
             !description ||
@@ -127,6 +103,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
             weight: weight.toString(),
             size: size.toString(),
             color,
+            location,
             description,
             healthStatus,
             energyLevel,
@@ -144,11 +121,16 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) {
             console.error('Absence de token');
+            setErrorMessage('Absence de token')
             return;
         };
 
         try {
-            const response = await axios.post('http://localhost:8989/pet/create', dataToSend, {
+            let url = 'http://localhost:8989/pet/create';
+            if (id) {
+                url = `http://localhost:8989/pet/update/${id}`;
+            }
+            const response = await axios.post(url, dataToSend, {
                 headers: {
                     // 'Content-Type': 'multipart/form-data',
                     "Access-Control-Allow-Origin": "*",
@@ -160,55 +142,83 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
             // Si la requête est réussie, envoyer la photo
             const petId = response.data.pet.id;
             if (petId && photoProfil) {
+                let urlMedias = `http://localhost:8989/pet/addMedias/${petId}`;
+                if (id) {
+                    urlMedias = `http://localhost:8989/pet/updateMedias/${id}`;
+                }
                 const formData = new FormData();
                 formData.append('photoProfil', photoProfil);
                 files.forEach((file, index) => {
                     formData.append(`file${index}`, file);
                 });
 
-                const photoResponse = await axios.post(`http://localhost:8989/pet/addMedias/${petId}`, formData, {
+                const photoResponse = await axios.post(urlMedias, formData, {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         Authorization: `Bearer ${token}`,
                     },
-                }).then(() => {
-                    navigate('/pets', { state: "success" });
-                });
-                console.log(photoResponse);
+                })
             }
         } catch (error) {
             console.error('Une erreur s\'est produite :', error);
+            setErrorMessage(error.message)
         }
 
     };
 
-    useEffect(() => {
-        if (initialValues && initialValues?.id) {
-            setId(initialValues.id);
-            setName(initialValues.name);
-            setSpecies(initialValues.species);
-            setBreed(initialValues.breed);
-            setAge(initialValues.age);
-            setGender(initialValues.gender);
-            setWeight(initialValues.weight);
-            setSize(initialValues.size);
-            setColor(initialValues.color);
-            setDescription(initialValues.description);
-            setHealthStatus(initialValues.healthStatus);
-            setLevelEnergy(initialValues.energyLevel);
-            setCompatibilityOtherAnimals(initialValues.compatibilityWithOtherAnimals);
-            setLevelActivity(initialValues.activityLevel);
-            setStory(initialValues.story);
-            setRequirementsResidence(initialValues.residenceRequirements);
-            setVaccinationSituation(initialValues.vaccinationStatus);
-            setSterilizationSituation(initialValues.sterilizationStatus);
-            setDewormingSituation(initialValues.dewormingStatus);
-            setChipSituation(initialValues.chipStatus);
-            setSituationAntiparasiteTreatment(
-                initialValues.antiparasiteTreatmentStatus
-            );
-        }
+    const createFileObject = async (item: { file: any; id?: any; }) => {
+        // Créer une requête pour récupérer le fichier à partir de son URL
+        const response = await fetch(item.file.url);
+        const blob = await response.blob();
 
+        // Créer un objet File à partir du blob et de son nom
+        const fileObject = new File([blob], item.file.publicId, item.id);
+
+        return fileObject
+    };
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(params.search);
+        const formDataString = searchParams.get('id');
+        if (formDataString) {
+            PetsService.getPetById(formDataString).then((animal) => {
+                const { result, profil, othersFiles } = animal;
+
+
+                createFileObject(profil[0]).then((item) => { setPhotoProfil(item) })
+
+                setFiles([]);
+                othersFiles.map((item: { file: { url: string | URL | Request; publicId: string; }; }) => {
+                    const fileObj = createFileObject(item)
+                    setFiles(oldArray => [...oldArray, fileObj]);
+                })
+
+                setId(result._id);
+                setName(result.name);
+                setSpecies(result.species);
+                setBreed(result.breed);
+                setAge(result.age);
+                setGender(result.gender);
+                setWeight(result.weight);
+                setSize(result.size);
+                setColor(result.color);
+                setLocation(result.location);
+                setDescription(result.description);
+                setHealthStatus(result.healthStatus);
+                setLevelEnergy(result.energyLevel);
+                setCompatibilityOtherAnimals(result.compatibilityWithOtherAnimals);
+                setLevelActivity(result.activityLevel);
+                setStory(result.story);
+                setRequirementsResidence(result.residenceRequirements);
+                setVaccinationSituation(result.vaccinationStatus);
+                setSterilizationSituation(result.sterilizationStatus);
+                setDewormingSituation(result.dewormingStatus);
+                setChipSituation(result.chipStatus);
+                setSituationAntiparasiteTreatment(
+                    result.antiparasiteTreatmentStatus
+                );
+            });
+        }
     }, []);
 
     return (
@@ -219,7 +229,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
                 </h1>
                 {/* Message d'error */}
                 {errorMessage ? (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <div className="bg-red-100 border border-red-400 m-6 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <span className="block sm:inline">{errorMessage}</span>
                         <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={() => setErrorMessage('')}>
                             <FaTimes color="red" className="fill-current h-6 w-6 text-red-500" />
@@ -291,7 +301,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
                             <ul className="mt-2">
                                 {files.map((file, index) => (
                                     <li key={index} className="flex items-center">
-                                        <span className="mr-2">{file.name}</span>
+                                        <span className="mr-2">{file.name ? file.name : `Pet${index + 1}`}</span>
                                         <span
                                             className="text-red-500 hover:text-red-700"
                                             onClick={() => removeFile(index)}
@@ -353,7 +363,6 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <SelectForm
                                     label="Localisation:"
                                     id="location"
@@ -367,6 +376,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
                                     label="Poids:"
                                     id="weight"
                                     type="number"
+                                    min={1}
                                     value={weight}
                                     onChange={(e) => setWeight(e.target.value)}
                                     min={0}
@@ -377,6 +387,7 @@ const PetFom: FC<PetFormProps> = ({ initialValues }) => {
                                     label="Taille:"
                                     id="size"
                                     type="number"
+                                    min={1}
                                     value={size}
                                     onChange={(e) => setSize(e.target.value)}
                                     min={0} // Ajout de la valeur min pour le champ de taille

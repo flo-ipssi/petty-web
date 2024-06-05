@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import logo from '../../../assets/images/icon-no-label.svg';
 import "./Home.scss";
 import { PanInfo, motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 interface HomeProps { }
 
@@ -16,6 +16,8 @@ type imageProps = {
 
 const Home: FC<HomeProps> = () => {
   const [imagePositions, setImagePositions] = useState<imageProps[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams('');
+
   const positions = [
     { width: "400px", height: "400px", top: "1vh", left: "-10vw", rotation: "rotate" },
     { width: "350px", height: "350px", top: "55vh", left: "-7vw", rotation: "rotate2" },
@@ -25,7 +27,14 @@ const Home: FC<HomeProps> = () => {
     { width: "500px", height: "500px", top: "-15vh", left: "76vw", rotation: "rotate6" },
     { width: "200px", height: "200px", top: "-5vh", left: "45vw", rotation: "rotate7" }
   ];
-  useEffect(() => setImagePositions(positions), []);
+  useEffect(() => {
+    setImagePositions(positions);
+    if(searchParams.get("success")){
+      const value = searchParams.get("success");
+      setSearchParams(value);
+    }
+    
+  }, []);
   const navigate = useNavigate();
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {

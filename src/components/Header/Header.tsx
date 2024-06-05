@@ -148,7 +148,6 @@ export const Header = () => {
                 <Link
                   className="block mx-4 lg:inline-block border-x-indigo-200 hover:bg-gray-600 text-gray-400 hover:text-white px-2 py-1 rounded-lg"
                   to="/signup"
-                  onClick={() => setActive(!active)}
                 >
                   Inscription
                 </Link>

@@ -34,10 +34,14 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
         setEmail(isDefinedAndNotNull(data.email) ? data.email : "");
       }
     }
+
+    console.log("Step3: ");
+    console.log(data);
+    
   }, []);
 
   return (
-    <div className="flex w-screen overflow-hidden">
+    <div className="flex w-screen h-3/4 overflow-hidden">
       <div className="w-2/3 p-10">
         <h1 className="my-10">Dernière étape</h1>
         <div className="w-full max-w-lg">

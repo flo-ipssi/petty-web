@@ -1,91 +1,104 @@
 import React, { useEffect, useState } from "react";
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { PetsService } from "../../../services/PetsService";
-import {
-  FaHospital,
-} from "react-icons/fa";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
+import { ConversationsService } from "../../../services/ConversationsService";
 
 export default function ConversationsList() {
+  const [listConversations, setListConversations] = useState<[]>();
 
-  const conversationsData = [
-    {
-      id: 1,
-      firstName: 'Anita',
-      lastMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat ornare luctus. Quisque semper aliquet velit, nec elementum tellus molestie vel. Quisque feugiat, ipsum quis viverra feugiat, nisl quam ultricies nulla, in vulputate urna erat id sapien. Nam accumsan enim tellus, sit amet egestas sapien rutrum elementum. Nam faucibus elementum risus eget tristique. ",
-      lastMessageSeen: false,
-      profileImage: 'https://www.aidonslesnotres.fr/wp-content/uploads/2016/03/Etre-accompagne-au-quotidien-methode-naomi-feil-700x465-1.jpg',
-      animal: {
-        avatar: 'https://jardinage.lemonde.fr/images/dossiers/categories2/chat-141428-650-325.jpg',
-        name: 'Jimmy',
-      },
-      housingPhotos: [
-        'https://www.fac-habitat.com/upload/residences/28/_DSC9435_1.jpg?h=41', 
-        'https://www.fac-habitat.com/upload/residences/28/Auguste-Rodin_image9.jpg?h=41', 
-        'https://www.fac-habitat.com/upload/residences/28/Auguste-Rodin_image6.jpg?h=41'],
-    },
-    {
-      id: 2,
-      firstName: 'Alice',
-      lastMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat ornare luctus. Quisque semper aliquet velit, nec elementum tellus molestie vel. Quisque feugiat, ipsum quis viverra feugiat, nisl quam ultricies nulla, in vulputate urna erat id sapien. Nam accumsan enim tellus, sit amet egestas sapien rutrum elementum. Nam faucibus elementum risus eget tristique. ",
-      lastMessageSeen: true,
-      profileImage: 'https://www.psychologue.net/site/article/52697/51923/shutterstock-657236170-1_ai1.jpg',
-      animal: {
-        avatar: 'https://mf.b37mrtl.ru/rbthmedia/images/all/2016/06/03/topimg.jpg',
-        name: 'Toto',
-      },
-      housingPhotos: ['https://v.seloger.com/s/cdn/x/visuels/0/q/b/a/0qbaw9iakvl4e82pzurttn7pftb681dsqnp2fb81g.jpg',
-       'https://v.seloger.com/s/cdn/x/visuels/0/x/t/h/0xthv6licblma89q2ccfmzritprt2q3ci2ps752t0.jpg', 
-       'https://v.seloger.com/s/cdn/x/visuels/0/h/n/p/0hnp3vpxswyvr4nkx8s5p4tjrmjjo3s8zd1waxldg.jpg'],
-    },
-  ];
+  const userTemplate = (conversation: { userUploads: any[]; petInfo: any[];}) => {
+    const userFile = conversation.userUploads.find(
+      (item: { profil: any }) => item.profil == true
+    );
 
-  const userTemplate = (conversation: { animal: { avatar: string | undefined; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }; }) => {
     return (
       <div className="flex align-items-center gap-2">
-        <img src={conversation.animal.avatar} alt={conversation.animal.avatar}
-          className="relative inline-block h-12 w-12 rounded-full object-cover object-center" />
-        <span className="font-semibold mt-3 ms-1">{conversation.animal.name}</span>
+        <img
+          src={userFile.file.url}
+          alt={userFile.file.url}
+          className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
+        />
+        <span className="font-semibold mt-3 ms-1">
+          {conversation.petInfo.name}
+        </span>
       </div>
-    )
+    );
   };
 
-  const petTemplate = (conversation: { profileImage: string | undefined; firstName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
+  const petTemplate = (conversation: { petUploads: any[]; fromUser: { name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }; }) => {
+    const petFile = conversation.petUploads.find(
+      (item: { profil: any }) => item.profil == true
+    );
+
     return (
       <div className="flex align-items-center gap-2">
-        <img src={conversation.profileImage} alt={conversation.profileImage}
-          className="relative inline-block h-12 w-12 rounded-full object-cover object-center" />
-        <span className="font-semibold mt-3 ms-1">{conversation.firstName}</span>
+        <img
+          src={petFile.file.url}
+          alt={petFile.file.url}
+          className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
+        />
+        <span className="font-semibold mt-3 ms-1">
+          {conversation.fromUser.name}
+        </span>
       </div>
-    )
+    );
   };
-  
-  const renderHousingPhotos = (rowData: { housingPhotos: any[]; }) => {
+
+  const renderHousingPhotos = (conversation: { userUploads: any[]; }) => {
+    const housingPhotos = conversation.userUploads.filter(
+      (item) => item.category === "Residence"
+    );
+
     return (
       <div className="flex gap-2">
-        {rowData.housingPhotos.slice(0, 3).map((photo, index) => (
-          <img key={index} src={photo} alt={`Housing ${index + 1}`} className="w-14 h-14 rounded-md" />
+        {housingPhotos.slice(0, 3).map((photo, index) => (
+          <img
+            key={index}
+            src={photo.file.url}
+            alt={`Housing ${index + 1}`}
+            className="w-14 h-14 rounded-md"
+          />
         ))}
       </div>
     );
   };
 
-  const renderLastMessage = (conversation: { lastMessage: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
+  const renderLastMessage = (conversation: {
+    messages: { text: string | null }[]
+  }) => {
+
+    console.log(conversation.messages[0]);
+    
     return (
       <div className="flex align-items-center gap-2">
-        <p className="truncate w-40">{conversation.lastMessage}</p>
+        <p className={conversation.messages[0].is_Seen ? `truncate w-40` : `truncate w-40 font-semibold`}>
+          {conversation.messages[0].message ? conversation.messages[0].message : "..."}
+        </p>
       </div>
-    )
+    );
   };
-  const renderActions = (rowData: { id: any; }) => {
+
+  const renderActions = (conversation: { _id: any; }) => {
     return (
-      <Link to={`/conversation/${rowData.id}`} className="p-button p-component p-button-text p-button-rounded">
+      <Link
+        to={`/conversation/${conversation._id}`}
+        className="p-button p-component p-button-text p-button-rounded"
+      >
         View Conversation
       </Link>
     );
   };
 
+  function fetchListConversations() {
+    ConversationsService.getConversationsOfCompany().then((data) => {
+      setListConversations(data);
+    });
+  }
+
+  useEffect(() => {
+    fetchListConversations();
+  }, []);
 
   return (
     <div className="relative md:ml-64 bg-blueGray-50">
@@ -113,8 +126,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">Earnings</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">$340.5</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  Earnings
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  $340.5
+                </h4>
               </div>
             </div>
             <div className="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
@@ -139,8 +156,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">Spend this month</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">$642.39</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  Spend this month
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  $642.39
+                </h4>
               </div>
             </div>
             <div className="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
@@ -164,8 +185,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">Sales</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">$574.34</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  Sales
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  $574.34
+                </h4>
               </div>
             </div>
             <div className="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
@@ -189,8 +214,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">Your Balance</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">$1,000</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  Your Balance
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  $1,000
+                </h4>
               </div>
             </div>
             <div className="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
@@ -214,8 +243,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">New Tasks</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">145</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  New Tasks
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  145
+                </h4>
               </div>
             </div>
             <div className="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
@@ -238,8 +271,12 @@ export default function ConversationsList() {
                 </div>
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
-                <p className="font-dm text-sm font-medium text-gray-600">Total Projects</p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">$2433</h4>
+                <p className="font-dm text-sm font-medium text-gray-600">
+                  Total Projects
+                </p>
+                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+                  $2433
+                </h4>
               </div>
             </div>
           </div>
@@ -249,12 +286,12 @@ export default function ConversationsList() {
       <div className="flex flex-wrap -mx-3 mb-5">
         <div className="w-full max-w-full px-3 mb-6  mx-auto">
           <div className="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
-            <DataTable value={conversationsData}>
-              <Column body={petTemplate} header="Candidat"></Column>
-              <Column body={userTemplate} header="Animal"></Column>
-              <Column header="Housing Photos" body={renderHousingPhotos}></Column>
-              <Column header="Dernier message" body={renderLastMessage}></Column>
-              <Column header="Actions" body={renderActions}></Column>
+            <DataTable value={listConversations}>
+              <Column body={petTemplate} header="Animal"></Column>
+              <Column body={userTemplate} header="Candidat"></Column>
+              <Column body={renderHousingPhotos} header="Housing Photos"></Column>
+              <Column body={renderLastMessage} header="Dernier message" ></Column>
+              <Column body={renderActions} header="Actions"></Column>
             </DataTable>
           </div>
         </div>

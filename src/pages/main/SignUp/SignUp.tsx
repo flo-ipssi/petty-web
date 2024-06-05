@@ -10,6 +10,8 @@ import Step2 from "./Step2/Step2";
 import Step3 from "./Step3/Step3";
 import Step4 from "./Step4/Step4";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpProps {
   stepInitial?: number;
@@ -19,7 +21,9 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
   const [step, setStep] = stepInitial ? useState(stepInitial) : useState(0);
   const [formData, setFormData] = useState({});
 
-  const handleNext = (data) => {
+  const navigate = useNavigate();
+
+  const handleNext = (data: {}) => {
     setFormData((prevData) => ({ ...prevData, ...data }));
     setStep((prevStep) => prevStep + 1);
   };
@@ -43,7 +47,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
     return new Blob([ia], { type: mimeString });
   };
 
-  const uploadFile = async (uploadImg: { uri: string; }) => {
+  const uploadFile = async (uploadImg: { uri: string }) => {
     let split = uploadImg.uri.split("/");
     let type = split[1].split(";")[0];
 
@@ -58,6 +62,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
     });
 
     const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+
     try {
       const response = await fetch("http://localhost:8989/upload/create", {
         method: "POST",
@@ -65,7 +70,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
         headers: {
           Authorization: "Bearer " + token,
           // 'Content-Type': 'multipart/form-data;',
-          // 'Access-Control-Allow-Origin': '*', // Permet les requêtes depuis toutes les origines
+          // 'Access-Control-Allow-Origin': '*',
         },
       });
 
@@ -75,12 +80,56 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
       let errorResponse = await error;
     }
   };
-  const handleSubmit = (data: any) => {
-    // Envoyer les données du formulaire
-    console.log("Données soumises :", data);
 
-    // Réinitialiser le formulaire ou rediriger l'utilisateur
+  const handleSubmit = async () => {
+    // Envoyer les données du formulaire
+    console.log("Données soumises :", formData);
+    // Validation des données si nécessaire
+    try {
+      const reponse = await fetch("http://localhost:8989/auth/createByWeb", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // Permet les requêtes depuis toutes les origines
+        },
+        body: JSON.stringify(formData),
+      });
+
+      console.log(reponse);
+
+    
+        const resultat = await reponse.json();
+        const token = resultat.token;
+        const userID = resultat.user.id;
+        const formMediasData = new FormData();
+        formMediasData.append("userID", userID);
+        formMediasData.append("photoProfil", formData.profileImage);
+        formData?.images.forEach((file: string | Blob, index: any) => {
+          formMediasData.append(`file${index}`, file);
+        });
+
+        const photoResponse = await axios.post(
+          "http://localhost:8989/auth/createUploadByWeb",
+          formMediasData,
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+          console.log(photoResponse);
+        if (photoResponse) {
+          
+          navigate("/?success=WaitToConfirm");
+        }
+        
+    } catch (error) {
+      // Connexion errors
+      console.log(error);
+    }
   };
+
   return (
     <div className="SignUp h-screen flex items-center justify-center space-6 mx-auto py-4">
       {step === 0 && <Step0 onNext={handleNext} />}

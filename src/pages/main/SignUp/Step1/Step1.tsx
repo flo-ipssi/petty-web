@@ -19,7 +19,6 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
   const [numero, setNumero] = useState("");
   const [website, setWebSite] = useState("");
 
-  console.log(data);
 
   const toggleCheckbox = () => {
     if (data.company) {
@@ -66,6 +65,9 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
       setNumero(isDefinedAndNotNull(data.numero) ? data.numero : "");
       setWebSite(isDefinedAndNotNull(data.website) ? data.website : "");
     }
+    
+    console.log("Step1: ");
+    console.log(data);
   }, []);
   return (
     <div className="flex w-screen overflow-hidden step1">
@@ -245,6 +247,13 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
             ) : null}
           </div>
         </div>
+        <button
+          onClick={onPrevious}
+          className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded me-6"
+          type="button"
+        >
+          Précèdent
+        </button>
         <button
           onClick={handleNext}
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"

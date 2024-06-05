@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import "./Step4.scss";
-import DataURIToBlob from "../../../../helpers/upload";
-import { Keys, getFromAsyncStorage } from "../../../../utils/asyncStorage";
+import { useNavigate } from "react-router-dom";
 
 interface Step4Props {
   data: any;
@@ -29,73 +28,8 @@ interface FormData {
 const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   const images = data?.images ? data.images : null;
 
-  const handleSubmit = async () => {
-    // Validation des données si nécessaire  
-    try {
-      const reponse = await fetch("http://localhost:8989/auth/createByWeb", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Permet les requêtes depuis toutes les origines
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!reponse.ok) {
-        // Servor error
-        let errorResponse = await reponse.json();
-      } else {
-        const resultat = await reponse.json();
-        uploadFile(data.images, resultat.token)
-      }
-
-    } catch (error) {
-      // Connexion errors      
-      console.log(error);
-    }
-
-  };
-
-  const uploadFile = async (uploadImg: any, token: string) => {
-
-    const formData = new FormData();
-    
-    uploadImg.forEach((image: string, index: any) => {
-      let split = image.split("/");
-      let type = split[1].split(";")[0];
-  
-      // Change data to blob
-      const file = DataURIToBlob(image);
-      formData.append(`image${index}`, image);
-      formData.append(`upload${index}`, file);
-      formData.append(`file${index}`, {
-        type: type,
-        uri: uploadImg.uri,
-      });
-  
-    });
-    // const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-    try {
-      const response = await fetch("http://localhost:8989/upload/create", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: "Bearer " + token,
-          // 'Content-Type': 'multipart/form-data;',
-          // 'Access-Control-Allow-Origin': '*', // Permet les requêtes depuis toutes les origines
-        },
-      })
-      if (!response.ok) {
-        console.log(response);
-
-      } else {
-        console.log(response);
-      }
-    } catch (error) {
-      let errorResponse = await error;
-      console.log(errorResponse);
-    }
-  };
+  console.log("Step4: ");
+  console.log(data);
   return (
     <div className="w-full h-full text-center content-center grid grid-cols-1 gap-4">
       <h2 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -113,7 +47,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           </h2>
           <img
             className="object-cover w-full rounded-t-lg h-full md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-            src={data.profileImage ? data.profileImage : null}
+            src={data.profileImage ? URL.createObjectURL(data.profileImage) : null}
             alt=""
           />
         </div>
@@ -147,15 +81,17 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
         <div className="m-auto flex flex-col mt-0 py-6">
           <h2 className="mb-6 text-xl font-bold tracking-tight ">Gallerie</h2>
           <div className="flex flex-wrap">
-            {images?.map((image: any, index: number) => (
+            {images?.map((image: any, index: number) =>
+            (
               <div key={index}>
                 <img
                   className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
-                  src={image}
+                  src={image ? URL.createObjectURL(image) : null}
                   alt=""
                 />
               </div>
-            ))}
+            )
+            )}
           </div>
         </div>
       </div>
@@ -169,7 +105,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           Précèdent
         </button>
         <button
-          onClick={handleSubmit}
+          onClick={onSubmit}
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
           type="button"
         >

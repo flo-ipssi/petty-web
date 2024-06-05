@@ -1,6 +1,7 @@
 import React from "react";
 import { Instance, createPopper } from "@popperjs/core";
 import { Outlet, Link } from "react-router-dom";
+import Logo from '../assets/images/logo-white.png';
 
 type Props = {};
 
@@ -36,8 +37,18 @@ const SideBar = (props: Props) => {
     }
   };
   return (
-    <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
-      <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
+    <nav className="md:left-0 md:block md:fixed
+     md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap
+      md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center 
+      justify-between relative md:w-64 z-10 ">
+      
+      <div
+          className="md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+          
+        >
+          <img src={Logo} className="mx-auto" width={80}/>
+        </div>
+      <div className="md:flex-col py-2 px-6 md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
         <button
           className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
           type="button"
@@ -45,12 +56,6 @@ const SideBar = (props: Props) => {
         >
           <i className="fas fa-bars"></i>
         </button>
-        <a
-          className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-          href="#"
-        >
-          Tailwind Starter Kit
-        </a>
         <ul className="md:hidden items-center flex flex-wrap list-none">
           <li className="inline-block relative">
             <a
@@ -121,7 +126,7 @@ const SideBar = (props: Props) => {
               </Link>
               
               <Link
-                to="/"
+                to="/matching"
                 className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
               >
                 Matching
@@ -188,7 +193,7 @@ const SideBar = (props: Props) => {
             </li>
             <li className="items-center">
               <Link
-                to="/"
+                to="/matching"
                 className="text-pink-500 hover:text-pink-600 text-xs uppercase py-3 font-bold block"
               >
                 <i className="fas fa-tv opacity-75 mr-2 text-sm"></i>
