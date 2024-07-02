@@ -9,7 +9,9 @@ interface InputFormProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputForm: React.FC<InputFormProps> = ({ label, id, type, value,min, onChange }) => {
+const InputForm: React.FC<InputFormProps> = ({ label, id, type, value, min, onChange }) => {
+    const phonePattern = "\\+?[0-9]{10,15}";
+
     return (
         <div>
             <label
@@ -25,6 +27,7 @@ const InputForm: React.FC<InputFormProps> = ({ label, id, type, value,min, onCha
                 value={value}
                 onChange={onChange}
                 min={type === 'number' ? min : undefined}
+                pattern={type === 'phone' ? phonePattern : undefined}
             />
         </div>
     );

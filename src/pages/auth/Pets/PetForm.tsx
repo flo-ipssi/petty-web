@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { AnimalData } from "../../../@types/pet";
-import { AiOutlineCloudUpload, AiOutlineCodepenCircle } from "react-icons/ai";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import { FaTimes, FaTimesCircle } from "react-icons/fa";
 import axios from "axios";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
@@ -9,10 +8,14 @@ import InputForm from "../../../components/form/InputForm";
 import SelectForm from "../../../components/form/SelectForm";
 import TextAreaForm from "../../../components/form/TextAreaForm";
 import { PetsService } from "../../../services/PetsService";
-import { gendersOptions, levelOptions, locationsOptions, speciesOptions } from "../../../api/fieldsValues";
+import {
+    gendersOptions,
+    levelOptions,
+    locationsOptions,
+    speciesOptions,
+} from "../../../api/fieldsValues";
 
-interface PetFormProps {
-}
+interface PetFormProps { }
 
 const PetFom: FC<PetFormProps> = ({ }) => {
     const navigate = useNavigate();
@@ -30,7 +33,8 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const [description, setDescription] = useState("");
     const [healthStatus, setHealthStatus] = useState("");
     const [energyLevel, setLevelEnergy] = useState("");
-    const [compatibilityWithOtherAnimals, setCompatibilityOtherAnimals] = useState("");
+    const [compatibilityWithOtherAnimals, setCompatibilityOtherAnimals] =
+        useState("");
     const [activityLevel, setLevelActivity] = useState("");
     const [story, setStory] = useState("");
     const [residenceRequirements, setRequirementsResidence] = useState("");
@@ -38,8 +42,8 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const [sterilizationStatus, setSterilizationSituation] = useState("");
     const [dewormingStatus, setDewormingSituation] = useState("");
     const [chipStatus, setChipSituation] = useState("");
-    const [antiparasiteTreatmentStatus, setSituationAntiparasiteTreatment] = useState("");
-
+    const [antiparasiteTreatmentStatus, setSituationAntiparasiteTreatment] =
+        useState("");
 
     // Medias
     const [photoProfil, setPhotoProfil] = useState(null);
@@ -47,8 +51,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
-
-    const [successMessage, setSuccessMessage] = useState('');
 
     const handlePhotoProfilChange = (event: { target: { files: any[] } }) => {
         const file = event.target.files[0];
@@ -60,7 +62,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         if (fileList) {
             const newFiles = Array.from(fileList);
             if (files.length + newFiles.length <= 8) {
-                setFiles(prevFiles => [...prevFiles, ...newFiles]);
+                setFiles((prevFiles) => [...prevFiles, ...newFiles]);
             } else {
                 alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
             }
@@ -115,18 +117,18 @@ const PetFom: FC<PetFormProps> = ({ }) => {
             sterilizationStatus,
             dewormingStatus,
             chipStatus,
-            antiparasiteTreatmentStatus
+            antiparasiteTreatmentStatus,
         };
 
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) {
-            console.error('Absence de token');
-            setErrorMessage('Absence de token')
+            console.error("Absence de token");
+            setErrorMessage("Absence de token");
             return;
-        };
+        }
 
         try {
-            let url = 'http://localhost:8989/pet/create';
+            let url = "http://localhost:8989/pet/create";
             if (id) {
                 url = `http://localhost:8989/pet/update/${id}`;
             }
@@ -138,7 +140,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 },
             });
 
-
             // Si la requête est réussie, envoyer la photo
             const petId = response.data.pet.id;
             if (petId && photoProfil) {
@@ -147,7 +148,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                     urlMedias = `http://localhost:8989/pet/updateMedias/${id}`;
                 }
                 const formData = new FormData();
-                formData.append('photoProfil', photoProfil);
+                formData.append("photoProfil", photoProfil);
                 files.forEach((file, index) => {
                     formData.append(`file${index}`, file);
                 });
@@ -157,16 +158,19 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                         "Access-Control-Allow-Origin": "*",
                         Authorization: `Bearer ${token}`,
                     },
-                })
+                });
+
+                if (photoResponse.ok) {
+                    navigate("/pets");
+                }
             }
         } catch (error) {
-            console.error('Une erreur s\'est produite :', error);
-            setErrorMessage(error.message)
+            console.error("Une erreur s'est produite :", error);
+            setErrorMessage(error.message);
         }
-
     };
 
-    const createFileObject = async (item: { file: any; id?: any; }) => {
+    const createFileObject = async (item: { file: any; id?: any }) => {
         // Créer une requête pour récupérer le fichier à partir de son URL
         const response = await fetch(item.file.url);
         const blob = await response.blob();
@@ -174,24 +178,29 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         // Créer un objet File à partir du blob et de son nom
         const fileObject = new File([blob], item.file.publicId, item.id);
 
-        return fileObject
+        return fileObject;
     };
 
     useEffect(() => {
         const searchParams = new URLSearchParams(params.search);
-        const formDataString = searchParams.get('id');
+        const formDataString = searchParams.get("id");
         if (formDataString) {
             PetsService.getPetById(formDataString).then((animal) => {
                 const { result, profil, othersFiles } = animal;
 
-
-                createFileObject(profil[0]).then((item) => { setPhotoProfil(item) })
+                createFileObject(profil[0]).then((item) => {
+                    setPhotoProfil(item);
+                });
 
                 setFiles([]);
-                othersFiles.map((item: { file: { url: string | URL | Request; publicId: string; }; }) => {
-                    const fileObj = createFileObject(item)
-                    setFiles(oldArray => [...oldArray, fileObj]);
-                })
+                othersFiles.map(
+                    (item: {
+                        file: { url: string | URL | Request; publicId: string };
+                    }) => {
+                        const fileObj = createFileObject(item);
+                        setFiles((oldArray) => [...oldArray, fileObj]);
+                    }
+                );
 
                 setId(result._id);
                 setName(result.name);
@@ -214,9 +223,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 setSterilizationSituation(result.sterilizationStatus);
                 setDewormingSituation(result.dewormingStatus);
                 setChipSituation(result.chipStatus);
-                setSituationAntiparasiteTreatment(
-                    result.antiparasiteTreatmentStatus
-                );
+                setSituationAntiparasiteTreatment(result.antiparasiteTreatmentStatus);
             });
         }
     }, []);
@@ -229,12 +236,22 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 </h1>
                 {/* Message d'error */}
                 {errorMessage ? (
-                    <div className="bg-red-100 border border-red-400 m-6 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <div
+                        className="bg-red-100 border border-red-400 m-6 text-red-700 px-4 py-3 rounded relative"
+                        role="alert"
+                    >
                         <span className="block sm:inline">{errorMessage}</span>
-                        <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={() => setErrorMessage('')}>
-                            <FaTimes color="red" className="fill-current h-6 w-6 text-red-500" />
+                        <span
+                            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                            onClick={() => setErrorMessage("")}
+                        >
+                            <FaTimes
+                                color="red"
+                                className="fill-current h-6 w-6 text-red-500"
+                            />
                         </span>
-                    </div>) : null}
+                    </div>
+                ) : null}
                 <form onSubmit={handleSubmit}>
                     <div className="md:flex">
                         <div className="mb-4 w-1/2">
@@ -299,17 +316,30 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 onChange={handleFileChange}
                             />
                             <ul className="mt-2">
-                                {files.map((file, index) => (
-                                    <li key={index} className="flex items-center">
-                                        <span className="mr-2">{file.name ? file.name : `Pet${index + 1}`}</span>
-                                        <span
-                                            className="text-red-500 hover:text-red-700"
-                                            onClick={() => removeFile(index)}
-                                        >
-                                            &#10006;
-                                        </span>
-                                    </li>
-                                ))}
+                                {files.map((file, index) => {
+                                    console.log(file);
+                                    const styles = {
+                                        backgroundImage: `url("${URL.createObjectURL(file)}")`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                        width: "40px",
+                                        height: "30px",
+                                    };
+                                    return (
+                                        <li key={index} className="flex items-center">
+                                            <div className="w-full h-full" style={styles}></div>
+                                            <span className="mx-2 my-2">
+                                                {file.name ? file.name : `Pet${index + 1}`}
+                                            </span>
+                                            <span
+                                                className="text-red-500 hover:text-red-700"
+                                                onClick={() => removeFile(index)}
+                                            >
+                                                &#10006;
+                                            </span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     </div>
@@ -353,7 +383,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <SelectForm
                                     label="Genre:"
                                     id="gender"
@@ -404,7 +433,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Description:"
                                     id="description"
@@ -431,7 +459,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                         </div>
                         <div className="md:w-1/2 px-6 pb-8">
                             <div className="mb-4">
-
                                 <SelectForm
                                     label="Niveau d'activité:"
                                     id="activityLevel"
@@ -441,7 +468,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Histoire de l'animal:"
                                     id="story"
@@ -450,7 +476,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Exigences de résidence:"
                                     id="residenceRequirements"
@@ -459,7 +484,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Situation de vaccination:"
                                     id="vaccinationStatus"
@@ -476,7 +500,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Situation de vermifugation:"
                                     id="dewormingStatus"
@@ -485,7 +508,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Situation de puçage:"
                                     id="chipStatus"
@@ -494,16 +516,16 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <TextAreaForm
                                     label="Situation de traitement anti-parasitaire:"
                                     id="antiparasiteTreatmentStatus"
                                     value={antiparasiteTreatmentStatus}
-                                    onChange={(e) => setSituationAntiparasiteTreatment(e.target.value)}
+                                    onChange={(e) =>
+                                        setSituationAntiparasiteTreatment(e.target.value)
+                                    }
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <SelectForm
                                     label="Niveau d'énergie:"
                                     id="energyLevel"

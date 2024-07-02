@@ -10,6 +10,8 @@ export const PetsService = {
                     Authorization: `Bearer ${token}`,
                 } 
             });
+            console.log(response);
+            
             return response.data.list;
         } catch (error) {
             console.error('Une erreur s\'est produite lors de la récupération des données des animaux :', error);

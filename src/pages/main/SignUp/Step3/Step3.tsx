@@ -47,7 +47,7 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
         <div className="w-full max-w-lg">
           <div className="w-full max-w-lg fields mt-5">
             <div className="flex flex-wrap -mx-3 mb-8">
-              <div className="w-full md:w100 px-3 md:mb-6">
+              <div className="w-full md:w100 px-3 mb-6">
                 <div className="group">
                   <input
                     required
@@ -60,7 +60,7 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
                   <label>Email</label>
                 </div>
               </div>
-              <div className="w-full md:w100 px-3 md:mb-6">
+              <div className="w-full md:w100 px-3 mb-6">
                 <div className="group">
                   <input
                     required
@@ -73,7 +73,7 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
                   <label>Mot de passe</label>
                 </div>
               </div>
-              <div className="w-full md:w00 px-3 md:mb-6">
+              <div className="w-full md:w00 px-3 mb-6">
                 <div className="group">
                   <input
                     required

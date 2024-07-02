@@ -1,7 +1,12 @@
 import React from "react";
 import { Instance, createPopper } from "@popperjs/core";
 import { Outlet, Link } from "react-router-dom";
-import Logo from '../assets/images/logo-white.png';
+import Logo from "../assets/images/logo-white.png";
+import {
+  Keys,
+  getFromAsyncStorage,
+  removeFromAsyncStorage,
+} from "../utils/asyncStorage";
 
 type Props = {};
 
@@ -36,18 +41,35 @@ const SideBar = (props: Props) => {
       element.classList.toggle("px-6");
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      if (!token) return;
+      await fetch("http://localhost:8989/auth/log-out?fromAll=yes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      await removeFromAsyncStorage(Keys.AUTH_TOKEN);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <nav className="md:left-0 md:block md:fixed
+    <nav
+      className="md:left-0 md:block md:fixed
      md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap
       md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center 
-      justify-between relative md:w-64 z-10 ">
-      
-      <div
-          className="md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-          
-        >
-          <img src={Logo} className="mx-auto" width={80}/>
-        </div>
+      justify-between relative md:w-64 z-10 "
+    >
+      <div className="md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+        <img src={Logo} className="mx-auto" width={80} />
+      </div>
       <div className="md:flex-col py-2 px-6 md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
         <button
           className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
@@ -124,7 +146,7 @@ const SideBar = (props: Props) => {
               >
                 Dashboard
               </Link>
-              
+
               <Link
                 to="/matching"
                 className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
@@ -139,7 +161,10 @@ const SideBar = (props: Props) => {
               </Link>
               <Link
                 className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                to="/pets">Animaux</Link>
+                to="/pets"
+              >
+                Animaux
+              </Link>
               {/* <a
                 href="#pablo"
                 className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
@@ -243,13 +268,22 @@ const SideBar = (props: Props) => {
           </h6>
           <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
             <li className="inline-flex">
-              <a
+              <Link
+                to="/profile"
                 className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                href="#/documentation/styles"
               >
                 <i className="fas fa-paint-brush mr-2 text-blueGray-400 text-base"></i>
-                Styles
-              </a>
+                Profil
+              </Link>
+            </li>
+
+            <li className="inline-flex">
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-1 px-2 rounded-full"
+              >
+                Déconnexion
+              </button>
             </li>
           </ul>
         </div>

@@ -23,9 +23,11 @@ export const Header = () => {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  const navigation = useNavigate()
+  const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
     try {
       // we want to send these information to our api
       const { data } = await client.post("/auth/sign-in", {
@@ -36,9 +38,11 @@ export const Header = () => {
           "Access-Control-Allow-Origin": "*",
         }
       });
+      
       await saveToAsyncStorage(Keys.AUTH_TOKEN, data.token);
       dispatch(updateProfile(data.profile));
       dispatch(updateLoggedInState(true));
+      navigate("/pets"); 
     } catch (error) {
       console.log("Sign in error: ", error);
     }

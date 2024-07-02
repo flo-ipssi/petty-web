@@ -10,40 +10,77 @@ interface ListModalProps {
   petId: string;
   isOpen: boolean;
   onRequestClose: any;
-  list: [] | undefined;
+  list: any;
 }
 
-const startConversation = async (data: any, petId: string) => {
-  const form = {
-    from: data._id,
-    toPet: petId,
-    status: "En conversation"
-  };
-  console.log(form);
-
-  try {
-    const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-    const response = await axios.post(
-      `http://localhost:8989/conversation/create`, form,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      }
-    );
-    return response;
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite lors de la récupération des données des animaux :",
-      error
-    );
-    return null;
-  }
-};
 
 const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) => {
   const [showAlert, setShowAlert] = useState<boolean>(true);
+  const [listCandidates, setListCandidates] = useState(list);
 
+
+  const startConversation = async (data: any, petId: string) => {
+    const form = {
+      from: data._id,
+      toPet: petId,
+      status: "accept"
+    };
+  
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const response = await axios.post(
+        `http://localhost:8989/conversation/create`, form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la récupération des données des animaux :",
+        error
+      );
+      return null;
+    }
+  };
+  
+  
+  
+  const deleteConversation = async ( data: any, petId: string, index) => {
+    const form = {
+      from: data._id,
+      toPet: petId,
+      status: "refused"
+    };
+  
+  
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const response = await axios.post(
+        `http://localhost:8989/conversation/delete/`,form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      if (response.status === 200) {
+        const updatedCandidates = [...listCandidates];
+        updatedCandidates.splice(index, 1);
+        setListCandidates(updatedCandidates);
+      }
+      return response;
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la récupération des données des animaux :",
+        error
+      );
+      return null;
+    }
+  };
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,6 +89,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
 
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -63,11 +101,12 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
       </button>
       <h2 className="text-center p-4 uppercase">Liste des candidats</h2>
       <div className="listCandidate overflow-y">
-        {list?.map((item, index) => (
+        {listCandidates?.map((item, index) => (
           <ListComponent
             data={item}
             index={index}
             startConversation={() => startConversation(item, petId)}
+            deleteConversation={() => deleteConversation(item, petId, index)}
           />
         ))}
       </div>

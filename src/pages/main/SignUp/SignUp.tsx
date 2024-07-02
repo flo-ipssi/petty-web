@@ -61,14 +61,11 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
       uri: uploadImg.uri,
     });
 
-    const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-
     try {
       const response = await fetch("http://localhost:8989/upload/create", {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: "Bearer " + token,
           // 'Content-Type': 'multipart/form-data;',
           // 'Access-Control-Allow-Origin': '*',
         },
@@ -93,11 +90,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
           "Access-Control-Allow-Origin": "*", // Permet les requêtes depuis toutes les origines
         },
         body: JSON.stringify(formData),
-      });
-
-      console.log(reponse);
-
-    
+      });    
         const resultat = await reponse.json();
         const token = resultat.token;
         const userID = resultat.user.id;

@@ -2,7 +2,7 @@
 import AppContainer from "./components/AppContainer/AppContainer";
 import TabNavigator from "./navigation/TabNavigator";
 import AuthNavigator from "./navigation/AuthNavigator";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAuthState,
@@ -11,16 +11,20 @@ import {
   updateProfile,
 } from "./store/auth";
 import { useEffect } from "react";
-import { Keys, getFromAsyncStorage } from "./utils/asyncStorage";
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import {
+  Keys,
+  getFromAsyncStorage,
+  removeFromAsyncStorage,
+} from "./utils/asyncStorage";
+import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 
-
 function App() {
   const { loggedIn, busy } = useSelector(getAuthState);
   const dispatch = useDispatch();
+  // const apiUrl = import.meta.env;
 
   useEffect(() => {
     const fetchAuthInfo = async () => {
@@ -49,7 +53,6 @@ function App() {
     fetchAuthInfo();
   }, []);
   return (
-
     <AppContainer>
       <Router>
         {loggedIn ? (

@@ -8,7 +8,7 @@ interface Step1Props {
   onNext: (data: any) => void;
 }
 const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
-  const [isChecked, setIsChecked] = useState(null); // Initialisation à true
+  const [isChecked, setIsChecked] = useState(null); 
   const [typeStructure, setTypeStructure] = useState("");
   const [nameAssociation, setNameAssociation] = useState("");
   const [name, setName] = useState("");
@@ -16,7 +16,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState(null);
   const [zip, setZip] = useState("");
-  const [numero, setNumero] = useState("");
+  const [phone, setPhone] = useState("");
   const [website, setWebSite] = useState("");
 
 
@@ -41,7 +41,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
       city,
       zip,
       nameAssociation,
-      numero,
+      phone,
       website,
     });
   };
@@ -50,7 +50,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
     toggleCheckbox();
 
     if (data) {
-      setIsChecked(isDefinedAndNotNull(data.isChecked) ? data.isChecked : true);
+      setIsChecked(isDefinedAndNotNull(data.isChecked) ? data.isChecked : false);
       setTypeStructure(
         isDefinedAndNotNull(data.typeStructure) ? data.typeStructure : ""
       );
@@ -62,7 +62,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
       setAddress(isDefinedAndNotNull(data.address) ? data.address : "");
       setCity(isDefinedAndNotNull(data.city) ? data.city : null);
       setZip(isDefinedAndNotNull(data.zip) ? data.zip : "");
-      setNumero(isDefinedAndNotNull(data.numero) ? data.numero : "");
+      setPhone(isDefinedAndNotNull(data.phone) ? data.phone : "");
       setWebSite(isDefinedAndNotNull(data.website) ? data.website : "");
     }
     
@@ -82,12 +82,12 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
           <div className="flex  flex-nowrap">
             <div
               className={
-                !isChecked
-                  ? "leading-2 fonseca uppercase "
-                  : "leading-2 uppercase "
+                isChecked
+                  ? "leading-2 uppercase "
+                  : "leading-2 fonseca uppercase "
               }
             >
-              Association
+              Particulier
             </div>
             <div className="mx-3">
               <input
@@ -98,12 +98,12 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
             </div>
             <div
               className={
-                isChecked
-                  ? "leading-2 fonseca uppercase "
-                  : "leading-2 uppercase "
+                !isChecked
+                  ? "leading-2 uppercase "
+                  : "leading-2 fonseca uppercase "
               }
             >
-              Particulier
+              Association
             </div>
           </div>
           {isChecked ? (
@@ -223,7 +223,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
                   type="text"
                   pattern="\d*"
                   className="input"
-                  onChange={(e) => setNumero(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
                 <span className="highlight"></span>
                 <span className="bar"></span>

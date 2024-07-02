@@ -4,10 +4,11 @@ import Carousel from "../Carrousel/Carousel";
 interface ListComponentProps {
     data: any;
     index: number;
-    startConversation?(): void
+    startConversation?(): void,
+    deleteConversation?(): void,
 }
 
-const ListComponent: FC<ListComponentProps> = ({ data , startConversation}) => (
+const ListComponent: FC<ListComponentProps> = ({ data , startConversation, deleteConversation}) => (
     <div className="bg-white dark:bg-gray-900 border-2 border-grey-300 rounded-lg">
         <div className="grid max-w-screen-xl p-4 mx-auto lg:gap-8 xl:gap-0 lg:py-8 lg:grid-cols-12">
             <div className="mr-auto place-self-center lg:col-span-7">
@@ -24,6 +25,7 @@ const ListComponent: FC<ListComponentProps> = ({ data , startConversation}) => (
                     Engager la conversation
                 </button>
                 <button
+                    onClick={deleteConversation}
                     className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center bg-red-500 text-white border border-red-300 rounded-lg hover:bg-red-400 focus:ring-4 focus:ring-red-100 dark:text-white dark:border-red-600 dark:hover:bg-gray-500 dark:focus:ring-gray-600"
                 >
                     Supprimer la candidature

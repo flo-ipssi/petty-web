@@ -175,33 +175,8 @@ export default function Pets() {
 
   useEffect(() => {
     fetchListPets();
-
-    // Pour la modal , vous pouvez appeler votre API pour récupérer
-    // les détails de l'animal en utilisant l'ID de l'animal dans match.params.animalId
-    // Exemple :
-    // fetchAnimalDetails(match.params.animalId).then((data) => {
-    //   setAnimal(data);
-    //   setLoading(false);
-    // });
-    // Assurez-vous d'ajuster cette logique à votre cas d'utilisation réel
-    // Pour l'instant, je vais simplement simuler des données
-    // const simulatedAnimalData = {
-    //     id: "Math.params.animalId",
-    //     name: 'Fido',
-    //     espece: 'Chien',
-    //     race: 'Labrador',
-    //     age: 3,
-    //     sexe: 'Mâle',
-    //     poids: 25,
-    //     taille: 60,
-    //     couleur: 'Noir',
-    //     description: 'Un chien très sympathique et joueur.',
-    //     // Ajoutez d'autres champs si nécessaire
-    // };
-    // setAnimal(simulatedAnimalData);
     setLoading(false);
   }, []);
-  // }, [match.params.animalId]);
 
   return (
     <div>

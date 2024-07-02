@@ -44,6 +44,26 @@ export const ConversationsService = {
         }
     },
 
+    async isSeenConversation(id: any) {
+        try {
+            const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+            const response = await axios.post(
+                `http://localhost:8989/message/isSeen`,{conversationId:id},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error(
+                "Une erreur s'est produite lors de la récupération des données des animaux :",
+                error
+            );
+            return [];
+        }
+    },
     getConversationsOfCompany() {
         return Promise.resolve(this.getListConversationsData());
     },

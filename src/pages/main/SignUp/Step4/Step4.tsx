@@ -1,6 +1,8 @@
-import React, { FC } from "react";
+import { FC, useRef, useState } from "react";
 import "./Step4.scss";
-import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
+import { Keys, getFromAsyncStorage } from "../../../../utils/asyncStorage";
 
 interface Step4Props {
   data: any;
@@ -14,7 +16,7 @@ interface FormData {
   name: string;
   email: string;
   address: string;
-  numero: string;
+  phone: string;
   city: string;
   images: Object;
   nameAssociation: string;
@@ -27,11 +29,66 @@ interface FormData {
 
 const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   const images = data?.images ? data.images : null;
+  const reCaptchaKey = import.meta.env.VITE_REACT_APP_SITE_KEY;
 
-  console.log("Step4: ");
+  const captchaRef = useRef(null);
+  const [conditionsAccepted, setConditionsAccepted] = useState(false);
+  const [isAdult, setIsAdult] = useState(false);
+
+  const handleNext = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    if (conditionsAccepted == false || isAdult == false) {
+      alert("Cochez les cases requises");
+      return false;
+    }
+    if (captchaRef?.current?.getValue()) {
+      const reCaptcha = captchaRef?.current?.getValue();
+      captchaRef.current.reset();
+      console.log(reCaptcha);
+      
+
+      try {
+        const response = await fetch("http://localhost:8989/auth/recaptcha", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify({ reCaptcha }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const serverResponse = await response.json();
+        if (serverResponse.success == true) {
+          onSubmit({ ...data, conditionsAccepted, isAdult });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleConditionsChange = (event: {
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
+    setConditionsAccepted(event.target.checked);
+  };
+
+  const handleIsAdultChange = (event: {
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
+    setIsAdult(event.target.checked);
+  };
+
   console.log(data);
   return (
-    <div className="w-full h-full text-center content-center grid grid-cols-1 gap-4">
+    <form
+      onSubmit={handleNext}
+      className="w-full h-full text-center content-center grid grid-cols-1 gap-4"
+    >
       <h2 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
         Prêt pour la grande aventure ?
       </h2>
@@ -42,16 +99,16 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
         md:flex-row dark:border-gray-700 dark:bg-gray-800 recap"
       >
         <div className="p-6">
-          <h2 className="mb-6 text-xl font-bold tracking-tight ">
-            Profil
-          </h2>
+          <h2 className="mb-6 text-xl font-bold tracking-tight ">Profil</h2>
           <img
             className="object-cover w-full rounded-t-lg h-full md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-            src={data.profileImage ? URL.createObjectURL(data.profileImage) : null}
+            src={
+              data.profileImage ? URL.createObjectURL(data.profileImage) : null
+            }
             alt=""
           />
         </div>
-        <div className="flex flex-col justify-between py-4 leading-normal mx-2">
+        <div className="flex flex-col w-min-50 justify-between py-4 leading-normal mx-2">
           <ul
             role="list"
             className="space-y-4 text-gray-500 dark:text-gray-400"
@@ -73,30 +130,67 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
               </span>
             </li>
             <li className="flex space-x-2 rtl:space-x-reverse items-center">
-              <span className="font-bold">Numero:</span>
-              <span className="leading-tight">{data.numero}</span>
+              <span className="font-bold">Téléphone :</span>
+              <span className="leading-tight">{data.phone}</span>
             </li>
           </ul>
         </div>
-        <div className="m-auto flex flex-col mt-0 py-6">
-          <h2 className="mb-6 text-xl font-bold tracking-tight ">Gallerie</h2>
-          <div className="flex flex-wrap">
-            {images?.map((image: any, index: number) =>
-            (
-              <div key={index}>
-                <img
-                  className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
-                  src={image ? URL.createObjectURL(image) : null}
-                  alt=""
-                />
-              </div>
-            )
-            )}
+        <div className="m-auto flex flex-col mt-0 py-6 w-96">
+          {!data.company ? (
+            <div className="flex flex-wrap">
+              <h2 className="mb-6 text-xl font-bold tracking-tight ">
+                Gallerie
+              </h2>
+              {images?.map((image: any, index: number) => (
+                <div key={index}>
+                  <img
+                    className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
+                    src={image ? URL.createObjectURL(image) : null}
+                    alt=""
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <h2 className="mb-2 text-xl font-bold tracking-tight ">
+                Mise en garde
+              </h2>
+              <p className="mb-4 text-red-500">
+                Toute information incorrecte ou utilisation à des fins
+                malveillantes pourra entraîner des poursuites légales.
+              </p>
+            </>
+          )}
+          <div className="mb-2 flex items-center mx-auto">
+            <input
+              type="checkbox"
+              id="conditions"
+              checked={conditionsAccepted}
+              onChange={handleConditionsChange}
+              className="mr-2"
+            />
+            <label htmlFor="conditions" className="text-gray-700">
+              J'accepte les conditions d'utilisation.
+            </label>
+          </div>
+          <div className="mb-4 flex items-center mx-auto">
+            <input
+              type="checkbox"
+              id="isAdult"
+              checked={isAdult}
+              onChange={handleIsAdultChange}
+              className="mr-2"
+            />
+            <label htmlFor="isAdult" className="text-gray-700">
+              Je confirme que je suis majeur.
+            </label>
           </div>
         </div>
       </div>
 
-      <div>
+      <div className="mx-auto ">
+        <ReCAPTCHA sitekey={reCaptchaKey} ref={captchaRef} className="mb-6" />
         <button
           onClick={onPrevious}
           className="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded me-6"
@@ -105,14 +199,13 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           Précèdent
         </button>
         <button
-          onClick={onSubmit}
+          type="submit"
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-          type="button"
         >
           Soumettre
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
