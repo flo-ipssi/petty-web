@@ -133,7 +133,7 @@ export default function Pets() {
     if (itemToDelete) {
       console.log(`Suppression de l'élément : ${itemToDelete}`);
 
-      PetsService.deletePetById(itemToDelete).then((data) => {
+      PetsService.deletePetById(itemToDelete).then(() => {
         fetchListPets();
         setItemToDelete(null);
         setIsModalOpen(false);

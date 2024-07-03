@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import './Infos.scss';
 import { PanInfo, motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from '../../../assets/images/adopt.svg';
 import icon from '../../../assets/images/icon-no-label.svg';
 
