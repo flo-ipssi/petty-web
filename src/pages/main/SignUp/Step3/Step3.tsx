@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import './Step3.scss';
 import { motion } from 'framer-motion';
 import isDefinedAndNotNull from '../../../../helpers/form';
-import * as yup from 'yup';
 
 
 interface Step3Props {
@@ -34,9 +33,6 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
         setEmail(isDefinedAndNotNull(data.email) ? data.email : "");
       }
     }
-
-    console.log("Step3: ");
-    console.log(data);
     
   }, []);
 

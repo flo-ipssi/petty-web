@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import "./Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { UserProfile, getAuthState, updateProfile } from "../../../store/auth";
@@ -10,8 +10,23 @@ import _ from "lodash";
 interface ProfileProps { }
 
 const Profile: FC<ProfileProps> = () => {
-  const { loggedIn, busy, profile } = useSelector(getAuthState);
-  const [userProfile, setUserProfile] = useState<UserProfile>(profile);
+  const { profile } = useSelector(getAuthState);
+  const [userProfile, setUserProfile] = useState<UserProfile>(profile ?? {
+    id: "",
+    fullname: "",
+    firstname: "",
+    name: "",
+    email: "",
+    verified: false,
+    avatar: "",
+    address: "",
+    zip: "",
+    city: "",
+    website: "",
+    phone: "",
+    description: "",
+    animal_owner: true
+  });
   const avatar = userProfile.avatar ? userProfile.avatar : null;
   const [uploadResponse, setUploadResponse] = useState(avatar);
   const dispatch = useDispatch();
@@ -19,7 +34,7 @@ const Profile: FC<ProfileProps> = () => {
     setUploadResponse(response);
   };
 
-  const handleInfos = (obj: UserProfile) => { 
+  const handleInfos = (obj: UserProfile) => {
     saveInfos(obj);
   };
 
@@ -41,7 +56,7 @@ const Profile: FC<ProfileProps> = () => {
         const data = await res.json();
         dispatch(updateProfile(data.profile));
         setUserProfile(data.profile)
-        
+
       } catch (error) {
         console.error("Error saving description", error);
       }
@@ -185,9 +200,9 @@ const Profile: FC<ProfileProps> = () => {
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d252230.02028974562!2d38.613328040215286!3d8.963479542403238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1710567234587!5m2!1sen!2set"
                   className="rounded-lg w-full h-full"
-                  allowfullscreen=""
+                  allowFullScreen={true}
                   loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
+                  referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
             </div>

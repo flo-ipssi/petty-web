@@ -1,59 +1,70 @@
-import { Carousel } from "primereact/carousel";
 import { Image } from "primereact/image";
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Link, useLocation } from "react-router-dom";
 import { ConversationsService } from "../../../services/ConversationsService";
 import { capitalizeFirstLetter } from "../../../helpers/format";
 import { MessagesService } from "../../../services/MessagesService";
 
+interface InfosUserElement {
+  infos: {
+    id: string;
+    name: string;
+    firstname: string;
+    fullname: string;
+    phone: string;
+    email: string;
+    verified: boolean;
+    description?: string;
+    company?: boolean;
+    animal_owner?: boolean;
+    location?: string;
+    avatar?: string;
+  };
+  uploads: any;
+  url: string;
+}
+
+interface InfosAnimaElement {
+  infos: {
+    id: string;
+    name: string;
+    species: string;
+  };
+  uploads: any;
+  url: string;
+}
+
 const Conversation = () => {
-  const chatContainerRef = useRef(0);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const icon = <i className="pi pi-search"></i>;
   const { pathname } = useLocation();
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [infosUser, setInfosUser] = useState(null);
-  const [infosAnimal, setInfosAnimal] = useState(null);
+  const [messages, setMessages] = useState<
+    { text: string; sender: string; owner: null }[]
+  >([]);
+  const [infosUser, setInfosUser] = useState<InfosUserElement>();
+  const [infosAnimal, setInfosAnimal] = useState<InfosAnimaElement>();
   const [nbApplied, setNbApplied] = useState(0);
   const [consersationId, setConsersationId] = useState("");
   const [ownerId, setOwnerId] = useState(null);
 
-  const responsiveOptions = [
-    {
-      breakpoint: "1400px",
-      numVisible: 2,
-      numScroll: 1,
-    },
-    {
-      breakpoint: "1199px",
-      numVisible: 3,
-      numScroll: 1,
-    },
-    {
-      breakpoint: "767px",
-      numVisible: 2,
-      numScroll: 1,
-    },
-    {
-      breakpoint: "575px",
-      numVisible: 1,
-      numScroll: 1,
-    },
-  ];
-
   // Fonction pour proposer un rendez-vous
   const proposeMeeting = () => {
-    alert(`Proposing a meeting with ${conversation.firstName}`);
+    // alert(`Proposing a meeting with ${conversation.firstName}`);
   };
 
   // Fonction pour signaler l'utilisateur
   const reportUser = () => {
-    alert(`Reporting user: ${conversation.firstName}`);
+    // alert(`Reporting user: ${conversation.firstName}`);
   };
 
   // Fonction pour clôturer pour adoption
   const closeForAdoption = () => {
-    alert(`Closing for adoption with ${conversation.firstName}`);
+    // alert(`Closing for adoption with ${conversation.firstName}`);
   };
 
   const handleMessageSend = async () => {
@@ -62,26 +73,15 @@ const Conversation = () => {
       try {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
         setMessage("");
-        // Scroll au bas du chat lors de l'envoi d'un message
-        chatContainerRef.current.scrollTop =
-          chatContainerRef.current.scrollHeight;
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop =
+            chatContainerRef.current.scrollHeight;
+        }
 
         MessagesService.sendMessage(newMessage, ownerId, consersationId);
       } catch (error) {
         console.error(error);
       }
-
-      // Simulation de la réponse de l'autre partie
-      // setTimeout(() => {
-      //     const replyMessage = {
-      //         text: "Sure! How about tomorrow at 2 PM?",
-      //         sender: "other",
-      //     };
-      //     setMessages((prevMessages) => [...prevMessages, replyMessage]);
-      //     // Scroll au bas du chat après la réponse
-      //     chatContainerRef.current.scrollTop =
-      //         chatContainerRef.current.scrollHeight;
-      // }, 1000);
     }
   };
 
@@ -118,21 +118,18 @@ const Conversation = () => {
 
   function isSeenConversation() {
     const paramConversationId = pathname.split("/");
-    ConversationsService.isSeenConversation(paramConversationId[2]).then(
-      (data) => {
-        console.log("Succes");
-      }
-    );
+    ConversationsService.isSeenConversation(paramConversationId[2]).then(() => {
+      console.log("Succes");
+    });
   }
   function fetchMessages() {
     const paramConversationId = pathname.split("/");
     MessagesService.getMessages(paramConversationId[2]).then((data) => {
       if (data) {
         setMessages(data.messages);
-
-        // Scroll au bas du chat lors du chargement des messages
-        chatContainerRef.current.scrollTop =
-          chatContainerRef.current.scrollHeight;
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
       }
     });
   }
@@ -144,7 +141,7 @@ const Conversation = () => {
           className="border h-100  mt-10 p-4 rounded-lg overflow-y-auto mb-4"
           ref={chatContainerRef}
         >
-          {messages.map((msg, index) => (
+          {messages.map((msg: { owner: any; text: string }, index) => (
             <div
               key={index}
               className={`mb-4 ${
@@ -246,7 +243,7 @@ const Conversation = () => {
         </div>
 
         <div className="flex-1 p-4">
-          {infosUser != "undefined" && (
+          {typeof infosUser != "undefined" && (
             <div className="pt-20">
               <div className="flex items-center mb-4">
                 <div className="px-6">
@@ -318,7 +315,7 @@ const Conversation = () => {
                       (item: { category: string }) =>
                         item.category == "Residence"
                     )
-                    .map((photo: string | undefined, index: any) => (
+                    .map((photo: { file: { url: string } }, index: any) => (
                       <Image
                         key={index}
                         src={photo.file.url}

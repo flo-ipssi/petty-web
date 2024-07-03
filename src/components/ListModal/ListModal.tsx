@@ -48,7 +48,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
   
   
   
-  const deleteConversation = async ( data: any, petId: string, index) => {
+  const deleteConversation = async ( data: any, petId: string, index: number) => {
     const form = {
       from: data._id,
       toPet: petId,
@@ -101,7 +101,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
       </button>
       <h2 className="text-center p-4 uppercase">Liste des candidats</h2>
       <div className="listCandidate overflow-y">
-        {listCandidates?.map((item, index) => (
+        {listCandidates?.map((item: any, index: number) => (
           <ListComponent
             data={item}
             index={index}

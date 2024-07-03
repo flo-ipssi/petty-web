@@ -24,10 +24,10 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const [name, setName] = useState("");
     const [species, setSpecies] = useState("");
     const [breed, setBreed] = useState("");
-    const [age, setAge] = useState(null);
+    const [age, setAge] = useState("");
     const [gender, setGender] = useState("");
-    const [weight, setWeight] = useState(null);
-    const [size, setSize] = useState(null);
+    const [weight, setWeight] = useState("");
+    const [size, setSize] = useState('');
     const [color, setColor] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
@@ -46,9 +46,8 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         useState("");
 
     // Medias
-    const [photoProfil, setPhotoProfil] = useState(null);
-    const [files, setFiles] = useState<{ uri: string; name: string }[]>([]);
-
+    const [photoProfil, setPhotoProfil] = useState<File | Blob>();
+    const [files, setFiles] = useState<({ uri: string; name: string; } | Blob)[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -60,7 +59,17 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
         if (fileList) {
-            const newFiles = Array.from(fileList);
+            const newFiles = Array.from(fileList).map((file: File) => {
+                const fileReader = new FileReader();
+                fileReader.onload = () => {
+                    return {
+                        uri: fileReader.result as string,
+                        name: file.name,
+                    };
+                };
+                fileReader.readAsDataURL(file);
+                return { uri: "", name: file.name };
+            });
             if (files.length + newFiles.length <= 8) {
                 setFiles((prevFiles) => [...prevFiles, ...newFiles]);
             } else {
@@ -72,11 +81,10 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         }
     };
 
-    const removeFile = (indexToRemove: number) => {
-        const newFiles = files.filter((_, index) => index !== indexToRemove);
-        setFiles(newFiles);
-    };
 
+    const removeFile = (index: number) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (
@@ -100,10 +108,10 @@ const PetFom: FC<PetFormProps> = ({ }) => {
             name: name,
             species,
             breed,
-            age: age.toString(),
+            age: age as string,
             gender,
-            weight: weight.toString(),
-            size: size.toString(),
+            weight: weight as string,
+            size: size as string,
             color,
             location,
             description,
@@ -149,10 +157,31 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 }
                 const formData = new FormData();
                 formData.append("photoProfil", photoProfil);
-                files.forEach((file, index) => {
-                    formData.append(`file${index}`, file);
+
+                const filePromises = files.map(async (file, index) => {
+                    let blob: Blob;
+                    let fileName: string;
+
+                    if ("uri" in file) {
+                        blob = await fetch(file.uri).then((r) => r.blob());
+                        fileName = file.name;
+                    } else if (file instanceof File) {
+                        blob = file;
+                        fileName = file.name || `file${index}`;
+                    } else {
+                        throw new Error("Invalid file type");
+                    }
+
+
+                    return { blob, fileName };
                 });
 
+                Promise.all(filePromises).then((fileInfos) => {
+                    fileInfos.forEach(({ blob, fileName }, index) => {
+                        formData.append(`file${index}`, blob, fileName);
+                    });
+
+                });
                 const photoResponse = await axios.post(urlMedias, formData, {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -160,25 +189,25 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                     },
                 });
 
-                if (photoResponse.ok) {
+                if (photoResponse.status === 200) {
                     navigate("/pets");
                 }
             }
-        } catch (error) {
-            console.error("Une erreur s'est produite :", error);
-            setErrorMessage(error.message);
+        }
+        catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Une erreur s'est produite :", error);
+                setErrorMessage(error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
         }
     };
 
-    const createFileObject = async (item: { file: any; id?: any }) => {
-        // Créer une requête pour récupérer le fichier à partir de son URL
+    const createFileObject = async (item: { file: { url: string | URL | Request; publicId: string } }) => {
         const response = await fetch(item.file.url);
         const blob = await response.blob();
-
-        // Créer un objet File à partir du blob et de son nom
-        const fileObject = new File([blob], item.file.publicId, item.id);
-
-        return fileObject;
+        return blob;
     };
 
     useEffect(() => {
@@ -193,14 +222,11 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 });
 
                 setFiles([]);
-                othersFiles.map(
-                    (item: {
-                        file: { url: string | URL | Request; publicId: string };
-                    }) => {
-                        const fileObj = createFileObject(item);
-                        setFiles((oldArray) => [...oldArray, fileObj]);
-                    }
-                );
+                const filePromises = othersFiles.map((item: { file: any; id?: any; }) => createFileObject(item));
+
+                Promise.all(filePromises).then((files) => {
+                    setFiles(files);
+                });
 
                 setId(result._id);
                 setName(result.name);
@@ -267,13 +293,13 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                             backgroundPosition: "center",
                                             border: 0,
                                         }
-                                        : null
+                                        : {}
                                 }
                             >
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={handlePhotoProfilChange}
+                                    onChange={() => handlePhotoProfilChange}
                                     className="hidden"
                                     id={`file-input-photoProfil`}
                                 />
@@ -287,7 +313,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                                 size={30}
                                                 color="red"
                                                 className="relative redButtonProfile"
-                                                onClick={() => setPhotoProfil(null)}
+                                                onClick={() => setPhotoProfil(undefined)}
                                             />
                                         </div>
                                     )}
@@ -317,10 +343,10 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                             />
                             <ul className="mt-2">
                                 {files.map((file, index) => {
-                                    console.log(file);
+                                    const objectUrl = file instanceof Blob ? URL.createObjectURL(file) : "";
+                                    const fileName = (file as { uri: string; name: string; }).name || `Pet${index + 1}`;
                                     const styles = {
-                                        backgroundImage: `url("${URL.createObjectURL(file)}")`,
-                                        backgroundSize: "cover",
+                                        backgroundImage: `url("${objectUrl}")`, backgroundSize: "cover",
                                         backgroundPosition: "center",
                                         width: "40px",
                                         height: "30px",
@@ -329,7 +355,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                         <li key={index} className="flex items-center">
                                             <div className="w-full h-full" style={styles}></div>
                                             <span className="mx-2 my-2">
-                                                {file.name ? file.name : `Pet${index + 1}`}
+                                                {fileName ? fileName : `Pet${index + 1}`}
                                             </span>
                                             <span
                                                 className="text-red-500 hover:text-red-700"
@@ -408,7 +434,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                     min={1}
                                     value={weight}
                                     onChange={(e) => setWeight(e.target.value)}
-                                    min={0}
                                 />
                             </div>
                             <div className="mb-4">
@@ -419,7 +444,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                     min={1}
                                     value={size}
                                     onChange={(e) => setSize(e.target.value)}
-                                    min={0} // Ajout de la valeur min pour le champ de taille
                                 />
                             </div>
 

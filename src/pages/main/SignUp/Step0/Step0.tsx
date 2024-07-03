@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import adopt_Image from "../../../../assets/Design/Design/Adopt 2.jpeg";
 import makeAdopt from "../../../../assets/Design/Design/Maitre et chien 1.jpeg";
@@ -58,7 +58,7 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
 
           <p className="text-gray-700 text-base text-center">
             Ouvrez votre cœur, faites une proposition d'adoption et offrez un
-            nouveau départ à un compagnon, prêt à remplir votre vie de bonheur
+            nouveau départ à un compagnon, prêt à remplir des vies de bonheur
             et d'amour.
           </p>
         </motion.div>
@@ -67,8 +67,8 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
         <button
           onClick={handleNext}
           className="mx-auto mt-10 bg-teal-500 hover:bg-teal-700
-             border-teal-500 hover:border-teal-700 text-sm border-4 
-             text-white py-1 px-2 rounded flex items-center"
+             border-teal-500 hover:border-teal-700 border-4 
+             text-white py-1 px-2 rounded garet-bold flex items-center text-2xl uppercase "
           type="button"
         >
           {title}

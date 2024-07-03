@@ -1,13 +1,12 @@
-import React, { FC, useState, useEffect, useRef } from "react";
+import { FC, useState, useEffect, useRef, ChangeEvent } from "react";
 import "./Step2.scss";
 import {
   AiFillCloseCircle,
   AiOutlineCloudUpload,
-  AiOutlineCodepen,
-  AiOutlineCodepenCircle,
 } from "react-icons/ai";
 import isDefinedAndNotNull from "../../../../helpers/form";
-import { RiEditCircleFill } from "react-icons/ri";
+import { RxCrossCircled } from "react-icons/rx";
+import colors from "../../../../utils/colors";
 
 
 interface Step2Props {
@@ -18,42 +17,41 @@ interface Step2Props {
 
 const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
   const [images, setImages] = useState(Array(8).fill(null));
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState<File>();
   const initialized = useRef(false);
 
   // Function to handle file selection
-  const handleFileChange = (index, event) => {
+  const handleFileChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
-    newImages[index] = event.target.files[0];
-    setImages(newImages);
-  };
-  const handleProfileFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log(file);
+    if (event.target.files) {
 
-      // const newImage = URL.createObjectURL(file);
-      setProfileImage(file);
+      newImages[index] = event.target.files[0];
+      setImages(newImages);
     }
   };
+  const handleProfileFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      if (file) {
+        setProfileImage(file);
+      }
+    }
+  };
+
   // Function to clear image by index
-  const clearImage = (index) => {
+  const clearImage = (index: number) => {
     const newImages = [...images];
     newImages[index] = null;
     setImages(newImages);
   };
 
   const handleNext = () => {
-    // Validation des données si nécessaire
     onNext({ images, profileImage });
   };
 
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
-      // if (data.company) {
-      //   handleNext();
-      // }
       setImages(
         isDefinedAndNotNull(data.images) ? data.images : Array(8).fill(null)
       );
@@ -61,9 +59,6 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
         isDefinedAndNotNull(data.profileImage) ? data.profileImage : null
       );
     }
-
-    console.log("Step2: ");
-    console.log(data);
   }, []);
 
   return (
@@ -87,7 +82,7 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
                         backgroundPosition: "center",
                         border: 0,
                       }
-                      : null
+                      : {}
                   }
                 >
                   <input
@@ -143,7 +138,7 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
 
       <div
         className={`${data?.company ? "w-screen mx-auto" : "w-2/6"
-          } bg-gray-400 bg-right grid clear-both grid-cols-1 gap-4 content-center relative`}
+          } bg-gray-100 bg-right grid clear-both grid-cols-1 gap-4 content-center relative`}
       >
         <h2 className="text-center">Importez une photo de vous</h2>
         <div
@@ -159,7 +154,7 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
                 backgroundPosition: "center",
                 border: 0,
               }
-              : null
+              : {}
           }
         >
           <input
@@ -174,11 +169,11 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
           >
             {profileImage && (
               <>
-                <RiEditCircleFill
+                <RxCrossCircled 
                   size={50}
-                  color="red"
+                  color={colors.ERROR}
                   className="relative redButtonProfile"
-                  onClick={() => setProfileImage(null)}
+                  onClick={() => setProfileImage(undefined)}
                 />
               </>
             )}
@@ -190,10 +185,10 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
           </label>
         </div>
         <div>
-          <p className="text-xl text-center text-white capitalize font-semibold">
+          <p className="text-xl text-center text-dark capitalize font-semibold">
             {data.name}
           </p>
-          <p className="text-xl text-center text-white capitalize font-semibold">
+          <p className="text-xl text-center text-dark capitalize font-semibold">
             {data.city}
           </p>
         </div>
@@ -207,11 +202,11 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
             Précèdent
           </button>
           <button
-          disabled={profileImage ? false : true}
+            disabled={profileImage ? false : true}
             onClick={handleNext}
-           
-            className={`${profileImage? "" : "disabled:opacity-60 "
-            } flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded`}
+
+            className={`${profileImage ? "" : "disabled:opacity-60 "
+              } flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded`}
 
             type="button"
           >

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import "../SignUp.scss";
 import isDefinedAndNotNull from "../../../../helpers/form";
 
@@ -8,13 +8,13 @@ interface Step1Props {
   onNext: (data: any) => void;
 }
 const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
-  const [isChecked, setIsChecked] = useState(null); 
+  const [isChecked, setIsChecked] = useState(false); 
   const [typeStructure, setTypeStructure] = useState("");
   const [nameAssociation, setNameAssociation] = useState("");
   const [name, setName] = useState("");
   const [firstname, setFirstname] = useState("");
   const [address, setAddress] = useState("");
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const [phone, setPhone] = useState("");
   const [website, setWebSite] = useState("");

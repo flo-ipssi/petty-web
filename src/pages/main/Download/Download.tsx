@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import './Download.scss';
 import { PanInfo, motion } from "framer-motion";
 import logo from "../../../assets/images/logo.svg";
@@ -14,7 +14,7 @@ interface DownloadProps { }
 const Download: FC<DownloadProps> = () => {
 
   const navigate = useNavigate();
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
 
     const dragDistance = info.offset.x + info.point.x;
     console.log('dragDistance:', dragDistance);
@@ -47,8 +47,8 @@ const Download: FC<DownloadProps> = () => {
         </div>
       </div>
       <div className="relative col-span-2 gap-4 row-span-2 animals md:h-screen h-0">
-        <div className="absolute bottom-20 left-32 h-16 w-16 font-bold text-1xl">RESEAUX SOCIAUX</div>
-        <div className="absolute bottom-20 left-56 h-16 ">
+        <div className="absolute bottom-16 left-56 h-16 w-16 font-bold text-1xl titleMedia">RESEAUX SOCIAUX</div>
+        <div className="absolute bottom-16 left-80 h-16  ">
           <ul className="imgSocials grid gap-4 grid-cols-3 grid-rows-3">
             <li><img  src={imgFacebook} alt="" /></li>
             <li><img  src={imgInsta} alt="" /></li>

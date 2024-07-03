@@ -1,19 +1,11 @@
-import React, { useState } from "react";
-import {
-  Navbar,
-  MobileNav,
-  Typography,
-  Button,
-  IconButton,
-  Card,
-} from "@material-tailwind/react";
+import { useState } from "react";
 import logo from "../../assets/images/logo.svg";
 import "./Header.scss";
 import Modal from "../Modal/Modal";
 import { Keys, saveToAsyncStorage } from "../../utils/asyncStorage";
 import { updateLoggedInState, updateProfile } from "../../store/auth";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
 
 export const Header = () => {

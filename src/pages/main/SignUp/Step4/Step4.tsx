@@ -1,8 +1,6 @@
 import { FC, useRef, useState } from "react";
 import "./Step4.scss";
 import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
-import { Keys, getFromAsyncStorage } from "../../../../utils/asyncStorage";
 
 interface Step4Props {
   data: any;
@@ -10,28 +8,12 @@ interface Step4Props {
   onSubmit: (data: any) => void;
 }
 
-interface FormData {
-  company: boolean;
-  firstname: string;
-  name: string;
-  email: string;
-  address: string;
-  phone: string;
-  city: string;
-  images: Object;
-  nameAssociation: string;
-  password: string;
-  profileImage: string;
-  typeStructure: string;
-  website: string;
-  zip: string;
-}
 
 const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   const images = data?.images ? data.images : null;
   const reCaptchaKey = import.meta.env.VITE_REACT_APP_SITE_KEY;
 
-  const captchaRef = useRef(null);
+  const captchaRef = useRef<ReCAPTCHA>(null);
   const [conditionsAccepted, setConditionsAccepted] = useState(false);
   const [isAdult, setIsAdult] = useState(false);
 
@@ -42,10 +24,8 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
       return false;
     }
     if (captchaRef?.current?.getValue()) {
-      const reCaptcha = captchaRef?.current?.getValue();
+      const reCaptcha = captchaRef.current.getValue();
       captchaRef.current.reset();
-      console.log(reCaptcha);
-      
 
       try {
         const response = await fetch("http://localhost:8989/auth/recaptcha", {
@@ -83,7 +63,6 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
     setIsAdult(event.target.checked);
   };
 
-  console.log(data);
   return (
     <form
       onSubmit={handleNext}
@@ -103,7 +82,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           <img
             className="object-cover w-full rounded-t-lg h-full md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
             src={
-              data.profileImage ? URL.createObjectURL(data.profileImage) : null
+              data.profileImage ? URL.createObjectURL(data.profileImage) : ""
             }
             alt=""
           />
@@ -145,7 +124,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
                 <div key={index}>
                   <img
                     className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
-                    src={image ? URL.createObjectURL(image) : null}
+                    src={image ? URL.createObjectURL(image) : ""}
                     alt=""
                   />
                 </div>

@@ -6,6 +6,13 @@ import { ConversationsService } from "../../../services/ConversationsService";
 import { useSelector } from "react-redux";
 import { getAuthState } from "../../../store/auth";
 
+interface Message {
+  _id: string;
+  is_Seen: boolean;
+  owner: string;
+  message: string;
+}
+
 export default function ConversationsList() {
   const [listConversations, setListConversations] = useState<[]>();
   const { profile } = useSelector(getAuthState);
@@ -99,7 +106,7 @@ export default function ConversationsList() {
     );
   };
 
-  const renderLastMessage = ({ messages }) => {
+  const renderLastMessage = ({ messages }: { messages: Message[] }) => {
     if (!messages || messages.length === 0) {
       return (
         <div className="flex items-center gap-2">
@@ -109,17 +116,16 @@ export default function ConversationsList() {
     }
 
     const { is_Seen, owner, message } = messages[0];
-    console.log(is_Seen, owner, message, profile.id);
 
     const messageClass =
-      (is_Seen && owner != profile.id)
+      (is_Seen && owner != profile?.id)
         ? "truncate w-40 "
         : "truncate w-40 font-semibold";
 
     return (
       <div className="flex items-center gap-2">
         <p className={messageClass}>{message}</p>
-        {is_Seen && owner != profile.id ? (
+        {is_Seen && owner != profile?.id ? (
           <div className="rounded-full bg-black h-2 w-2 relative right-8"></div>
         ) : null}
       </div>
@@ -152,7 +158,7 @@ export default function ConversationsList() {
       <div className="lg:flex gap-4 items-stretch m-6">
         <div className="flex flex-col justify-center items-center w-full pt-4">
           <div className=" mt-3 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-3">
-            <div className="relative flex flex-grow w-min pr-6 !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
+            <div className="relative flex flex-grow w-min pr-6 !flex-row items-center rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
               <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
                 <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
                   <span className="flex items-center text-brand-500 dark:text-white">
@@ -181,7 +187,7 @@ export default function ConversationsList() {
                 </h4>
               </div>
             </div>
-            <div className="relative flex flex-grow w-min pr-6 !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
+            <div className="relative flex flex-grow w-min pr-6 !flex-row items-center rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
               <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
                 <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
                   <span className="flex items-center text-brand-500 dark:text-white">
@@ -209,7 +215,7 @@ export default function ConversationsList() {
                 </h4>
               </div>
             </div>
-            <div className="relative flex flex-grow w-min pr-6 !flex-row flex-col items-center rounded-[10px] rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
+            <div className="relative flex flex-grow w-min pr-6 !flex-row items-center rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
               <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
                 <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
                   <span className="flex items-center text-brand-500 dark:text-white">

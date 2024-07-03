@@ -23,4 +23,5 @@ export interface AnimalData {
     antiparasiteTreatmentStatus: string;
     profilePhoto: string;
     files: object;
+    uploads: any;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableFilterEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { PetsService } from "../../../services/PetsService";
 import { Tag } from "primereact/tag";
@@ -15,20 +15,38 @@ import { Link } from "react-router-dom";
 import ConfirmationForm from "../../../components/form/ConfirmationForm";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
+import { AnimalData } from "../../../@types/pet";
 
 export default function Pets() {
   const [animals, setAnimals] = useState([]);
-  const [animal, setAnimal] = useState([]);
+  const [animal, setAnimal] = useState<AnimalData>();
   const [loading, setLoading] = useState(true);
-
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  const [filters, setFilters] = useState<{
+    global: {
+      value: string | null;
+      matchMode: FilterMatchMode;
+    };
+  }>({
+    global: {
+      value: null,
+      matchMode: FilterMatchMode.CONTAINS,
+    },
   });
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage] = useState("");
   const [menuVisible, setMenuVisible] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+
+  const onFilter = (e: DataTableFilterEvent) => {
+    if ("value" in e.filters["global"]) {
+      setFilters({
+        global: {
+          value: e.filters["global"].value,
+          matchMode: e.filters["global"].matchMode as FilterMatchMode,
+        },
+      });
+    }
+  };
 
   const showMenu = (
     visibility: boolean | ((prevState: boolean) => boolean)
@@ -36,15 +54,11 @@ export default function Pets() {
     setMenuVisible(visibility);
   };
 
-  const imageBodyTemplate = (animal: {
-    uploads: any[];
-    name: any;
-  }) => {
+  const imageBodyTemplate = (animal: { uploads: any[]; name: any }) => {
     const avatar = animal.uploads.find(
       (media: { profil: boolean }) => media.profil === true
     );
     if (avatar) {
-
       const cacheHandler = "?lastmod=" + Math.floor(Date.now() / 1000);
       return (
         <div className="flex align-items-center gap-2 capitalize">
@@ -57,10 +71,8 @@ export default function Pets() {
         </div>
       );
     }
-    return null
+    return null;
   };
-
-  const deleteItem = (index) => { };
 
   const handlePetTemplate = (animal: any) => {
     // const dataString = encodeURIComponent(JSON.stringify(animal));
@@ -125,7 +137,6 @@ export default function Pets() {
         fetchListPets();
         setItemToDelete(null);
         setIsModalOpen(false);
-        console.log(data);
       });
     }
   };
@@ -140,13 +151,14 @@ export default function Pets() {
     });
   }
 
-  const onGlobalFilterChange = (event) => {
+  const onGlobalFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    let _filters = { ...filters };
-
-    _filters["global"].value = value;
-
-    setFilters(_filters);
+    setFilters({
+      global: {
+        value,
+        matchMode: FilterMatchMode.CONTAINS,
+      },
+    });
   };
 
   const renderHeader = () => {
@@ -261,7 +273,7 @@ export default function Pets() {
               <div>
                 <p>Nombre d'animaux</p>
                 <h2 className="text-4xl font-bold text-gray-600">
-                  {animal.length > 0 ? animal.length : 0}
+                  {animals.length > 0 ? animals.length : 0}
                 </h2>
               </div>
               <FaHospital size={50} />
@@ -309,7 +321,7 @@ export default function Pets() {
                 <DataTable
                   header={header}
                   filters={filters}
-                  onFilter={(e) => setFilters(e.filters)}
+                  onFilter={onFilter}
                   className="flex-auto block py-8 pt-6 px-9 text-center"
                   value={animals}
                   scrollable

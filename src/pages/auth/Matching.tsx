@@ -1,39 +1,43 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import icon from "../../assets/images/Adopt.png";
-import { DataTable } from 'primereact/datatable';
+import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
 import { FaEye, FaSearch, FaTimes } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { Tag } from 'primereact/tag';
 import { PetsService } from '../../services/PetsService';
 import { InputText } from 'primereact/inputtext';
 import ListModal from '../../components/ListModal/ListModal';
 
+
+interface Animal {
+  _id: string;
+  candidates: any;
+}
 interface MatchingProps { }
 
 const Matching: FC<MatchingProps> = () => {
   const [animals, setAnimals] = useState([]);
-  const [currentAnimal, setCurrentAnimal] = useState(null);
-  const [filters, setFilters] = useState({
+  const [currentAnimal, setCurrentAnimal] = useState("");
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   // Modal Config 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [listCandidate, setListCandidate] = useState();
-  
-  
-  const openModal = (candidates:any) => {
+  const [listCandidate, setListCandidate] = useState<any[]>([]);
+
+
+  const openModal = (candidates: any) => {
     const listArray = Array.isArray(candidates) ? candidates : [candidates];
-    setListCandidate(listArray); 
+    setListCandidate(listArray);
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
- 
+
 
   const imageBodyTemplate = (animal: {
     uploads: any[];
@@ -55,18 +59,18 @@ const Matching: FC<MatchingProps> = () => {
     );
   };
 
-  const handlePetTemplate = (animal: { _id: React.SetStateAction<null>; candidates: any; }) => {
+  const handlePetTemplate = (animal: Animal) => {
     return (
       <div className="flex align-items-center gap-2">
         <button
-          onClick={() => {setCurrentAnimal(animal._id);openModal(animal.candidates)}}
+          onClick={() => { setCurrentAnimal(animal._id); openModal(animal.candidates); }}
           className="p-button font-bold bg-blue-600 p-2"
         >
           <FaEye color="white" />
         </button>
         <button
           className="p-button font-bold bg-red-600 p-2"
-          // onClick={() => {openModal}}
+        // onClick={() => {openModal}}
         >
           <FaTimes color="white" />
         </button>
@@ -90,14 +94,16 @@ const Matching: FC<MatchingProps> = () => {
   const onGlobalFilterChange = (event: any) => {
     const value = event.target.value;
     let _filters = { ...filters };
-
-    _filters["global"].value = value;
+    if ('value' in _filters['global']) {
+      _filters['global'].value = value;
+    }
 
     setFilters(_filters);
   };
 
   const renderHeader = () => {
-    const value = filters["global"] ? filters["global"].value : "";
+    const globalFilter = filters["global"];
+    const value = globalFilter && "value" in globalFilter ? globalFilter.value : "";
 
     return (
       <div className="pb-4 flex-row dark:bg-gray-900">
@@ -127,7 +133,7 @@ const Matching: FC<MatchingProps> = () => {
   }, [])
   return (
     <div className="relative md:ml-64 bg-blueGray-50">
-      <ListModal isOpen={modalIsOpen} onRequestClose={closeModal} list={listCandidate} petId={currentAnimal}  />
+      <ListModal isOpen={modalIsOpen} onRequestClose={closeModal} list={listCandidate} petId={currentAnimal} />
       <nav
         className="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4"
       >

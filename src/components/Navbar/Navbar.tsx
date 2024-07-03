@@ -1,9 +1,8 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.scss";
 import {
   FaHome,
-  FaInfoCircle,
   FaBullseye,
   FaLightbulb,
   FaDownload,
@@ -55,14 +54,14 @@ const Navbar: FC<NavbarProps> = () => {
       </div>
 
       {/* Menu pour les écrans plus grands */}
-      <div className="Navbar bg-white text-center hidden lg:block">
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-white w-full p-4 shadow-md">
+      <div className="Navbar bg-transparent text-center hidden lg:block">
+        <div className="fixed bottom-0 font-bold uppercase left-1/2 transform -translate-x-1/2 bg-white w-full p-4 shadow-md">
           <div className="grid grid-cols-5 gap-4">
             <div>
               <Link to="/">Home</Link>
             </div>
             <div>
-              <Link to="/about" className="capitalize">
+              <Link to="/about">
                 à propos de Petty
               </Link>
             </div>

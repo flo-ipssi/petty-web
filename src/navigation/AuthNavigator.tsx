@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import SlideRoutes from "react-slide-routes";
 import Dashboard from "../pages/auth/Dashboard/Dashboard";
 import Profile from "../pages/auth/Profile/Profile";

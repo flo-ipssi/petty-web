@@ -3,6 +3,10 @@
         max-width: 300px;
     }
 
+    .titleMedia{
+        color: #01fde5;
+    }
+
     .imgIphone , .imgAndroid{
         text-align: center;
         img{
@@ -13,7 +17,7 @@
     }
 
     .animals{
-        background: url(../../assets/images/adopt-3.svg) no-repeat;
+        background: url("../../../assets/images/adopt-3.svg") no-repeat;
         background-size: cover;
         background-position:center ;
     }

@@ -14,15 +14,14 @@ import { useEffect } from "react";
 import {
   Keys,
   getFromAsyncStorage,
-  removeFromAsyncStorage,
 } from "./utils/asyncStorage";
-import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import { PrimeReactProvider } from "primereact/api";
 import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 
 function App() {
-  const { loggedIn, busy } = useSelector(getAuthState);
+  const { loggedIn } = useSelector(getAuthState);
   const dispatch = useDispatch();
   // const apiUrl = import.meta.env;
 
@@ -33,7 +32,7 @@ function App() {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) return;
 
-        const reponse = await fetch("http://localhost:8989/auth/is-auth", {
+        const response = await fetch("http://localhost:8989/auth/is-auth", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -42,9 +41,12 @@ function App() {
           },
         });
 
-        const data = await reponse.json();
-        dispatch(updateProfile(data.profile));
-        dispatch(updateLoggedInState(true));
+        if (response.ok) {
+          const data = await response.json();
+          dispatch(updateProfile(data.profile));
+          dispatch(updateLoggedInState(true));
+        }
+        
       } catch (error) {
         console.log("Auth error: " + error);
       }

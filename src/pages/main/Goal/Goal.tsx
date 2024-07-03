@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import './Goal.scss';
 import { PanInfo, motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import iconHumanDog from "../../../assets/images/Maitre-et-chien.svg";
 import logo from '../../../assets/images/icon-no-label.svg';
 
@@ -11,7 +11,7 @@ const Goal: FC<GoalProps> = () => {
 
   const navigate = useNavigate();
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
 
     const dragDistance = info.offset.x + info.point.x;
     if (dragDistance < -300) {

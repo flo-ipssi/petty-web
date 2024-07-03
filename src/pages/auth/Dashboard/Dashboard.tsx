@@ -1,4 +1,3 @@
-import { Instance, createPopper } from "@popperjs/core";
 import icon from "../../../assets/images/adopt-3.svg";
 import { FaEye } from "react-icons/fa";
 import {
@@ -14,25 +13,6 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
-  const openDropdown = (event: Event | undefined, dropdownID: string) => {
-    let element = event?.target as HTMLElement;
-    while (element.nodeName !== "A") {
-      element = element.parentNode as HTMLElement;
-    }
-    const referenceElement = element;
-    const dropdownElement = document.getElementById(dropdownID);
-    if (dropdownElement) {
-      const popperInstance: Instance = createPopper(
-        referenceElement,
-        dropdownElement,
-        {
-          placement: "bottom-end",
-        }
-      );
-      dropdownElement.classList.toggle("hidden");
-      dropdownElement.classList.toggle("block");
-    }
-  };
 
   const data = [
     { name: "Page A", uv: 400, pv: 2400, amt: 2400 },

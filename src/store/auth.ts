@@ -1,19 +1,19 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "@reduxjs/toolkit/query";
+import { RootState } from ".";
 
 export interface UserProfile {
    id: string,
    fullname: string | undefined,
-   firstname: string | undefined,
+   firstname: string ,
    name: string,
    email: string,
    verified: boolean,
    avatar: string | undefined,
-   address: string | undefined,
-   zip: string | undefined,
-   city: string | undefined,
+   address: string,
+   zip: string ,
+   city: string,
    website: string | undefined,
-   phone: string | undefined,
+   phone: string,
    description: string | undefined,
    animal_owner: boolean | undefined,
 }

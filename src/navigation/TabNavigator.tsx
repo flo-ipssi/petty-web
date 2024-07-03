@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import SlideRoutes from "react-slide-routes";
 import Home from "../pages/main/Home/Home";
 import Download from "../pages/main/Download/Download";

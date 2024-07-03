@@ -1,6 +1,4 @@
-import React from "react";
-import { Instance, createPopper } from "@popperjs/core";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../assets/images/logo-white.png";
 import {
   Keys,
@@ -8,24 +6,15 @@ import {
   removeFromAsyncStorage,
 } from "../utils/asyncStorage";
 
-type Props = {};
 
-const SideBar = (props: Props) => {
+const SideBar = () => {
   const openDropdown = (event: Event | undefined, dropdownID: string) => {
     let element = event?.target as HTMLElement;
     while (element.nodeName !== "A") {
       element = element.parentNode as HTMLElement;
     }
-    const referenceElement = element;
     const dropdownElement = document.getElementById(dropdownID);
     if (dropdownElement) {
-      const popperInstance: Instance = createPopper(
-        referenceElement,
-        dropdownElement,
-        {
-          placement: "bottom-end",
-        }
-      );
       dropdownElement.classList.toggle("hidden");
       dropdownElement.classList.toggle("block");
     }
@@ -70,7 +59,7 @@ const SideBar = (props: Props) => {
       <div className="md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
         <img src={Logo} className="mx-auto" width={80} />
       </div>
-      <div className="md:flex-col py-2 px-6 md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
+      <div className="md:flex-col py-2 px-6 md:items-stretch md:min-h-full md:flex-nowrap flex flex-wrap items-center justify-between w-full mx-auto">
         <button
           className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
           type="button"
