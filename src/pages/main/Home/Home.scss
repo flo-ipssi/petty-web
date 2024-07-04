@@ -75,7 +75,27 @@
   @include fadeInBounceAnimation(1);
 }
 
-.logo-background{
-  max-width:fit-content;
+@media only screen and (max-width: 600px) {
+  .pawIcon {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .rotate {
+    top: 12vh !important;
+    left: 10vw !important;
+  }
+
+  .rotate6 {
+    top: 17vh !important;
+  }
+
+  .rotate7 {
+    top: 25vh !important;
+  }
+}
+
+.logo-background {
+  max-width: fit-content;
   margin: auto;
 }

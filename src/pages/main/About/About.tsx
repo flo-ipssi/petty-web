@@ -28,7 +28,7 @@ const About: FC<AboutProps> = () => {
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
       onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{ cursor: "grab" }}
-      className="about h-screen space-6 flex sm:flex-row xs:flex-col items-center content-center"
+      className="about py-48 lg:h-screen md:h-screen space-6 flex sm:flex-row xs:flex-col items-center content-center"
     >
       <div className="p-6 w-100 ">
         <h1 className=" text-6xl font-semibold my-8 first-letter:uppercase ">
@@ -63,7 +63,7 @@ const About: FC<AboutProps> = () => {
           Ensemble, faisons la différence, une adoption à la fois.
         </p>
       </div>
-      <div className="py-8 w-100">
+      <div className="py-8 w-100 hidden sm:block">
         <img src={cats} className="" alt={`Cats`} />
       </div>
     </motion.div>

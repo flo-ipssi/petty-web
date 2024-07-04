@@ -32,7 +32,7 @@ const Goal: FC<GoalProps> = () => {
         <div className="p-6 ">
           <img
             src={iconHumanDog}
-            className=""
+            className="sm:relative sm:h-6 sm:mr-10"
             alt={`Cats`}
           />
           <div className="card-marron">

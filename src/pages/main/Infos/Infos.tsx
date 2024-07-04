@@ -29,8 +29,8 @@ const Infos: FC<InfosProps> = () => {
       onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{ cursor: 'grab' }}
       className="infos min-h-screen flex items-center justify-center space-6 mx-auto p-4">
-      <div className="grid grid-cols-2 xs:grid-cols-1 gap-4">
-        <div className="p-6 r">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-6 hidden sm:block">
           <h2 className="text-5xl garet-bold mb-6">Nous simplifions la recherche pour l’adoption</h2>
           <img
             src={logo}
@@ -55,13 +55,13 @@ const Infos: FC<InfosProps> = () => {
             </li>
           </ul>
         </div>
-      </div>      
+      </div>
       <img
         src={icon}
-        className= "rotate6"
+        className="rotate6"
         alt={`Image `}
         style={{
-          zIndex:"-9",
+          zIndex: "-9",
           position: 'fixed',
           top: "-80px",
           left: "77vw",

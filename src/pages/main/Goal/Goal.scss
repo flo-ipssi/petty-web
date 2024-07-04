@@ -1,6 +1,11 @@
 
 .goal {
 
+    @media only screen and (max-width: 600px) {
+    .rotate5{
+        left: 60vw;
+    }
+}
     // background: url(../../assets/images/font1.jpg) no-repeat;
     // background-size: cover;
     .grid img {

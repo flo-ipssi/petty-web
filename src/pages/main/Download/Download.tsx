@@ -34,10 +34,10 @@ const Download: FC<DownloadProps> = () => {
       style={{ cursor: 'grab' }}
       className="download mx-auto h-screen space-6 grid grid-rows-3 md:grid-cols-3 gap-4 content-center">
       <div className="bg-white p-6 row-span-3">
-        <img className="logo mx-auto mb-12" src={logo} alt="" />
+        <img className="logo mx-auto mb-8 mt-10" src={logo} alt="" />
         <h1 className="text-3xl font-bold mb-4">Rendez vos animaux encore plus heureux</h1>
         <p className='text-lg '>Rencontrez d’autres propriétaires et faites jouer vos animaux !</p>
-        <div className="items-baseline grid grid-cols-2 gap-4 content-center mt-28">
+        <div className="items-baseline grid grid-cols-2 gap-4 content-center mt-20">
           <div className="imgIphone">
             <img src={imgIphone} alt="" />
           </div>
@@ -46,7 +46,7 @@ const Download: FC<DownloadProps> = () => {
           </div>
         </div>
       </div>
-      <div className="relative col-span-2 gap-4 row-span-2 animals md:h-screen h-0">
+      <div className="relative col-span-2 gap-4 row-span-2 animals md:h-screen h-0 hidden sm:block">
         <div className="absolute bottom-16 left-56 h-16 w-16 font-bold text-1xl titleMedia">RESEAUX SOCIAUX</div>
         <div className="absolute bottom-16 left-80 h-16  ">
           <ul className="imgSocials grid gap-4 grid-cols-3 grid-rows-3">

@@ -2,9 +2,17 @@
     // background: url(../../assets/images/font2.jpg) no-repeat;
     // background-size: 100% auto;
 
-    h2.garet-bold{
+    h2.garet-bold {
         max-width: 800px;
         margin: auto;
         text-align: center;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .rotate6 {
+            top: 2vh !important;
+            left: 48vw;
+            width: 230px;
+        }
     }
 }

@@ -89,8 +89,15 @@ const Home: FC<HomeProps> = () => {
     info: PanInfo
   ) => {
     const dragDistance = info.offset.x + info.point.x;
-    if (dragDistance < -400) {
-      navigate("/about");
+    //mObile device
+    if (window.innerWidth < 1000) {
+      if (dragDistance < 800) {
+        navigate("/about");
+      }
+    } else {
+      if (dragDistance < -200) {
+        navigate("/about");
+      }
     }
   };
   return (
@@ -100,12 +107,6 @@ const Home: FC<HomeProps> = () => {
       onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{
         cursor: "grab",
-        // width: '100vw',
-        // height: '100vh',
-        // background: 'linear-gradient(to right, #36D1DC, #5B86E5)',
-        // display: 'flex',
-        // alignItems: 'center',
-        // justifyContent: 'center',
         fontSize: "24px",
       }}
       className="space-6 h-screen space-6 grid grid-cols-1 md:grid-cols-1 gap-4 content-center"
@@ -120,7 +121,7 @@ const Home: FC<HomeProps> = () => {
           <img
             key={index}
             src={logo}
-            className={position.rotation}
+            className={position.rotation + ` pawIcon`}
             alt={`Image ${index + 1}`}
             style={{
               position: "fixed",
