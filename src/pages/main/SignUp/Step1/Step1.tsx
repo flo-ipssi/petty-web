@@ -66,8 +66,6 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
       setWebSite(isDefinedAndNotNull(data.website) ? data.website : "");
     }
     
-    console.log("Step1: ");
-    console.log(data);
   }, []);
   return (
     <div className="flex w-screen overflow-hidden step1">
