@@ -69,8 +69,8 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
   }, []);
   return (
     <div className="flex w-screen overflow-hidden step1">
-      <div className="w-1/2 bg-gray-300 bg-left-step1"></div>
-      <div className="w-1/2 p-10">
+      <div className="w-1/2 hidden sm:block bg-gray-300 bg-left-step1"></div>
+      <div className="w-full sm:w-96 p-10">      
         <h1 className="my-10">Qui êtes-vous ?</h1>
         <div
           className={
@@ -173,12 +173,12 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
             </div>
           ) : null}
           <div className="flex flex-wrap -mx-3 mb-8">
-            <div className={" px-3 mb-6 md:mb-0 md:w-1/2"}>
+            <div className={" px-3 md:mb-0 md:w-1/2 sm:grid "}>
               <select
                 onChange={(e) => setCity(e.target.value)}
                 id="underline_select"
                 className={
-                  "block py-2.5 px-0  text-sm text-gray-500 bg-transparent border-0 border-b-2  appearance-none dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer w-full"
+                  "block py-2.5 px-0  text-sm text-gray-500 bg-transparent border-0 border-b-2  appearance-none dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 "
                 }
               >
                 <option selected>Ville</option>

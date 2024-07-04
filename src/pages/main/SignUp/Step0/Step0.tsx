@@ -16,7 +16,7 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
   };
 
   return (
-    <div>
+    <div className="pt-24">
       <h1 className="text-center my-10">Que voulez vous ?</h1>
       <div className="grid grid-cols-2 gap-4 place-content-center h-auto ">
         <motion.div
@@ -35,8 +35,7 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
           <h2 className="font-bold text-xl mb-2 text-center">Adoption</h2>
           <img src={adopt_Image} />
           <p className="text-gray-700 text-base text-center">
-            Offrez-leur un foyer chaleureux : Faites le choix responsable
-            d'adopter un adorable compagnon à quatre pattes.
+            Offrez-leur un foyer chaleureux
           </p>
         </motion.div>
         <motion.div
@@ -57,9 +56,7 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
           <img src={makeAdopt} />
 
           <p className="text-gray-700 text-base text-center">
-            Ouvrez votre cœur, faites une proposition d'adoption et offrez un
-            nouveau départ à un compagnon, prêt à remplir des vies de bonheur
-            et d'amour.
+            Offrez un nouveau départ à un compagnon
           </p>
         </motion.div>
       </div>

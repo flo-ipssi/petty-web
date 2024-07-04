@@ -62,11 +62,16 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   }) => {
     setIsAdult(event.target.checked);
   };
-
+  
+  function hasNoEmptyElements(array: any[]) {
+    return array.every((element) => {
+      return element !== null && element !== undefined && element !== '';
+    });
+  }
   return (
     <form
       onSubmit={handleNext}
-      className="w-full h-full text-center content-center grid grid-cols-1 gap-4"
+      className=" text-center content-center flex flex-col mt-20 gap-4 pb-24"
     >
       <h2 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
         Prêt pour la grande aventure ?
@@ -115,23 +120,26 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           </ul>
         </div>
         <div className="m-auto flex flex-col mt-0 py-6 w-96">
-          {!data.company ? (
-            <div className="flex flex-wrap">
+          {!data.company && !hasNoEmptyElements(images) ? (
+            <div>
               <h2 className="mb-6 text-xl font-bold tracking-tight ">
                 Gallerie
               </h2>
-              {images?.map((image: any, index: number) => (
-                <div key={index}>
-                  <img
-                    className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
-                    src={image ? URL.createObjectURL(image) : ""}
-                    alt=""
-                  />
-                </div>
-              ))}
+              <div className="flex flex-wrap">
+                {images?.map((image: any, index: number) => (
+                  <div key={index}>
+                    <img
+                      className="min-h-10 h-36 px-4 w-auto shrink rounded-lg"
+                      src={image ? URL.createObjectURL(image) : ""}
+                      alt=""
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : (
-            <>
+          ) : null}
+          
+          <>
               <h2 className="mb-2 text-xl font-bold tracking-tight ">
                 Mise en garde
               </h2>
@@ -140,7 +148,6 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
                 malveillantes pourra entraîner des poursuites légales.
               </p>
             </>
-          )}
           <div className="mb-2 flex items-center mx-auto">
             <input
               type="checkbox"

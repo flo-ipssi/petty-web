@@ -79,7 +79,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
   };
 
   return (
-    <div className="SignUp h-screen flex items-center justify-center space-6 mx-auto py-4">
+    <div className="SignUp flex items-center justify-center space-6 mx-auto py-4">
       {step === 0 && <Step0 onNext={handleNext} />}
       {step === 1 && (
         <Step1
