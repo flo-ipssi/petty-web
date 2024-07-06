@@ -25,7 +25,7 @@ export const Header = () => {
       console.log(client + "/auth/sign-in");
       
       // we want to send these information to our api
-      const { data } = await axios.post(client + "/auth/sign-in", {
+      const { data } = await axios.post(client + "auth/sign-in", {
         email,
         password,
       }, {
