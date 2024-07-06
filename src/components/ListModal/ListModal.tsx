@@ -5,6 +5,7 @@ import ListComponent from "./ListComponent";
 import { Keys, getFromAsyncStorage } from "../../utils/asyncStorage";
 import axios from "axios";
 import AlertForm from "../form/AlertForm";
+import client from "../../api/client";
 
 interface ListModalProps {
   petId: string;
@@ -29,7 +30,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
     try {
       const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
       const response = await axios.post(
-        `http://localhost:8989/conversation/create`, form,
+        client + `conversation/create`, form,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +60,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
     try {
       const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
       const response = await axios.post(
-        `http://localhost:8989/conversation/delete/`,form,
+        client + `conversation/delete/`,form,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -70,8 +70,8 @@ const Step2: FC<Step2Props> = ({ data, onPrevious, onNext }) => {
         {data?.company == false ? (
           <div className="w-full p-10">
             <h1 className="my-10">Comment est votre logement ?</h1>
-            <div className="residence mt-5 overflow-auto">
-              <div className="flex flex-wrap border-2 border-violet-100 rounded-md">
+            <div className="residence mt-5 border-2 border-violet-100 rounded-md overflow-auto">
+              <div className="flex flex-wrap ">
                 {images.map((image, index) => (
                   <div
                     key={index}

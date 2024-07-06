@@ -7,6 +7,7 @@ import { updateLoggedInState, updateProfile } from "../../store/auth";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
+import axios from "axios";
 
 export const Header = () => {
   const [active, setActive] = useState(false);
@@ -21,8 +22,10 @@ export const Header = () => {
     e.preventDefault();
 
     try {
+      console.log(client + "/auth/sign-in");
+      
       // we want to send these information to our api
-      const { data } = await client.post("/auth/sign-in", {
+      const { data } = await axios.post(client + "/auth/sign-in", {
         email,
         password,
       }, {

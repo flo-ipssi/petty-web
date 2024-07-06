@@ -1,6 +1,7 @@
 import { FC, useRef, useState } from "react";
 import "./Step4.scss";
 import ReCAPTCHA from "react-google-recaptcha";
+import client from "../../../../api/client";
 
 interface Step4Props {
   data: any;
@@ -28,7 +29,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
       captchaRef.current.reset();
 
       try {
-        const response = await fetch("http://localhost:8989/auth/recaptcha", {
+        const response = await fetch(client + "auth/recaptcha", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

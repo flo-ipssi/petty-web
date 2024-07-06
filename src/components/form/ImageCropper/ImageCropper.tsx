@@ -12,6 +12,7 @@ import {
   updateBusyState,
 } from "../../../store/auth";
 import Loader from "../../Loader";
+import client from "../../../api/client";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -88,7 +89,7 @@ const ImageCropper: FC<ImageCropperProps> = ({ onUploadSuccess }) => {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         formData.append("upload", croppedImage, "cropped-image.jpg");
         const response = await axios.post(
-          "http://localhost:8989/upload/create/User",
+          client + "upload/create/User",
           formData,
           {
             headers: {

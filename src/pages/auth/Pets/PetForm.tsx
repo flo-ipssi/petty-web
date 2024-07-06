@@ -14,6 +14,7 @@ import {
     locationsOptions,
     speciesOptions,
 } from "../../../api/fieldsValues";
+import client from "../../../api/client";
 
 interface PetFormProps { }
 
@@ -136,9 +137,9 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         }
 
         try {
-            let url = "http://localhost:8989/pet/create";
+            let url = client + "pet/create";
             if (id) {
-                url = `http://localhost:8989/pet/update/${id}`;
+                url = client + `pet/update/${id}`;
             }
             const response = await axios.post(url, dataToSend, {
                 headers: {
@@ -151,9 +152,9 @@ const PetFom: FC<PetFormProps> = ({ }) => {
             // Si la requête est réussie, envoyer la photo
             const petId = response.data.pet.id;
             if (petId && photoProfil) {
-                let urlMedias = `http://localhost:8989/pet/addMedias/${petId}`;
+                let urlMedias = client + `pet/addMedias/${petId}`;
                 if (id) {
-                    urlMedias = `http://localhost:8989/pet/updateMedias/${id}`;
+                    urlMedias = client + `pet/updateMedias/${id}`;
                 }
                 const formData = new FormData();
                 formData.append("photoProfil", photoProfil);

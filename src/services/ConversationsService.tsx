@@ -1,12 +1,13 @@
 import axios from "axios";
 import { Keys, getFromAsyncStorage } from "../utils/asyncStorage";
+import client from "../api/client";
 
 export const ConversationsService = {
     async getListConversationsData() {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.get(
-                `http://localhost:8989/conversation/list`,
+                client + `conversation/list`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -27,7 +28,7 @@ export const ConversationsService = {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.get(
-                `http://localhost:8989/conversation/${id}`,
+                client + `conversation/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -48,7 +49,7 @@ export const ConversationsService = {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.post(
-                `http://localhost:8989/message/isSeen`,{conversationId:id},
+                client + `message/isSeen`,{conversationId:id},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

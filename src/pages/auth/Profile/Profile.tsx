@@ -6,6 +6,7 @@ import ImageCropper from "../../../components/form/ImageCropper/ImageCropper";
 import InputForm from "../../../components/form/InputForm";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
 import _ from "lodash";
+import client from "../../../api/client";
 
 interface ProfileProps { }
 
@@ -44,7 +45,7 @@ const Profile: FC<ProfileProps> = () => {
       if (!token) return;
 
       try {
-        const res = await fetch(`http://localhost:8989/profile/save/infosOwner`, {
+        const res = await fetch(client + `profile/save/infosOwner`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

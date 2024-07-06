@@ -1,12 +1,13 @@
 import axios from "axios";
 import { Keys, getFromAsyncStorage } from "../utils/asyncStorage";
+import client from "../api/client";
 
 export const MessagesService = {
     async retrieveMessages(conversation: any) {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.post(
-                `http://localhost:8989/message/`,
+                client+ `message/`,
                 {
                     conversationId: conversation,
                 },
@@ -34,7 +35,7 @@ export const MessagesService = {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.post(
-                `http://localhost:8989/message/send`,
+                client + `message/send`,
                 {
                     messageText: message.text,
                     ownerId: owner,

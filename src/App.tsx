@@ -19,6 +19,7 @@ import { PrimeReactProvider } from "primereact/api";
 import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
+import client from "./api/client";
 
 function App() {
   const { loggedIn } = useSelector(getAuthState);
@@ -32,7 +33,7 @@ function App() {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) return;
 
-        const response = await fetch("http://localhost:8989/auth/is-auth", {
+        const response = await fetch(client + "auth/is-auth", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

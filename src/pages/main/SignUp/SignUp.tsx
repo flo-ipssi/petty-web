@@ -7,6 +7,7 @@ import Step3 from "./Step3/Step3";
 import Step4 from "./Step4/Step4";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import client from "../../../api/client";
 
 interface SignUpProps {
   stepInitial?: number;
@@ -36,7 +37,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      const response = await fetch("http://localhost:8989/auth/createByWeb", {
+      const response = await fetch(client + "auth/createByWeb", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
 
       // Envoyer les médias à l'API d'upload
       await axios.post(
-        "http://localhost:8989/auth/createUploadByWeb",
+        client + "auth/createUploadByWeb",
         formMediasData,
         {
           headers: {

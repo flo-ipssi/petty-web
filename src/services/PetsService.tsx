@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { Keys, getFromAsyncStorage } from '../utils/asyncStorage';
+import client from '../api/client';
 
 export const PetsService = {
     async getPetsData() {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-            const response = await axios.get(`http://localhost:8989/pet/list`, {
+            const response = await axios.get(client + `pet/list`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 } 
@@ -22,7 +23,7 @@ export const PetsService = {
     async getPetById(id: string) {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-            const response = await axios.get(`http://localhost:8989/pet/get/${id}`, {
+            const response = await axios.get(client + `pet/get/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 } 
@@ -37,7 +38,7 @@ export const PetsService = {
     async getPetsLiked(){
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-            const response = await axios.get(`http://localhost:8989/pet/applications`, {
+            const response = await axios.get(client + `pet/applications`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 } 
@@ -52,7 +53,7 @@ export const PetsService = {
     async deletePetById(id: string) {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-            const response = await axios.post(`http://localhost:8989/pet/delete/${id}`, {
+            const response = await axios.post(client + `pet/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 } 

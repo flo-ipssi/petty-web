@@ -5,6 +5,7 @@ import {
   getFromAsyncStorage,
   removeFromAsyncStorage,
 } from "../utils/asyncStorage";
+import client from "../api/client";
 
 
 const SideBar = () => {
@@ -35,7 +36,7 @@ const SideBar = () => {
     try {
       const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
       if (!token) return;
-      await fetch("http://localhost:8989/auth/log-out?fromAll=yes", {
+      await fetch(client + "auth/log-out?fromAll=yes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
