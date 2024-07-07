@@ -52,7 +52,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handlePhotoProfilChange = (event: { target: { files: any[] } }) => {
+    const handlePhotoProfilChange = (event: any) => {
         const file = event.target.files[0];
         setPhotoProfil(file);
     };
@@ -73,14 +73,36 @@ const PetFom: FC<PetFormProps> = ({ }) => {
             });
             if (files.length + newFiles.length <= 8) {
                 setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-            } else {
-                alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
-            }
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
             }
         }
     };
+
+    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const fileList = event.target.files;
+    //     if (fileList) {
+    //         const newFiles = Array.from(fileList).map((file: File) => {
+    //             console.log(file);
+
+    //             const fileReader = new FileReader();
+    //             fileReader.onload = () => {
+    //                 return {
+    //                     uri: fileReader.result as string,
+    //                     name: file.name,
+    //                 };
+    //             };
+    //             fileReader.readAsDataURL(file);
+    //             return { uri: "", name: file.name };
+    //         });
+    //         if (files.length + newFiles.length <= 8) {
+    //             setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    //         } else {
+    //             alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
+    //         }
+    //         if (fileInputRef.current) {
+    //             fileInputRef.current.value = "";
+    //         }
+    //     }
+    // };
 
 
     const removeFile = (index: number) => {
@@ -182,17 +204,20 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                         formData.append(`file${index}`, blob, fileName);
                     });
 
-                });
-                const photoResponse = await axios.post(urlMedias, formData, {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                }).then(async () => {
 
-                if (photoResponse.status === 200) {
-                    navigate("/pets");
-                }
+                    await axios.post(urlMedias, formData, {
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                })
+
+                // if (photoResponse.status === 200) {
+                //     navigate("/pets");
+                // }
+                navigate("/pets");
             }
         }
         catch (error: unknown) {
@@ -300,7 +325,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={() => handlePhotoProfilChange}
+                                    onChange={(e) => handlePhotoProfilChange(e)}
                                     className="hidden"
                                     id={`file-input-photoProfil`}
                                 />
@@ -344,6 +369,8 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                             />
                             <ul className="mt-2">
                                 {files.map((file, index) => {
+                                    console.log(file);
+
                                     const objectUrl = file instanceof Blob ? URL.createObjectURL(file) : "";
                                     const fileName = (file as { uri: string; name: string; }).name || `Pet${index + 1}`;
                                     const styles = {

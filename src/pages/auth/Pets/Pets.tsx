@@ -283,18 +283,13 @@ export default function Pets() {
           <div className="bg-white p-4 rounded-lg xs:mb-4 max-w-full shadow-md lg:w-[65%]">
             <div className="flex flex-wrap justify-between h-full">
               <div className="flex-1 bg-gradient-to-r from-green-400 to-green-600 rounded-lg flex flex-col items-center justify-center p-4 space-y-2 border border-gray-200 m-2">
-                <h2 className="text-4xl font-bold text-white">523</h2>
+                <h2 className="text-4xl font-bold text-white">0</h2>
                 <p className="text-white">Adopt</p>
               </div>
 
               <div className="flex-1 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-lg flex flex-col items-center justify-center p-4 space-y-2 border border-gray-200 m-2">
-                <i className="fas fa-exchange-alt text-white text-4xl"></i>
-                <p className="text-white">Transferir</p>
-              </div>
-
-              <div className="flex-1 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-lg flex flex-col items-center justify-center p-4 space-y-2 border border-gray-200 m-2">
-                <i className="fas fa-qrcode text-white text-4xl"></i>
-                <p className="text-white">Canjear</p>
+              <h2 className="text-4xl font-bold text-white">0</h2>
+              <p className="text-white">Nouveaux arrivants</p>
               </div>
             </div>
           </div>

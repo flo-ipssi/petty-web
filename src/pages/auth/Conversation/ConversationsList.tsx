@@ -180,10 +180,10 @@ export default function ConversationsList() {
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
                 <p className="font-dm text-sm font-medium text-gray-600">
-                  Your Balance
+                  Matchs
                 </p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-                  $1,000
+                <h4 className="text-xl text-center font-bold text-navy-700 dark:text-white">
+                  0 
                 </h4>
               </div>
             </div>
@@ -208,10 +208,10 @@ export default function ConversationsList() {
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
                 <p className="font-dm text-sm font-medium text-gray-600">
-                  Total Projects
+                  Signalements
                 </p>
-                <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-                  $2433
+                <h4 className="text-xl text-center font-bold text-navy-700 dark:text-white">
+                  0
                 </h4>
               </div>
             </div>
@@ -236,10 +236,10 @@ export default function ConversationsList() {
               </div>
               <div className="h-50 ml-4 flex w-auto flex-col justify-center">
                 <p className="font-dm text-sm font-medium text-gray-600">
-                  Total Projects
+                  Adoptions
                 </p>
                 <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-                  $2433
+                  0
                 </h4>
               </div>
             </div>
