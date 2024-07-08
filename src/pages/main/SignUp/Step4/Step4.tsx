@@ -29,7 +29,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
       captchaRef.current.reset();
 
       try {
-        const response = await fetch(client + "auth/recaptcha", {
+        const response = await fetch(client + "http://localhost:8989/auth/recaptcha", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
