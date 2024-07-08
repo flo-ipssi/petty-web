@@ -20,7 +20,7 @@ const TabNavigator: FC<TabNavigatorProps> = () => (
     <Route path="/" element={<Home />} />
     <Route path="/about" element={<About />} />
     <Route path="/objectives" element={<Goal />} />
-    <Route path="/simplifions" element={<Infos />} />
+    {/* <Route path="/simplifions" element={<Infos />} /> */}
     <Route path="/download" element={<Download />} />
     <Route path="/signup" element={<SignUp stepInitial={0} />} />
   </SlideRoutes><Navbar /></>

@@ -15,7 +15,7 @@ const Goal: FC<GoalProps> = () => {
 
     const dragDistance = info.offset.x + info.point.x;
     if (dragDistance < -300) {
-      navigate('/simplifions');
+      navigate('/download');
     }
     if (dragDistance > 950) {
       navigate('/about');
@@ -32,7 +32,7 @@ const Goal: FC<GoalProps> = () => {
         <div className="p-6 ">
           <img
             src={iconHumanDog}
-            className="sm:relative sm:h-6 sm:mr-10"
+            className="sm:relative xs:h-10 h-32 sm:mr-10"
             alt={`Cats`}
           />
           <div className="card-marron">
