@@ -4,7 +4,6 @@ import "./Navbar.scss";
 import {
   FaHome,
   FaBullseye,
-  FaLightbulb,
   FaDownload,
   FaPaw,
 } from "react-icons/fa";
