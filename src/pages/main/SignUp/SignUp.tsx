@@ -60,20 +60,23 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
         formMediasData.append(`file${index}`, file);
       });
 
-      // Envoyer les médias à l'API d'upload
-      await axios.post(
-        client + "auth/createUploadByWeb",
-        formMediasData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      if (userId) {
+
+        // Envoyer les médias à l'API d'upload
+        await axios.post(
+          client + `auth/createUploadByWeb/${userId}`,
+          formMediasData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
 
       // Rediriger vers la page de succès
       navigate("/?success=WaitToConfirm");
-      
+
     } catch (error) {
       console.log(error);
     }

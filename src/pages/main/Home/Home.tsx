@@ -19,9 +19,9 @@ type imageProps = {
 };
 
 const Home: FC<HomeProps> = () => {
+  const navigate = useNavigate();
   const [imagePositions, setImagePositions] = useState<imageProps[]>([]);
   const [searchParams, setSearchParams] = useSearchParams("");
-
   const positions = [
     {
       width: "400px",
@@ -73,16 +73,6 @@ const Home: FC<HomeProps> = () => {
       rotation: "rotate7",
     },
   ];
-  useEffect(() => {
-    setImagePositions(positions);
-    if (searchParams.get("success")) {
-      const value = searchParams.get("success");
-      if (value) {
-        setSearchParams(value);
-      }
-    }
-  }, []);
-  const navigate = useNavigate();
 
   const handleDragEnd = (
     _event: MouseEvent | TouchEvent | PointerEvent,
@@ -100,6 +90,19 @@ const Home: FC<HomeProps> = () => {
       }
     }
   };
+
+
+
+  useEffect(() => {
+    setImagePositions(positions);
+    if (searchParams.get("success")) {
+      const value = searchParams.get("success");
+      if (value) {
+        setSearchParams(value);
+      }
+    }
+  }, []);
+
   return (
     <motion.div
       drag="x"

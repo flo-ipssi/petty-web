@@ -9,13 +9,14 @@ import About from "../pages/main/About/About";
 import Navbar from "../components/Navbar/Navbar";
 import { Header } from "../components/Header/Header";
 import SignUp from "../pages/main/SignUp/SignUp";
+import Alert from "../components/Alert";
 
 interface TabNavigatorProps {
   children?: React.ReactNode;
 }
 
 const TabNavigator: FC<TabNavigatorProps> = () => (
-    <><Header /><SlideRoutes>
+    <><Header /><Alert/><SlideRoutes>
     <Route path="/" element={<Home />} />
     <Route path="/about" element={<About />} />
     <Route path="/objectives" element={<Goal />} />

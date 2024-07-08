@@ -16,7 +16,7 @@ const Step0: FC<Step0Props> = ({ onNext }) => {
   };
 
   return (
-    <div className="pt-24">
+    <div className="pt-24 h-screen">
       <h1 className="text-center my-10">Que voulez vous ?</h1>
       <div className="grid grid-cols-2 gap-4 place-content-center h-auto ">
         <motion.div
