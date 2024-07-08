@@ -3,7 +3,6 @@ import { Route } from "react-router-dom";
 import SlideRoutes from "react-slide-routes";
 import Home from "../pages/main/Home/Home";
 import Download from "../pages/main/Download/Download";
-import Infos from "../pages/main/Infos/Infos";
 import Goal from "../pages/main/Goal/Goal";
 import About from "../pages/main/About/About";
 import Navbar from "../components/Navbar/Navbar";

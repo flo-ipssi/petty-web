@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { CiFacebook } from "react-icons/ci";
 import imgInsta from "../../../assets/images/socials/instagram.svg";
 import { FaTwitter } from "react-icons/fa";
-import colors from "../../../utils/colors";
 
 interface DownloadProps {}
 
