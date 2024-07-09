@@ -1,7 +1,8 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import './Step3.scss';
 import { motion } from 'framer-motion';
 import isDefinedAndNotNull from '../../../../helpers/form';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 
 interface Step3Props {
@@ -16,7 +17,31 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
   const initialized = useRef(false)
+  const [validation, setValidation] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+  });
 
+  const validatePassword = (password: string) => {
+    const length = password.length >= 8;
+    const uppercase = /[A-Z]/.test(password);
+    const number = /\d/.test(password);
+
+    setValidation({ length, uppercase, number });
+  };
+
+  const handlePasswordChange = (e: { target: { value: any; }; }) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    validatePassword(newPassword);
+  };
+
+  const handleConfirmedPasswordChange = (e: { target: { value: SetStateAction<string>; }; }) => {
+    setConfirmedPassword(e.target.value);
+    setPasswordMatch(true);
+
+  };
   const handleNext = () => {
     if (password === confirmedPassword) {
       onNext({ ...data, email, password });
@@ -63,7 +88,7 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
                       required
                       type="password"
                       className="input"
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={handlePasswordChange}
                     />
                     <span className="highlight"></span>
                     <span className="bar"></span>
@@ -76,14 +101,23 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
                       required
                       type="password"
                       className="input"
-                      onChange={(e) => {
-                        setConfirmedPassword(e.target.value);
-                        setPasswordMatch(true); // Réinitialise l'état lorsque l'utilisateur commence à saisir à nouveau
-                      }}
+                      onChange={handleConfirmedPasswordChange}
                     />
                     <span className="highlight"></span>
                     <span className="bar"></span>
                     <label>Confirmer mot de passe</label>
+                  </div>
+                </div>
+
+                <div className="password-requirements grid grid-cols-1 gap-4 mx-4">
+                  <div className="inline-flex leading-5" style={{ color: validation.length ? 'green' : 'red' }}>
+                    {validation.length ? <FaCheckCircle /> : <FaTimesCircle />} Au moins 8 caractères
+                  </div>
+                  <div className="inline-flex leading-5" style={{ color: validation.uppercase ? 'green' : 'red' }}>
+                    {validation.uppercase ? <FaCheckCircle /> : <FaTimesCircle />} Au moins 1 majuscule
+                  </div>
+                  <div className="inline-flex leading-5" style={{ color: validation.number ? 'green' : 'red' }}>
+                    {validation.number ? <FaCheckCircle /> : <FaTimesCircle />} Au moins 1 chiffre
                   </div>
                 </div>
                 {!passwordMatch && (

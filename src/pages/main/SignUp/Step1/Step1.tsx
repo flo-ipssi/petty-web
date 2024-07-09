@@ -173,7 +173,7 @@ const Step1: FC<Step1Props> = ({ data, onPrevious, onNext }) => {
             </div>
           ) : null}
           <div className="flex flex-wrap -mx-3 mb-8">
-            <div className={" px-3 md:mb-0 md:w-1/2 sm:grid "}>
+            <div className=" md:w-1/2 px-3 mb-6 md:mb-0 ">
               <select
                 onChange={(e) => setCity(e.target.value)}
                 id="underline_select"
