@@ -1,4 +1,3 @@
-import icon from "../../../assets/images/adopt-3.svg";
 import { FaEye } from "react-icons/fa";
 import {
   LineChart,
