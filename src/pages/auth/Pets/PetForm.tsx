@@ -48,7 +48,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
 
     // Medias
     const [photoProfil, setPhotoProfil] = useState<File | Blob>();
-    const [files, setFiles] = useState<({ uri: string; name: string; } | Blob)[]>([]);
+    const [files, setFiles] = useState<(any[])>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -60,50 +60,17 @@ const PetFom: FC<PetFormProps> = ({ }) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
         if (fileList) {
-            const newFiles = Array.from(fileList).map((file: File) => {
-                const fileReader = new FileReader();
-                fileReader.onload = () => {
-                    return {
-                        uri: fileReader.result as string,
-                        name: file.name,
-                    };
-                };
-                fileReader.readAsDataURL(file);
-                return { uri: "", name: file.name };
-            });
+            const newFiles = Array.from(fileList);
             if (files.length + newFiles.length <= 8) {
-                setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+                setFiles(prevFiles => [...prevFiles, ...newFiles]);
+            } else {
+                alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
+            }
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
             }
         }
     };
-
-    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const fileList = event.target.files;
-    //     if (fileList) {
-    //         const newFiles = Array.from(fileList).map((file: File) => {
-    //             console.log(file);
-
-    //             const fileReader = new FileReader();
-    //             fileReader.onload = () => {
-    //                 return {
-    //                     uri: fileReader.result as string,
-    //                     name: file.name,
-    //                 };
-    //             };
-    //             fileReader.readAsDataURL(file);
-    //             return { uri: "", name: file.name };
-    //         });
-    //         if (files.length + newFiles.length <= 8) {
-    //             setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    //         } else {
-    //             alert("Vous ne pouvez pas sélectionner plus de 8 photos.");
-    //         }
-    //         if (fileInputRef.current) {
-    //             fileInputRef.current.value = "";
-    //         }
-    //     }
-    // };
-
 
     const removeFile = (index: number) => {
         setFiles(files.filter((_, i) => i !== index));
@@ -153,15 +120,15 @@ const PetFom: FC<PetFormProps> = ({ }) => {
 
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) {
-            console.error("Absence de token");
-            setErrorMessage("Absence de token");
+            console.error('Absence de token');
+            setErrorMessage('Absence de token')
             return;
-        }
+        };
 
         try {
-            let url = client + "pet/create";
+            let url = 'http://localhost:8989/pet/create';
             if (id) {
-                url = client + `pet/update/${id}`;
+                url = `http://localhost:8989/pet/update/${id}`;
             }
             const response = await axios.post(url, dataToSend, {
                 headers: {
@@ -171,64 +138,47 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 },
             });
 
+
             // Si la requête est réussie, envoyer la photo
             const petId = response.data.pet.id;
             if (petId && photoProfil) {
-                let urlMedias = client + `pet/addMedias/${petId}`;
+
+                let urlMedias = `${client}pet/addMedias/${petId}`;
                 if (id) {
-                    urlMedias = client + `pet/updateMedias/${id}`;
+                    urlMedias = `${client}pet/updateMedias/${id}`;
                 }
                 const formData = new FormData();
-                formData.append("photoProfil", photoProfil);
+                formData.append('photoProfil', photoProfil);
+                files.forEach((file, index) => {
+                    console.log(file);
 
-                const filePromises = files.map(async (file, index) => {
-                    let blob: Blob;
-                    let fileName: string;
-
-                    if ("uri" in file) {
-                        blob = await fetch(file.uri).then((r) => r.blob());
-                        fileName = file.name;
-                    } else if (file instanceof File) {
-                        blob = file;
-                        fileName = file.name || `file${index}`;
-                    } else {
-                        throw new Error("Invalid file type");
-                    }
-
-
-                    return { blob, fileName };
+                    formData.append(`file${index}`, file);
                 });
 
-                Promise.all(filePromises).then((fileInfos) => {
-                    fileInfos.forEach(({ blob, fileName }, index) => {
-                        formData.append(`file${index}`, blob, fileName);
-                    });
-
-                }).then(async () => {
-
-                    await axios.post(urlMedias, formData, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
+                await axios.post(urlMedias, formData, {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }).then(() => {
+                    navigate("/pets");
                 })
 
-                // if (photoResponse.status === 200) {
-                //     navigate("/pets");
-                // }
-                navigate("/pets");
             }
-        }
-        catch (error: unknown) {
+        } catch (error) {
+            console.error('Une erreur s\'est produite :', error);
+
             if (error instanceof Error) {
-                console.error("Une erreur s'est produite :", error);
                 setErrorMessage(error.message);
+            } else if (typeof error === 'string') {
+                setErrorMessage(error);
             } else {
-                console.error("Unexpected error:", error);
+                setErrorMessage('An unknown error occurred');
             }
         }
+
     };
+
 
     const createFileObject = async (item: { file: { url: string | URL | Request; publicId: string } }) => {
         const response = await fetch(item.file.url);
@@ -369,10 +319,9 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                             />
                             <ul className="mt-2">
                                 {files.map((file, index) => {
-                                    console.log(file);
-
                                     const objectUrl = file instanceof Blob ? URL.createObjectURL(file) : "";
                                     const fileName = (file as { uri: string; name: string; }).name || `Pet${index + 1}`;
+
                                     const styles = {
                                         backgroundImage: `url("${objectUrl}")`, backgroundSize: "cover",
                                         backgroundPosition: "center",

@@ -288,19 +288,18 @@ export default function Pets() {
               </div>
 
               <div className="flex-1 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-lg flex flex-col items-center justify-center p-4 space-y-2 border border-gray-200 m-2">
-              <h2 className="text-4xl font-bold text-white">0</h2>
-              <p className="text-white">Nouveaux arrivants</p>
+                <h2 className="text-4xl font-bold text-white">0</h2>
+                <p className="text-white">Nouveaux arrivants</p>
               </div>
             </div>
           </div>
         </div>
-
         <div className="flex flex-wrap -mx-3 mb-5">
-          <div className="w-full max-w-full px-3 mb-6  mx-auto">
-            <div className="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
+          <div className="w-full px-3 mb-6 mx-auto">
+            <div className="relative flex-1 flex flex-col break-words min-w-0 bg-clip-border rounded-lg bg-white m-5">
               <div className="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
-                <div className="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
-                  <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
+                <div className="px-4 sm:px-6 lg:px-9 pt-5 flex justify-between items-center flex-wrap min-h-[70px] pb-0 bg-transparent">
+                  <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl text-dark">
                     <span className="mr-3 font-semibold text-dark">
                       Liste des animaux
                     </span>
@@ -308,8 +307,7 @@ export default function Pets() {
                       to={{ pathname: "/pet/form" }}
                       className="text-white p-button font-bold bg-cyan-600 p-2 mt-2"
                     >
-                      <FaPlus color="white" className="me-2" /> Ajouter un
-                      animal
+                      <FaPlus color="white" className="mr-2" /> Ajouter un animal
                     </Link>
                   </h3>
                 </div>
@@ -317,42 +315,42 @@ export default function Pets() {
                   header={header}
                   filters={filters}
                   onFilter={onFilter}
-                  className="flex-auto block py-8 pt-6 px-9 text-center"
+                  className="flex-auto block py-8 pt-6 px-4 sm:px-6 lg:px-9 text-center w-full max-w-full"
                   value={animals}
                   scrollable
                   scrollHeight="400px"
-                  style={{ minWidth: "50rem" }}
+                  style={{ minWidth: "20rem" }}
                 >
                   <Column header="Nom" body={imageBodyTemplate}></Column>
                   <Column
                     field="species"
                     header="Type"
-                    bodyClassName={"capitalize"}
+                    bodyClassName="capitalize"
                   ></Column>
                   <Column
                     field="breed"
                     header="Race"
-                    bodyClassName={"capitalize"}
+                    bodyClassName="capitalize"
                   ></Column>
                   <Column
                     field="gender"
                     header="Genre"
-                    bodyClassName={"capitalize text-center"}
+                    bodyClassName="capitalize text-center"
                   ></Column>
                   <Column
                     field="age"
                     header="Age"
-                    bodyClassName={"capitalize text-center"}
+                    bodyClassName="capitalize text-center"
                   ></Column>
                   <Column
                     field="size"
                     header="Taille (cm)"
-                    bodyClassName={"capitalize text-center"}
+                    bodyClassName="capitalize text-center"
                   ></Column>
                   <Column
                     header="Status"
                     body={statusBodyTemplate}
-                    bodyClassName={"capitalize"}
+                    bodyClassName="capitalize"
                   ></Column>
                   <Column header="Edition" body={handlePetTemplate}></Column>
                 </DataTable>

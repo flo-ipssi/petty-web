@@ -23,61 +23,8 @@ export default function Dashboard() {
   ];
   return (
     <div className="relative md:ml-64 bg-blueGray-50">
-      <nav className="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4">
-        <div className="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
-          <a
-            className="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-            href="./index.html"
-          >
-            Dashboard
-          </a>
-          <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
-            <a className="text-blueGray-500 block" href="#pablo">
-              <div className="items-center flex">
-                <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-                  <img
-                    alt="..."
-                    className="w-full rounded-full align-middle border-none shadow-lg"
-                    src={icon}
-                  />
-                </span>
-              </div>
-            </a>
-            <div
-              className="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
-              // style="min-width: 12rem;"
-              id="user-dropdown"
-            >
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Action
-              </a>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Another action
-              </a>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Something else here
-              </a>
-              <div className="h-0 my-2 border border-solid border-blueGray-100"></div>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Seprated link
-              </a>
-            </div>
-          </ul>
-        </div>
-      </nav>
-      <div className="relative bg-pink-600 md:pt-32 pb-32 pt-12">
+      
+      <div className="relative bg-pink-600 md:pt-12 pb-32 pt-12">
         <div className="px-4 md:px-10 mx-auto w-full">
           <div>
             <div className="flex flex-wrap">

@@ -6,20 +6,25 @@ import {
   removeFromAsyncStorage,
 } from "../utils/asyncStorage";
 import client from "../api/client";
-
+import { FaBars, FaTimes } from "react-icons/fa";
+import colors from "../utils/colors";
+import { useSelector } from "react-redux";
+import { getAuthState } from "../store/auth";
 
 const SideBar = () => {
-  const openDropdown = (event: Event | undefined, dropdownID: string) => {
-    let element = event?.target as HTMLElement;
-    while (element.nodeName !== "A") {
-      element = element.parentNode as HTMLElement;
-    }
-    const dropdownElement = document.getElementById(dropdownID);
-    if (dropdownElement) {
-      dropdownElement.classList.toggle("hidden");
-      dropdownElement.classList.toggle("block");
-    }
-  };
+  const { profile } = useSelector(getAuthState);
+
+  // const openDropdown = (event: Event | undefined, dropdownID: string) => {
+  //   let element = event?.target as HTMLElement;
+  //   while (element.nodeName !== "A") {
+  //     element = element.parentNode as HTMLElement;
+  //   }
+  //   const dropdownElement = document.getElementById(dropdownID);
+  //   if (dropdownElement) {
+  //     dropdownElement.classList.toggle("hidden");
+  //     dropdownElement.classList.toggle("block");
+  //   }
+  // };
 
   const toggleNavbar = (collapseID: string) => {
     const element = document.getElementById(collapseID);
@@ -57,7 +62,8 @@ const SideBar = () => {
       md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center 
       justify-between relative md:w-64 z-10 "
     >
-      <div className="md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+      <div className="hidden md:block bg-pink-600 text-left md:pb-2 text-blueGray-600 mr-0  whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+        {" "}
         <img src={Logo} className="mx-auto" width={80} />
       </div>
       <div className="md:flex-col py-2 px-6 md:items-stretch md:min-h-full md:flex-nowrap flex flex-wrap items-center justify-between w-full mx-auto">
@@ -66,109 +72,19 @@ const SideBar = () => {
           type="button"
           onClick={() => toggleNavbar("example-collapse-sidebar")}
         >
-          <i className="fas fa-bars"></i>
+          <FaBars size={30} color={colors.OVERLAY} />
         </button>
         <ul className="md:hidden items-center flex flex-wrap list-none">
           <li className="inline-block relative">
-            <a
-              className="text-blueGray-500 block py-1 px-3"
-              href="#pablo"
-              onClick={() => openDropdown(event, "notification-dropdown")}
-            >
-              <i className="fas fa-bell"></i>
-            </a>
-            <div
-              className="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
-              // style="min-width: 12rem;"
-              id="notification-dropdown"
-            >
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Action
-              </a>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Another action
-              </a>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Something else here
-              </a>
-              <div className="h-0 my-2 border border-solid border-blueGray-100"></div>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Seprated link
-              </a>
-            </div>
-          </li>
-          <li className="inline-block relative">
-            <a
-              className="text-blueGray-500 block"
-              href="#pablo"
-              onClick={() => openDropdown(event, "user-responsive-dropdown")}
-            >
-              <div className="items-center flex">
-                <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-                  <img
-                    alt="..."
-                    className="w-full rounded-full align-middle border-none shadow-lg"
-                    src="./assets/img/team-1-800x800.jpg"
-                  />
-                </span>
+            <a className="text-blueGray-500 block" href="#pablo">
+              <div className="w-12 h-12 rounded-full overflow-hidden">
+                <img
+                  src={profile?.avatar}
+                  alt="Rounded Image"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </a>
-            <div
-              className="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
-              // style={{min-width: 12rem;}}
-              id="user-responsive-dropdown"
-            >
-              <Link
-                to="/"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Dashboard
-              </Link>
-
-              <Link
-                to="/matching"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Matching
-              </Link>
-              <Link
-                to="/conversations"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Messagerie
-              </Link>
-              <Link
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                to="/pets"
-              >
-                Animaux
-              </Link>
-              {/* <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Equipe
-              </a> */}
-              <div className="h-0 my-2 border border-solid border-blueGray-100"></div>
-              <a
-                href="#pablo"
-                className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-              >
-                Paramètre
-              </a>
-            </div>
           </li>
         </ul>
         <div
@@ -182,7 +98,7 @@ const SideBar = () => {
                   className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                   href="#"
                 >
-                  Tailwind Starter Kit
+                  Petty
                 </a>
               </div>
               <div className="w-6/12 flex justify-end">
@@ -191,7 +107,7 @@ const SideBar = () => {
                   className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
                   onClick={() => toggleNavbar("example-collapse-sidebar")}
                 >
-                  <i className="fas fa-times"></i>
+                  <FaTimes size={25} />
                 </button>
               </div>
             </div>
@@ -242,20 +158,8 @@ const SideBar = () => {
                 Equipe
               </a>
             </li> */}
-            <li className="items-center">
-              <a
-                className="text-blueGray-300 text-xs uppercase py-3 font-bold block"
-                href="#pablo"
-              >
-                <i className="fas fa-tools text-blueGray-300 mr-2 text-sm"></i>
-                Paramètre
-              </a>
-            </li>
           </ul>
           <hr className="my-4 md:min-w-full" />
-          <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-            Documentation
-          </h6>
           <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
             <li className="inline-flex">
               <Link

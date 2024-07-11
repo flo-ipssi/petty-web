@@ -7,27 +7,30 @@ import InputForm from "../../../components/form/InputForm";
 import { Keys, getFromAsyncStorage } from "../../../utils/asyncStorage";
 import _ from "lodash";
 import client from "../../../api/client";
+import banner from "../../../assets/images/banner.jpg";
 
-interface ProfileProps { }
+interface ProfileProps {}
 
 const Profile: FC<ProfileProps> = () => {
   const { profile } = useSelector(getAuthState);
-  const [userProfile, setUserProfile] = useState<UserProfile>(profile ?? {
-    id: "",
-    fullname: "",
-    firstname: "",
-    name: "",
-    email: "",
-    verified: false,
-    avatar: "",
-    address: "",
-    zip: "",
-    city: "",
-    website: "",
-    phone: "",
-    description: "",
-    animal_owner: true
-  });
+  const [userProfile, setUserProfile] = useState<UserProfile>(
+    profile ?? {
+      id: "",
+      fullname: "",
+      firstname: "",
+      name: "",
+      email: "",
+      verified: false,
+      avatar: "",
+      address: "",
+      zip: "",
+      city: "",
+      website: "",
+      phone: "",
+      description: "",
+      animal_owner: true,
+    }
+  );
   const avatar = userProfile.avatar ? userProfile.avatar : null;
   const [uploadResponse, setUploadResponse] = useState(avatar);
   const dispatch = useDispatch();
@@ -56,8 +59,7 @@ const Profile: FC<ProfileProps> = () => {
         });
         const data = await res.json();
         dispatch(updateProfile(data.profile));
-        setUserProfile(data.profile)
-
+        setUserProfile(data.profile);
       } catch (error) {
         console.error("Error saving description", error);
       }
@@ -72,23 +74,25 @@ const Profile: FC<ProfileProps> = () => {
       <section className="w-full overflow-hidden dark:bg-gray-900">
         <div className="flex flex-col">
           <img
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080"
-            alt="User Cover"
+            src={banner}
+            alt="Cover"
             className="w-full xl:h-[20rem] lg:h-[18rem] md:h-[16rem] sm:h-[14rem] xs:h-[11rem]"
           />
 
           <div className="sm:w-[80%] xs:w-[90%] mx-auto flex">
-            <img
-              src={
-                uploadResponse
-                  ? uploadResponse
-                  : "https://images.prismic.io/wisdom/65279594-a0f3-4f24-bed9-08bf9ff2b8aa_esa-dog.jpg?auto=compress%2Cformat&rect=241%2C0%2C1440%2C1080&w=820&h=615"
-              }
-              alt="User Profile"
-              className="rounded-md lg:w-[12rem] lg:h-[12rem] md:w-[10rem] md:h-[10rem] sm:w-[8rem] sm:h-[8rem] xs:w-[7rem] xs:h-[7rem] outline outline-2 outline-offset-2 outline-blue-500 relative lg:bottom-[5rem] sm:bottom-[4rem] xs:bottom-[3rem]"
-            />
-            <div className="w-full text-left my-1 sm:mx-4 xs:pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif">
-              <h1 className="text-left my-1 sm:mx-4 xs:pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif">
+            <div className="xs:ml-2 rounded-md h-32 overflow-hidden mb-20">
+              <img
+                src={
+                  uploadResponse
+                    ? uploadResponse
+                    : "https://images.prismic.io/wisdom/65279594-a0f3-4f24-bed9-08bf9ff2b8aa_esa-dog.jpg?auto=compress%2Cformat&rect=241%2C0%2C1440%2C1080&w=820&h=615"
+                }
+                alt="Rounded Image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-full text-left my-1 mx-4 pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl ">
+              <h1 className="text-left my-1  pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl ">
                 {userProfile.fullname}
               </h1>
               <div className="ms-5 pb-3">
