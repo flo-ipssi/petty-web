@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/images/logo-white.png";
 import {
   Keys,
@@ -13,6 +13,7 @@ import { getAuthState } from "../store/auth";
 
 const SideBar = () => {
   const { profile } = useSelector(getAuthState);
+  const navigate = useNavigate();
 
   // const openDropdown = (event: Event | undefined, dropdownID: string) => {
   //   let element = event?.target as HTMLElement;
@@ -38,9 +39,14 @@ const SideBar = () => {
   };
 
   const handleLogout = async () => {
+
     try {
       const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-      if (!token) return;
+      if (!token) {
+        navigate("/");
+        return;
+      };
+
       await fetch(client + "auth/log-out?fromAll=yes", {
         method: "POST",
         headers: {
@@ -50,6 +56,7 @@ const SideBar = () => {
         },
       });
       await removeFromAsyncStorage(Keys.AUTH_TOKEN);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

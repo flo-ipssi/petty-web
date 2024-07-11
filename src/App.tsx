@@ -2,7 +2,6 @@
 import AppContainer from "./components/AppContainer/AppContainer";
 import TabNavigator from "./navigation/TabNavigator";
 import AuthNavigator from "./navigation/AuthNavigator";
-import { BrowserRouter as Router } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAuthState,
@@ -20,11 +19,12 @@ import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import client from "./api/client";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+
 
 function App() {
   const { loggedIn } = useSelector(getAuthState);
   const dispatch = useDispatch();
-  // const apiUrl = import.meta.env;
 
   useEffect(() => {
     const fetchAuthInfo = async () => {
@@ -58,13 +58,11 @@ function App() {
   return (
     <AppContainer>
       <Router>
-        {loggedIn ? (
-          <PrimeReactProvider>
-            <AuthNavigator />
-          </PrimeReactProvider>
-        ) : (
-          <TabNavigator />
-        )}
+        <Routes>
+          <Route path="/" element={loggedIn ? <Navigate to="/auth" /> : <TabNavigator />} />
+          <Route path="/auth" element={<PrimeReactProvider><AuthNavigator /></PrimeReactProvider>} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
       </Router>
     </AppContainer>
   );
