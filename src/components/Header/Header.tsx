@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
 import axios from "axios";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 export const Header = () => {
   const [active, setActive] = useState(false);
@@ -23,7 +24,7 @@ export const Header = () => {
 
     try {
       console.log(client + "/auth/sign-in");
-      
+
       // we want to send these information to our api
       const { data } = await axios.post(client + "auth/sign-in", {
         email,
@@ -33,11 +34,11 @@ export const Header = () => {
           "Access-Control-Allow-Origin": "*",
         }
       });
-      
+
       await saveToAsyncStorage(Keys.AUTH_TOKEN, data.token);
       dispatch(updateProfile(data.profile));
       dispatch(updateLoggedInState(true));
-      navigate("/pets"); 
+      navigate("/pets");
     } catch (error) {
       console.log("Sign in error: ", error);
     }
@@ -135,9 +136,8 @@ export const Header = () => {
             />
           </h1>
           <nav
-            className={`lg:flex flex-grow items-center ${
-              active ? "block" : "hidden"
-            }`}
+            className={`lg:flex flex-grow items-center ${active ? "block" : "hidden"
+              }`}
           >
             <ul className="flex flex-col lg:flex-row lg:ml-auto mt-4 lg:mt-0">
               {/* <li><a href="#" className="block lg:inline-block text-gray-300 hover:text-white px-2 py-1">Accueil</a></li>
@@ -166,14 +166,7 @@ export const Header = () => {
             className="block lg:hidden"
             onClick={() => setActive(!active)}
           >
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6V6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4ZM12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13V13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11ZM11 18C11 17.4477 11.4477 17 12 17V17C12.5523 17 13 17.4477 13 18C13 18.5523 12.5523 19 12 19V19C11.4477 19 11 18.5523 11 18ZM3 5C3 4.44772 3.44772 4 4 4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H4C3.44772 6 3 5.55228 3 5ZM4 11C3.44772 11 3 11.4477 3 12C3 12.5523 3.44772 13 4 13H20C20.5523 13 21 12.5523 21 12C21 11.4477 20.5523 11 20 11H4ZM3 18C3 17.4477 3.44772 17 4 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18Z"
-              />
-            </svg>
-          </button>
+            {active ? <FaTimes size={20} /> : <FaBars size={20} />}          </button>
         </div>
       </header>
       <Modal

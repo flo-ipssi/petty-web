@@ -149,7 +149,7 @@ const Step3: FC<Step3Props> = ({ data, onPrevious, onNext }) => {
           Suivant
         </button>
       </div>
-      <div className="hidden md:block w-1/3 bg-gray-300 bg-right"></div>
+      <div className="hidden md:block w-1/3 bg-gray-300 bg-right bg-step3"></div>
     </div>
   );
 };
