@@ -19,7 +19,7 @@ import "./App.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import client from "./api/client";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 
 function App() {
@@ -58,11 +58,13 @@ function App() {
   return (
     <AppContainer>
       <Router>
-        <Routes>
-          <Route path="/" element={loggedIn ? <Navigate to="/auth" /> : <TabNavigator />} />
-          <Route path="/auth" element={<PrimeReactProvider><AuthNavigator /></PrimeReactProvider>} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        {loggedIn ? (
+          <PrimeReactProvider>
+            <AuthNavigator />
+          </PrimeReactProvider>
+        ) : (
+          <TabNavigator />
+        )}
       </Router>
     </AppContainer>
   );

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import SlideRoutes from "react-slide-routes";
 import Home from "../pages/main/Home/Home";
 import Download from "../pages/main/Download/Download";
@@ -22,6 +22,8 @@ const TabNavigator: FC<TabNavigatorProps> = () => (
     {/* <Route path="/simplifions" element={<Infos />} /> */}
     <Route path="/download" element={<Download />} />
     <Route path="/signup" element={<SignUp stepInitial={0} />} />
+    <Route path="*" element={<Navigate to="/" />} />
+
   </SlideRoutes><Navbar /></>
 );
 

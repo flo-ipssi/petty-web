@@ -39,13 +39,12 @@ const SideBar = () => {
   };
 
   const handleLogout = async () => {
-
     try {
       const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
       if (!token) {
         navigate("/");
         return;
-      };
+      }
 
       await fetch(client + "auth/log-out?fromAll=yes", {
         method: "POST",
@@ -55,8 +54,9 @@ const SideBar = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      await removeFromAsyncStorage(Keys.AUTH_TOKEN);
-      navigate("/");
+      await removeFromAsyncStorage(Keys.AUTH_TOKEN).then(() => {
+        navigate("/");
+      });
     } catch (error) {
       console.log(error);
     }

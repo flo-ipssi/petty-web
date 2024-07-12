@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import SlideRoutes from "react-slide-routes";
 import Dashboard from "../pages/auth/Dashboard/Dashboard";
 import Profile from "../pages/auth/Profile/Profile";
@@ -18,6 +18,7 @@ const AuthNavigator: FC<AuthNavigatorProps> = () => (
   <>
     <SideBar />
     <SlideRoutes>
+    <Route path="*" element={<Navigate to="/" />} />
       <Route path="/" element={<Dashboard />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/matching" element={<Matching />} />

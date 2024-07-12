@@ -75,7 +75,7 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
       }
 
       // Rediriger vers la page de succès
-      navigate("/?success=WaitToConfirm");
+      navigate("/success=WaitToConfirm");
 
     } catch (error) {
       console.log(error);
