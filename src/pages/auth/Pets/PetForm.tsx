@@ -126,9 +126,9 @@ const PetFom: FC<PetFormProps> = ({ }) => {
         };
 
         try {
-            let url = 'http://localhost:8989/pet/create';
+            let url = `${client}pet/create`;
             if (id) {
-                url = `http://localhost:8989/pet/update/${id}`;
+                url = `${client}pet/update/${id}`;
             }
             const response = await axios.post(url, dataToSend, {
                 headers: {
