@@ -9,7 +9,7 @@ const Alert : FC<Props> = () => {
 
     // Check if the URL contains the parameter "WaitToConfirm"
     const searchParams = new URLSearchParams(location.search);
-    const showAlert = searchParams.get('success') === 'WaitToConfirm';
+    const showAlert = searchParams.get('WaitToConfirm') === 'success';
   
     if (!showAlert) return null;
   

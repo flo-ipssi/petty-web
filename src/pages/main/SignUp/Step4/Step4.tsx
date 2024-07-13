@@ -72,16 +72,16 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   return (
     <form
       onSubmit={handleNext}
-      className=" text-center content-center flex flex-col mt-20 gap-4 pb-24"
+      className=" text-center content-center flex flex-col mt-20 gap-4 pb-24 pt-20"
     >
-      <h2 className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <h2 className="mb-2 text-3xl font-bold tracking-tight text-white-900 dark:text-white">
         Prêt pour la grande aventure ?
       </h2>
 
       <div
         className="m-auto flex flex-col  items-center 
         bg-white border border-gray-200  rounded-lg shadow 
-        md:flex-row dark:border-gray-700 dark:bg-gray-800 recap"
+        md:flex-row recap"
       >
         <div className="p-6">
           <h2 className="mb-6 text-xl font-bold tracking-tight ">Profil</h2>

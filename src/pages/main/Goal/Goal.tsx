@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import './Goal.scss';
-import { PanInfo, motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import iconHumanDog from "../../../assets/images/Maitre-et-chien.svg";
 import logo from '../../../assets/images/icon-no-label.svg';
 
@@ -9,23 +8,24 @@ interface GoalProps { }
 
 const Goal: FC<GoalProps> = () => {
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  // const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
 
-    const dragDistance = info.offset.x + info.point.x;
-    if (dragDistance < -300) {
-      navigate('/download');
-    }
-    if (dragDistance > 950) {
-      navigate('/about');
-    }
-  };
+  //   const dragDistance = info.offset.x + info.point.x;
+  //   if (dragDistance < -300) {
+  //     navigate('/download');
+  //   }
+  //   if (dragDistance > 950) {
+  //     navigate('/about');
+  //   }
+  // };
+
   return (
     <motion.div
       drag="x"
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      onDragEnd={(event, info) => handleDragEnd(event, info)}
+      // onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{ cursor: 'grab' }}
       className="goal min-h-screen flex items-center justify-center space-6 mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

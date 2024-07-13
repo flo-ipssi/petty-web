@@ -1,10 +1,9 @@
 import { FC } from "react";
 import "./Download.scss";
-import { PanInfo, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import logo from "../../../assets/images/logo.svg";
 import imgAndroid from "../../../assets/images/Android-logo-png.svg";
 import imgIphone from "../../../assets/images/iPhone-logo.svg";
-import { useNavigate } from "react-router-dom";
 import { CiFacebook } from "react-icons/ci";
 import imgInsta from "../../../assets/images/socials/instagram.svg";
 import { FaTwitter } from "react-icons/fa";
@@ -12,26 +11,26 @@ import { FaTwitter } from "react-icons/fa";
 interface DownloadProps {}
 
 const Download: FC<DownloadProps> = () => {
-  const navigate = useNavigate();
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    const dragDistance = info.offset.x + info.point.x;
-    console.log("dragDistance:", dragDistance);
-    if (dragDistance < -300) {
-      navigate("/");
-    }
-    if (dragDistance > 950) {
-      navigate("/simplifions");
-    }
-  };
+  // const navigate = useNavigate();
+  // const handleDragEnd = (
+  //   _event: MouseEvent | TouchEvent | PointerEvent,
+  //   info: PanInfo
+  // ) => {
+  //   const dragDistance = info.offset.x + info.point.x;
+  //   console.log("dragDistance:", dragDistance);
+  //   if (dragDistance < -300) {
+  //     navigate("/");
+  //   }
+  //   if (dragDistance > 950) {
+  //     navigate("/simplifions");
+  //   }
+  // };
 
   return (
     <motion.div
       drag="x"
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      onDragEnd={(event, info) => handleDragEnd(event, info)}
+      // onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{ cursor: "grab" }}
       className="download mx-auto h-screen space-6 grid grid-rows-3 md:grid-cols-3 gap-4 content-center"
     >

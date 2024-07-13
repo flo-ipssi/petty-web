@@ -1,32 +1,31 @@
 import { FC } from "react";
 import "./About.scss";
-import { PanInfo, motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import cats from "../../../assets/images/cats.svg";
 
 interface AboutProps {}
 
 const About: FC<AboutProps> = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    const dragDistance = info.offset.x + info.point.x;
-    console.log("dragDistance:", dragDistance);
-    if (dragDistance < -300) {
-      navigate("/objectives");
-    }
-    if (dragDistance > 950) {
-      navigate("/");
-    }
-  };
+  // const handleDragEnd = (
+  //   _event: MouseEvent | TouchEvent | PointerEvent,
+  //   info: PanInfo
+  // ) => {
+  //   const dragDistance = info.offset.x + info.point.x;
+  //   console.log("dragDistance:", dragDistance);
+  //   if (dragDistance < -300) {
+  //     navigate("/objectives");
+  //   }
+  //   if (dragDistance > 950) {
+  //     navigate("/");
+  //   }
+  // };
   return (
     <motion.div
       drag="x"
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      onDragEnd={(event, info) => handleDragEnd(event, info)}
+      // onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{ cursor: "grab" }}
       className="about py-48 lg:h-screen md:h-screen space-6 flex sm:flex-row xs:flex-col items-center content-center"
     >

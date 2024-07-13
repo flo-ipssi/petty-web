@@ -1,10 +1,9 @@
 import { FC, useState, useEffect } from "react";
 import logo from "../../../assets/images/icon-no-label.svg";
 import "./Home.scss";
-import { PanInfo, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Link,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 
@@ -19,7 +18,7 @@ type imageProps = {
 };
 
 const Home: FC<HomeProps> = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [imagePositions, setImagePositions] = useState<imageProps[]>([]);
   const [searchParams, setSearchParams] = useSearchParams("");
   const positions = [
@@ -74,32 +73,29 @@ const Home: FC<HomeProps> = () => {
     },
   ];
 
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    const dragDistance = info.offset.x + info.point.x;
-    //mObile device
-    if (window.innerWidth < 1000) {
-      if (dragDistance < 800) {
-        navigate("/about");
-      }
-    } else {
-      if (dragDistance < -200) {
-        navigate("/about");
-      }
-    }
-  };
+  // const handleDragEnd = (
+  //   _event: MouseEvent | TouchEvent | PointerEvent,
+  //   info: PanInfo
+  // ) => {
+  //   const dragDistance = info.offset.x + info.point.x;
+  //   //mObile device
+  //   if (window.innerWidth < 1000) {
+  //     if (dragDistance < 800) {
+  //       navigate("/about");
+  //     }
+  //   } else {
+  //     if (dragDistance < -200) {
+  //       navigate("/about");
+  //     }
+  //   }
+  // };
 
 
 
   useEffect(() => {
     setImagePositions(positions);
-    if (searchParams.get("success")) {
-      const value = searchParams.get("success");
-      if (value) {
-        setSearchParams(value);
-      }
+    if (searchParams.get("WaitToConfirm")) {
+      setSearchParams("En attente de confirmation sur votre adresse email !");
     }
   }, []);
 
@@ -107,7 +103,7 @@ const Home: FC<HomeProps> = () => {
     <motion.div
       drag="x"
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      onDragEnd={(event, info) => handleDragEnd(event, info)}
+      // onDragEnd={(event, info) => handleDragEnd(event, info)}
       style={{
         cursor: "grab",
         fontSize: "24px",
