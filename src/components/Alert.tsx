@@ -16,7 +16,7 @@ const Alert : FC<Props> = () => {
     return (
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md" role="alert">
         <strong className="font-bold">Enregistrement réussi! </strong>
-        <span className="block sm:inline">Vous pouvez maintenant vous connecter.</span>
+        <span className="block sm:inline">Vous pouvez maintenant vérifier votre adresse email.</span>
       </div>
     );
 };
