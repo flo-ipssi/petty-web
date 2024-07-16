@@ -77,7 +77,6 @@ const Conversation = () => {
           chatContainerRef.current.scrollTop =
             chatContainerRef.current.scrollHeight;
         }
-
         MessagesService.sendMessage(newMessage, ownerId, consersationId);
       } catch (error) {
         console.error(error);
@@ -107,7 +106,7 @@ const Conversation = () => {
             uploads: data.conversation.petUploads,
             url: animalUrl ? animalUrl.file.url : null,
           });
-          console.log(data.conversation);
+          
           setNbApplied(data.appliedNumber);
           setConsersationId(data.conversation._id);
           setOwnerId(data.conversation.petInfo.owner);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
@@ -19,18 +19,10 @@ export default function ConversationsList() {
 
   const userTemplate = (conversation: {
     userUploads: any[];
-    petInfo: {
-      name:
-        | string
-        | number
-        | boolean
-        | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-        | Iterable<React.ReactNode>
-        | React.ReactPortal
-        | null
-        | undefined;
-    };
+    fromUser: {
+      name: string};
   }) => {
+    
     const userFile = conversation.userUploads.find(
       (item: { category: string; profil: any }) =>
         item.profil == true && item.category == "User"
@@ -40,7 +32,7 @@ export default function ConversationsList() {
         <div className="flex align-items-center gap-2">Image Not found</div>
       );
     }
-
+    
     return (
       <div className="flex align-items-center gap-2">
         <img
@@ -49,7 +41,7 @@ export default function ConversationsList() {
           className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
         />
         <span className="font-semibold mt-3 ms-1">
-          {conversation.petInfo.name}
+          {conversation.fromUser.name}
         </span>
       </div>
     );
@@ -57,16 +49,8 @@ export default function ConversationsList() {
 
   const petTemplate = (conversation: {
     petUploads: any[];
-    fromUser: {
-      name:
-        | string
-        | number
-        | boolean
-        | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-        | Iterable<React.ReactNode>
-        | React.ReactPortal
-        | null
-        | undefined;
+    petInfo: {
+      name:string
     };
   }) => {
     const petFile = conversation.petUploads.find(
@@ -81,7 +65,7 @@ export default function ConversationsList() {
           className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
         />
         <span className="font-semibold mt-3 ms-1">
-          {conversation.fromUser.name}
+          {conversation.petInfo.name}
         </span>
       </div>
     );

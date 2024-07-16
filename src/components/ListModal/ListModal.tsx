@@ -13,11 +13,13 @@ interface ListModalProps {
   onRequestClose: any;
   list: any;
 }
-
+type Candidate = {
+  
+};
 
 const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) => {
   const [showAlert, setShowAlert] = useState<boolean>(true);
-  const [listCandidates, setListCandidates] = useState<[]>(list);
+  const [listCandidates, setListCandidates] = useState<Candidate[]>(list);
   
 
   const startConversation = async (data: any, petId: string) => {
