@@ -17,8 +17,8 @@ interface ListModalProps {
 
 const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) => {
   const [showAlert, setShowAlert] = useState<boolean>(true);
-  const [listCandidates, setListCandidates] = useState(list);
-
+  const [listCandidates, setListCandidates] = useState<[]>(list);
+  
 
   const startConversation = async (data: any, petId: string) => {
     const form = {
@@ -84,6 +84,7 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
   
 
   useEffect(() => {
+    setListCandidates(list)
     const timer = setTimeout(() => {
       setShowAlert(false);
     }, 3000);
@@ -104,9 +105,10 @@ const ListModal: FC<ListModalProps> = ({ isOpen, onRequestClose, list, petId }) 
       <div className="listCandidate overflow-y">
         {listCandidates?.map((item: any, index: number) => (
           <ListComponent
+            key={index}
             data={item}
             index={index}
-            startConversation={() => startConversation(item, petId)}
+            startConversation={() => {startConversation(item, petId); alert('Conversation engagée !')}}
             deleteConversation={() => deleteConversation(item, petId, index)}
           />
         ))}

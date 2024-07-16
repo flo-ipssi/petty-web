@@ -3,48 +3,56 @@ import logo from "../../assets/images/logo.svg";
 import "./Header.scss";
 import Modal from "../Modal/Modal";
 import { Keys, saveToAsyncStorage } from "../../utils/asyncStorage";
-import { updateLoggedInState, updateProfile } from "../../store/auth";
-import { useDispatch } from "react-redux";
+import { getAuthState, updateBusyState, updateLoggedInState, updateProfile } from "../../store/auth";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
 import axios from "axios";
 import { FaBars, FaTimes } from "react-icons/fa";
+import Loader from "../Loader";
 
 export const Header = () => {
   const [active, setActive] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { busy } = useSelector(getAuthState);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    dispatch(updateBusyState(true));
     try {
-      console.log(client + "/auth/sign-in");
-
       // we want to send these information to our api
-      const { data } = await axios.post(client + "auth/sign-in", {
-        email,
-        password,
-      }, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
+      const { data } = await axios.post(
+        client + "auth/sign-in-to-owner",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         }
-      });
+      );
 
       await saveToAsyncStorage(Keys.AUTH_TOKEN, data.token);
       dispatch(updateProfile(data.profile));
       dispatch(updateLoggedInState(true));
+      dispatch(updateBusyState(false));
       navigate("/pets");
     } catch (error) {
       console.log("Sign in error: ", error);
     }
+    dispatch(updateBusyState(false));
   };
 
   const formModal = () => {
+    dispatch(updateBusyState(false));
     return (
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
@@ -81,7 +89,7 @@ export const Header = () => {
             required
           />
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <div className="flex items-start">
             <div className="flex items-center h-5">
               <input
@@ -104,21 +112,19 @@ export const Header = () => {
           >
             Mot de passe oublié ?
           </a>
-        </div>
+        </div> */}
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Se connecter
+          {busy ? (<Loader text="Chargement" />) : "Se connecter"}
         </button>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-          Vous n'êtes pas inscrit ?{" "}
-          <a
-            href="#"
-            className="text-blue-700 hover:underline dark:text-blue-500"
-          >
+          Vous n'êtes pas inscrit ? 
+          <Link to="/signup"
+            className="text-blue-700 hover:underline dark:text-blue-500">
             Créer un compte
-          </a>
+          </Link>
         </div>
       </form>
     );
@@ -166,7 +172,8 @@ export const Header = () => {
             className="block lg:hidden"
             onClick={() => setActive(!active)}
           >
-            {active ? <FaTimes size={20} /> : <FaBars size={20} />}          </button>
+            {active ? <FaTimes size={20} /> : <FaBars size={20} />}{" "}
+          </button>
         </div>
       </header>
       <Modal

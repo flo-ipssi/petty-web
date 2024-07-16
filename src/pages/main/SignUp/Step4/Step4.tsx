@@ -2,6 +2,9 @@ import { FC, useRef, useState } from "react";
 import "./Step4.scss";
 import ReCAPTCHA from "react-google-recaptcha";
 import client from "../../../../api/client";
+import Loader from "../../../../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthState, updateBusyState } from "../../../../store/auth";
 
 interface Step4Props {
   data: any;
@@ -18,6 +21,9 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   const [conditionsAccepted, setConditionsAccepted] = useState(false);
   const [isAdult, setIsAdult] = useState(false);
 
+  const dispatch = useDispatch();
+  const { busy } = useSelector(getAuthState);
+
   const handleNext = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (conditionsAccepted == false || isAdult == false) {
@@ -26,6 +32,8 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
     }
     if (captchaRef?.current?.getValue()) {
       const reCaptcha = captchaRef.current.getValue();
+
+      dispatch(updateBusyState(true));
       captchaRef.current.reset();
 
       try {
@@ -46,9 +54,11 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
         if (serverResponse.success == true) {
           onSubmit({ ...data, conditionsAccepted, isAdult });
         }
+        dispatch(updateBusyState(false));
       } catch (error) {
         console.log(error);
       }
+      dispatch(updateBusyState(false));
     }
   };
 
@@ -63,7 +73,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
   }) => {
     setIsAdult(event.target.checked);
   };
-  
+
   function hasNoEmptyElements(array: any[]) {
     return array.every((element) => {
       return element !== null && element !== undefined && element !== '';
@@ -139,16 +149,16 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
               </div>
             </div>
           ) : null}
-          
+
           <>
-              <h2 className="mb-2 text-xl font-bold tracking-tight ">
-                Mise en garde
-              </h2>
-              <p className="mb-4 text-red-500">
-                Toute information incorrecte ou utilisation à des fins
-                malveillantes pourra entraîner des poursuites légales.
-              </p>
-            </>
+            <h2 className="mb-2 text-xl font-bold tracking-tight ">
+              Mise en garde
+            </h2>
+            <p className="mb-4 text-red-500">
+              Toute information incorrecte ou utilisation à des fins
+              malveillantes pourra entraîner des poursuites légales.
+            </p>
+          </>
           <div className="mb-2 flex items-center mx-auto">
             <input
               type="checkbox"
@@ -189,7 +199,8 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
           type="submit"
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
         >
-          Soumettre
+          {busy ? (<Loader text="Chargement" />) : "Soumettre"}
+
         </button>
       </div>
     </form>

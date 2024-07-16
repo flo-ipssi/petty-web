@@ -49,7 +49,7 @@ export const ConversationsService = {
         try {
             const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
             const response = await axios.post(
-                client + `message/isSeen`,{conversationId:id},
+                client + `message/isSeen`, { conversationId: id },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

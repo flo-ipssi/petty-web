@@ -116,12 +116,12 @@ const Conversation = () => {
     );
   }
 
-  function isSeenConversation() {
-    const paramConversationId = pathname.split("/");
-    ConversationsService.isSeenConversation(paramConversationId[2]).then(() => {
-      console.log("Succes");
-    });
-  }
+  // function isSeenConversation() {
+  //   const paramConversationId = pathname.split("/");
+  //   ConversationsService.isSeenConversation(paramConversationId[2]).then(() => {
+  //     console.log("Succes");
+  //   });
+  // }
   function fetchMessages() {
     const paramConversationId = pathname.split("/");
     MessagesService.getMessages(paramConversationId[2]).then((data) => {
@@ -138,24 +138,22 @@ const Conversation = () => {
     return (
       <>
         <div
-          className="border h-100  mt-10 p-4 rounded-lg overflow-y-auto mb-4"
+          className="border h-100 max-h-96 mt-10 p-4 rounded-lg overflow-y-auto mb-4"
           ref={chatContainerRef}
         >
           {messages.map((msg: { owner: any; text: string }, index) => (
             <div
               key={index}
-              className={`mb-4 ${
-                msg.owner == ownerId
-                  ? "text-right flex flex-row-reverse"
-                  : "text-left flex flex-row"
-              }`}
+              className={`mb-4 ${msg.owner == ownerId
+                ? "text-right flex flex-row-reverse"
+                : "text-left flex flex-row"
+                }`}
             >
               <div
-                className={`rounded-lg py-3 px-4 w-fit ${
-                  msg.owner == ownerId
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-black"
-                }`}
+                className={`rounded-lg py-3 px-4 w-fit ${msg.owner == ownerId
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-black"
+                  }`}
               >
                 {msg.text}
               </div>
@@ -174,7 +172,7 @@ const Conversation = () => {
             onClick={handleMessageSend}
             className="px-4 py-2  text-white rounded bg-blue-500 hover:bg-blue-600"
           >
-            Send
+            Envoyer
           </button>
         </div>
       </>
@@ -182,7 +180,7 @@ const Conversation = () => {
   };
 
   useEffect(() => {
-    isSeenConversation();
+    // isSeenConversation();
     fetchDetailsConversation();
     setMessage("");
 
@@ -246,7 +244,7 @@ const Conversation = () => {
           {typeof infosUser != "undefined" && (
             <div className="pt-20">
               <div className="flex items-center mb-4">
-                <div className="px-6">
+                <div className="px-6 w-full">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full flex justify-center">
                       <div className="relative">
@@ -290,69 +288,73 @@ const Conversation = () => {
                     </h3>
                     <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
                       <i className="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i>
-                      Paris, France
+                      France
                     </div>
                   </div>
                   <div className="mt-6 py-6 border-t border-slate-200 text-center">
                     <div className="flex flex-wrap justify-center">
                       <div className="w-full px-4">
                         <p className="font-light leading-relaxed text-slate-600 mb-4">
-                          An artist of considerable range, Mike is the name
-                          taken by Melbourne-raised, Brooklyn-based Nick Murphy
-                          writes, performs and records all of his own music,
-                          giving it a warm.
+                          {infosUser?.infos.description}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <h4 className="font-semibold mb-2">Housing Photos:</h4>
-                <div className="flex gap-2 overflow-y-auto h-40">
-                  {infosUser?.uploads
-                    .filter(
-                      (item: { category: string }) =>
-                        item.category == "Residence"
-                    )
-                    .map((photo: { file: { url: string } }, index: any) => (
-                      <Image
-                        key={index}
-                        src={photo.file.url}
-                        alt={`Housing ${index + 1}`}
-                        indicatorIcon={icon}
-                        preview
-                        className="w-32 max-h-24 rounded-md"
-                      />
-                    ))}
-                </div>
-              </div>
+              {infosUser?.uploads.filter(
+                (item: { category: string }) =>
+                  item.category == "Residence"
+              ).length > 0 ?
+                <div className="mb-4">
+                  <h4 className="font-semibold mb-2">Housing Photos:</h4>
+                  <div className="flex gap-2 overflow-y-auto h-40">
+                    {infosUser?.uploads
+                      .filter(
+                        (item: { category: string }) =>
+                          item.category == "Residence"
+                      )
+                      .map((photo: { file: { url: string } }, index: any) => (
+                        <Image
+                          key={index}
+                          src={photo.file.url}
+                          alt={`Housing ${index + 1}`}
+                          indicatorIcon={icon}
+                          preview
+                          className="w-32 max-h-24 rounded-md"
+                        />
+                      ))}
+                  </div>
+                </div> : null}
               <div className="flex gap-4">
                 <button
                   onClick={proposeMeeting}
                   className="px-4 py-2  text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
-                  Propose Meeting
+                  Proposer une rencontre
                 </button>
                 <button
                   onClick={reportUser}
                   className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                 >
-                  Report User
+                  Signaler l'utilisateur
                 </button>
                 <button
                   onClick={closeForAdoption}
                   className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 >
-                  Close for Adoption
+                  Adoption
                 </button>
 
-                <Link
-                  to="/conversations"
+                <button
                   className="px-4 py-2 text-center bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
                 >
-                  Back to Conversations
-                </Link>
+                  <Link
+                    to="/conversations"
+                  >
+                    Retour
+                  </Link>
+                </button>
               </div>
             </div>
           )}

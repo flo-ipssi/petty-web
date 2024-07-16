@@ -11,7 +11,7 @@ const TextAreaForm: React.FC<TextAreaFormProps> = ({ label, id, value, onChange 
     return (
         <div >
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-bold mb-2 required"
                 htmlFor={id}
             >
                 {label}
