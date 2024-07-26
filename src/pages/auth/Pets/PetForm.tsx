@@ -15,11 +15,16 @@ import {
     speciesOptions,
 } from "../../../api/fieldsValues";
 import client from "../../../api/client";
+import Loader from "../../../components/Loader";
+import { getAuthState, updateBusyState } from "../../../store/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 interface PetFormProps { }
 
 const PetFom: FC<PetFormProps> = ({ }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { busy } = useSelector(getAuthState);
     const params = useLocation();
     const [id, setId] = useState("");
     const [name, setName] = useState("");
@@ -124,6 +129,8 @@ const PetFom: FC<PetFormProps> = ({ }) => {
             setErrorMessage('Absence de token')
             return;
         };
+        dispatch(updateBusyState(true));
+
 
         try {
             let url = `${client}pet/create`;
@@ -150,8 +157,6 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 const formData = new FormData();
                 formData.append('photoProfil', photoProfil);
                 files.forEach((file, index) => {
-                    console.log(file);
-
                     formData.append(`file${index}`, file);
                 });
 
@@ -163,15 +168,21 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                 }).then(() => {
                     navigate("/pets");
                 })
+                dispatch(updateBusyState(false));
 
             }
         } catch (error) {
+            dispatch(updateBusyState(false));
+
             console.error('Une erreur s\'est produite :', error);
 
             if (error instanceof Error) {
                 setErrorMessage(error.message);
+                alert(error.message)
             } else if (typeof error === 'string') {
                 setErrorMessage(error);
+                alert(error)
+
             } else {
                 setErrorMessage('An unknown error occurred');
             }
@@ -544,7 +555,7 @@ const PetFom: FC<PetFormProps> = ({ }) => {
                                 font-semibold hover:text-white py-2 px-4 
                                 border border-blue-500 hover:border-transparent rounded"
                         >
-                            Confirmer
+                            {busy ? (<Loader text="Chargement" />) : "Soumettre"}
                         </button>
                     </div>
                 </form>

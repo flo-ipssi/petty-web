@@ -2,12 +2,10 @@ import { FC, useState, useEffect } from "react";
 import logo from "../../../assets/images/icon-no-label.svg";
 import "./Home.scss";
 import { motion } from "framer-motion";
-import {
-  Link,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Alert from "../../../components/Alert";
 
-interface HomeProps { }
+interface HomeProps {}
 
 type imageProps = {
   width: string;
@@ -18,9 +16,10 @@ type imageProps = {
 };
 
 const Home: FC<HomeProps> = () => {
-  // const navigate = useNavigate();
   const [imagePositions, setImagePositions] = useState<imageProps[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams("");
+  const [modalSignup, setModalSignup] = useState(false);
+  const location = useLocation();
+
   const positions = [
     {
       width: "400px",
@@ -90,12 +89,11 @@ const Home: FC<HomeProps> = () => {
   //   }
   // };
 
-
-
   useEffect(() => {
     setImagePositions(positions);
-    if (searchParams.get("WaitToConfirm")) {
-      setSearchParams("En attente de confirmation sur votre adresse email !");
+    const signUpConfirmation = location.state?.WaitToConfirm;
+    if (signUpConfirmation) {
+      setModalSignup(true);
     }
   }, []);
 
@@ -110,6 +108,7 @@ const Home: FC<HomeProps> = () => {
       }}
       className="space-6 h-screen space-6 grid grid-cols-1 md:grid-cols-1 gap-4 content-center"
     >
+      <Alert showAlert={modalSignup} />
       <div className="logo-background mx-auto">
         <Link to="/about">
           <h1 className="label-logo text-9xl brusher">Petty</h1>

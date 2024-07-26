@@ -26,6 +26,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
 
   const handleNext = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    dispatch(updateBusyState(true));
     if (conditionsAccepted == false || isAdult == false) {
       alert("Cochez les cases requises");
       return false;
@@ -60,6 +61,7 @@ const Step4: FC<Step4Props> = ({ data, onPrevious, onSubmit }) => {
       }
       dispatch(updateBusyState(false));
     }
+    dispatch(updateBusyState(false));
   };
 
   const handleConditionsChange = (event: {

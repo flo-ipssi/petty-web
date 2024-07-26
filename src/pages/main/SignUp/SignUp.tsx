@@ -73,9 +73,9 @@ const SignUp: FC<SignUpProps> = ({ stepInitial }) => {
           }
         );
       }
-
+      
       // Rediriger vers la page de succès
-      navigate("/?WaitToConfirm=success");
+      navigate("/", { state: { WaitToConfirm: "success" } });
 
     } catch (error) {
       console.log(error);
